@@ -15,28 +15,12 @@ import {
   Tabs,
   Tab,
 } from "@mui/material";
-import SideMenuBar from "../../components/Common/SideMenuBar";
 import { Link } from "react-router-dom";
-import rightArrow from "./arrowRight.svg";
+import SideMenuBar from "../../Components/Common/SideMenubar/SideMenuBar";
+import Chat from "../../Components/Common/Chat/chat.jsx";
+import ApplicantCards from "../../Components/Common/Applicants/ApplicantCards.jsx";
 
 const EmployerDashboard = () => {
-  const jobs = [
-    {
-      title: "Hiroshi Nomura",
-      age: "28",
-      description: "Description for Job Title 1.",
-      location: "Hong Kong",
-      date: "From 27 Feb 2024",
-      type: "Full Time",
-      image: "image_5.png",
-      jobrole: "DOMESTIC HELP",
-      jobtitle: "Need a office boy",
-      jobdescription: "Good day mam I'm interested to apply",
-      application: "",
-      conversation: "",
-      status: "active",
-    },
-  ];
   const profiles = [
     {
       title: "dummy456789",
@@ -55,8 +39,28 @@ const EmployerDashboard = () => {
       status: "Active",
     },
   ];
+  const savedprofiles = [
+    {
+      title: "dummy456789",
+      age: "28",
+      description: "Description for Job Title 1.",
+      location: "Hong Kong",
+      date: "From 27 Feb 2024",
+      type: "Full Time",
+      image: "image_5.png",
+      jobrole: "DOMESTIC HELP",
+      jobtitle: "Need a office boy",
+      jobdescription:
+        "Be as precise as possible in your ad in order to get relevant applications. You will then be able to further discuss with potential applicants through direct me...",
+      application: "05",
+      conversation: "03",
+      status: "Active",
+      jobOfferby: "Hiroshi Nomura",
+      addedDate: "January 30, 2024",
+    },
+  ];
 
-  const [activeTab, setActiveTab] = useState("applied");
+  const [activeTab, setActiveTab] = useState("Dashboard");
   return (
     <>
       <Grid container className="dashboardRow">
@@ -166,55 +170,8 @@ const EmployerDashboard = () => {
                         </Typography>
                       </Grid>
 
-                      {jobs.map((job, index) => (
-                        <Grid key={index} item lg={4} md={6} xs={12}>
-                          <Box className="helpersCol employerapplicant">
-                            <Box className="profileUpper">
-                              <Box className="helperImg">
-                                <img
-                                  src={`images/users/${job.image}`}
-                                  alt={`Helpers ${index}`}
-                                />
-                              </Box>
-                              <Box className="helperContent">
-                                <Box className="wishlistIcon">
-                                  <img src="wishlist-icon.svg" alt="Wishlist" />
-                                </Box>
-                                <Typography variant="h5">
-                                  {job.title}
-                                </Typography>
-                                <Box className="locationDate">
-                                  <Box className="location">{job.location}</Box>
-                                  <Box className="applicant_age">
-                                    {job.age} years
-                                  </Box>
-                                </Box>
-                              </Box>
-                            </Box>
-                            <Box className="work_Profile">
-                              <Typography className="job_role">
-                                {job.jobrole}
-                              </Typography>
-                              <Typography className="job_title">
-                                {job.jobtitle}
-                              </Typography>
-                              <Typography className="job_desc">
-                                {job.jobdescription}
-                              </Typography>
-                            </Box>
-                            <Box className="buttonFlex">
-                              <Button className="green-btn small">
-                                View Profile
-                              </Button>
-                              <Button className="arrowButton small">
-                                View Message
-                              </Button>
-                            </Box>
-                          </Box>
-                        </Grid>
-                      ))}
                     </Grid>
-
+                    <ApplicantCards/>
                     {/* Your Job Posting */}
                     <Grid
                       container
@@ -469,10 +426,50 @@ const EmployerDashboard = () => {
                 </>
               )}
               {activeTab === "Conversations" && (
-                <Typography>Conversations</Typography>
+                <>
+                  <Chat />
+                </>
               )}
               {activeTab === "Saved_profiles" && (
-                <Typography>Saved profiles</Typography>
+                <>
+                  {savedprofiles.map((job, index) => (
+                    <Grid key={index} item lg={4} md={6} xs={12}>
+                      <Box className="helpersCol employerapplicant savedProfile">
+                        <Box className="profileUpper">
+                          <Box className="helperImg">
+                            <img
+                              src={`images/users/${job.image}`}
+                              alt={`Helpers ${index}`}
+                            />
+                          </Box>
+                          <Box className="helperContent">
+                            <Box className="wishlistIcon">
+                              <img src="cross.svg" alt="unsave" />
+                            </Box>
+                            <Typography variant="h5">{job.title}</Typography>
+                            <Box className="locationDate">
+                              <Box className="location">{job.location}</Box>
+                              <Box className="applicant_age">
+                                {job.age} years
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Box>
+                        <Box className="work_Profile">
+                          <Typography className="jobOfferby">
+                            Jobs offered by {job.jobOfferby}
+                          </Typography>
+                          <Typography className="job_role">
+                            {job.jobrole}
+                          </Typography>
+                          <Typography className="job_date">
+                            Added on {job.addedDate}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Grid>
+                  ))}
+                </>
               )}
             </Box>
           </Box>
