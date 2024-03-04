@@ -2586,6 +2586,7 @@ hr.hrSetting {
 .employerFooter ul {
     display: flex;
     width: 100%;
+    padding: 0;
 }
 
 .employerFooter ul li {

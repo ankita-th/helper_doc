@@ -21,6 +21,7 @@ function App() {
         <Route path="/subscription-plans" element={<SubscriptionPlans />} />
         <Route path="/settings" element={<Setting />} />
         <Route path="/notifications" element={<Notification />} />
+        {/* <Route path="/jobs" element={<Jobs />} /> */}
         </Routes>
       </Suspense>
       <PublicFooter />
