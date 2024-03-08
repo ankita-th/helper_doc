@@ -3,7 +3,7 @@ import React from "react";
 import ArrowButton from "../Common/ArrowButton";
 import { useTranslation } from "react-i18next";
 import HelperCard from "../Common/HelperCard";
-
+  
 const HelperSection = () => {
   const { t } = useTranslation();
   const helpers = [
