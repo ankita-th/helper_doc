@@ -24,6 +24,15 @@ import HelperRegistrationStep5 from "./Components/Signup/HelperRegistrationSteps
 import HelperRegistrationStep6 from "./Components/Signup/HelperRegistrationSteps/HelperRegistrationStep6";
 import HelperProfileComplete from "./Components/Signup/HelperRegistrationSteps/HelperProfileComplete";
 import HelperPublicProfileView from "./Components/Signup/HelperRegistrationSteps/HelperPublicProfileView";
+import HelperSignup from "./Components/Signup/HelperSignup";
+import ThankYou from "./Components/Common/ThankYou";
+import JobsList from "./pages/HelperDashboard/JobsList";
+import MyApplication from "./pages/HelperDashboard/MyApplication";
+import MyProfile from "./pages/HelperDashboard/MyProfile";
+import Notifications from "./Components/Common/Notification";
+import Chat from "./pages/HelperDashboard/Chat";
+import ApplicantDetails from "./Components/Common/Applicants/ApplicantDetails";
+import JobDetails from "./pages/HelperDashboard/Jobs/JobDetails";
 
 function App() {
   const [formData, setFormData] = useState({
@@ -63,7 +72,7 @@ function App() {
       <Suspense>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/emp-dashboard" element={<EmployerDashboard />} />
+          <Route path="/employee-dashboard" element={<EmployerDashboard />} />
           <Route path="/subscription-plans" element={<SubscriptionPlans />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/notifications" element={<Notification />} />
@@ -74,6 +83,10 @@ function App() {
           <Route path="/registration_page" element={<RegistrationPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/jobs" element={<JobsSection />} />
+          <Route
+              path="/signup/helper"
+              element={<HelperSignup role={formData.role} />}
+            />
           {/* stepper */}
           <Route
             path="/registration_steps/step1"
@@ -147,9 +160,34 @@ function App() {
               />
             }
           />
+          <Route path="/thankyou" element={<ThankYou />} />
+          <Route path="/helper_dashboard" element={<JobsList />} />
+          <Route path="/my_applications" element={<MyApplication />} />
+          <Route
+              path="/my_profile"
+              element={
+                <MyProfile formData={formData} setFormData={setFormData} />
+              }
+            />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/chat" element={<Chat />} />
+            {/* <Route path="/settings" element={<Setting />} /> */}
           {/* stepper */}
 
           {/* <Route path="/jobs" element={<Jobs />} /> */}
+
+          {/* Employee Dashboard */}
+
+          <Route path="/employee/my-posting" element={<ApplicantDetails />} />
+          <Route path="/employee/notification" element={<Notifications />} />
+          <Route path="/employee/message" element={<Chat />} />
+          <Route path="/employee/settings" element={<Setting />} />
+          <Route path="/helper/job-details" element={<JobDetails />} />
+
+
+          {/* Employee Dashboard */}
+
+
         </Routes>
       </Suspense>
       <PublicFooter />

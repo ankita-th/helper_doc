@@ -38,6 +38,7 @@ import * as yup from "yup";
 // import { LoginUser } from "../../Models/authUserInterface";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import ErrorMessage from "../Common/ErrorMessage/ErrorMessage";
+import CustomTextField from "../Common/InputFields/CustomTextField";
 // import { loginUser } from "../../services/authServices";
 
 const StyledImage = styled("img")({
@@ -115,7 +116,11 @@ const Login = ({ onLogin }) => {
 
   const handleOnSubmit = (data) => {
     console.log(data);
-    navigate("/employer_dashboard");
+    if(data.email === "helper@yopmail.com"){
+      navigate("/helper_dashboard");
+    } else {
+      navigate("/employ-dashboard");
+    }
     // setTermsAndConditions(true);
     // Dispatch the updateFormData action
     // loginUser(data)
@@ -186,39 +191,23 @@ const Login = ({ onLogin }) => {
                 onSubmit={handleSubmit(handleOnSubmit)}
                 className="formDataInfo"
               >
-                {/* <CustomTextField
-                  // required
+                <CustomTextField
                   className="formInputFiled"
                   id="username"
                   placeholder="Username"
-                  // name="username"
                   autoComplete="username"
                   autoFocus
-                  // value={username}
-                  // onChange={(e) => setUsername(e.target.value)}
                   {...register("email")}
-                /> */}
-                <Controller
-                  className="formInputFiled"
-                  name="username"
-                  id="username"
-                   value={username}
-                  control={control}
-                  render={({ field }) => <input type="text" {...field} />}
                 />
 
                 {errors?.email && <ErrorMessage msg={errors?.email?.message} />}
-                {/* <CustomTextField
-                  // required
+                <CustomTextField
                   className="formInputFiled"
-                  // name="password"
                   placeholder="Password"
                   id="password"
                   autoComplete="current-password"
-                  // value={password}
-                  // onChange={(e) => setPassword(e.target.value)}
                   {...register("password")}
-                  type={showPassword ? "text" : "password"} // Conditionally set the type
+                  type={showPassword ? "text" : "password"}
                   InputProps={{
                     // Add an end adornment for password visibility toggle
                     endAdornment: (
@@ -229,12 +218,6 @@ const Login = ({ onLogin }) => {
                       </InputAdornment>
                     ),
                   }}
-                /> */}
-                  <Controller
-                  className="formInputFiled"
-                  name="password"
-                  control={control}
-                  render={({ field }) => <input type={(showPassword)?"text":"password"} {...field} />}
                 />
                 {errors?.password && (
                   <ErrorMessage msg={errors?.password?.message} />

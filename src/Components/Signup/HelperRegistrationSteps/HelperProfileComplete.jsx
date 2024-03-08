@@ -16,7 +16,7 @@ import {
 import { styled } from "@mui/system";
 import { useLocation, useNavigate } from "react-router-dom";
 // import SuccessModal from "../../Common/SuccessModal";
-// import ProgressBar from "@ramonak/react-progress-bar";
+import ProgressBar from "@ramonak/react-progress-bar";
 import HelperUserDetails from "./HelperUserDetails";
 
 const TitleWrapper = styled("div")({
@@ -71,7 +71,7 @@ const HelperProfileComplete = ({
             >
               View Public Profile
             </Button>
-            {/* <ProgressBar completed={80} bgColor="#0a6259" /> */}
+            <ProgressBar completed={80} bgColor="#0a6259" />
             <Typography variant="body1">
               80% of your profile is complete {">"} Get Verified +20%
             </Typography>

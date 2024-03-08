@@ -16,9 +16,9 @@ import {
   Tab,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import SideMenuBar from "../../Components/Common/SideMenubar/SideMenuBar";
 import Chat from "../../Components/Common/Chat/chat.jsx";
 import ApplicantCards from "../../Components/Common/Applicants/ApplicantCards.jsx";
+import EmpSideBar from "../../Components/Common/SideMenubar/EmpSideBar.jsx";
 
 const EmployerDashboard = () => {
   const profiles = [
@@ -66,7 +66,7 @@ const EmployerDashboard = () => {
       <Grid container className="dashboardRow">
         {/* Sidebar Component */}
         <Grid className="dashboardSidebar">
-          <SideMenuBar />
+          <EmpSideBar />
         </Grid>
         {/* Main Content */}
         <Grid className="dashboardContentArea">

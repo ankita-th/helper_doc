@@ -18,8 +18,9 @@ import {
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import SideMenuBar from "../SideMenubar/SideMenuBar";
+import EmpSideBar from "../SideMenubar/EmpSideBar";
 
 const Setting = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -33,6 +34,7 @@ const Setting = () => {
   const [newPassword, setNewPassword] = useState("");
   const [showCurrentPassword, setCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const { pathname } = useLocation();
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -89,7 +91,7 @@ const Setting = () => {
     <Grid container className="dashboardRow">
       {/* Sidebar Component */}
       <Grid className="dashboardSidebar">
-        <SideMenuBar />
+      {pathname === '/employee/settings' ? <EmpSideBar /> : <SideMenuBar />}
       </Grid>
       {/* Main Content */}
       <Grid className="dashboardContentArea">

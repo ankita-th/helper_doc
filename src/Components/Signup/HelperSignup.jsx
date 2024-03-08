@@ -19,17 +19,18 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import ReCAPTCHA from "react-google-recaptcha";
 import FacebookLogin from "@greatsumini/react-facebook-login";
 import { GoogleLogin } from "@react-oauth/google";
-import { useDispatch } from "react-redux";
-import { setRole, updateFormData } from "../../redux/actions/userActions"; // Updated import path
+// import { useDispatch } from "react-redux";
+// import { setRole, updateFormData } from "../../redux/actions/userActions"; // Updated import path
 import { FacebookIcon } from "../Common/SocialIcons";
-import StyledGoogleLogin from "../Common/StyledGoogleLogin";
-import CustomTextField from "../Common/CustomTextField";
+// import StyledGoogleLogin from "../Common/StyledGoogleLogin";
+// import CustomTextField from "../Common/CustomTextField";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { registerUser } from "../../services/authServices";
-import { HelperFormData, RegisterUser } from "../../Models/authUserInterface";
+// import { registerUser } from "../../services/authServices";
+// import { HelperFormData, RegisterUser } from "../../Models/authUserInterface";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import ErrorMessage from "../Common/ErrorMessage";
+import ErrorMessage from "../Common/ErrorMessage/ErrorMessage";
+import CustomTextField from "../Common/InputFields/CustomTextField";
 
 // const StyledRoot = styled("div")(({ theme }) => ({
 //   flexGrow: 1,
@@ -87,7 +88,7 @@ const StyledOrSignupWith = styled("div")(({ theme }) => ({
 const HelperSignup = ({ role }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
@@ -111,13 +112,13 @@ const HelperSignup = ({ role }) => {
     setShowPasswordConfirmation((prev) => !prev);
   };
 
-  useEffect(() => {
-    console.log("Role received in HelperSignup:", role);
-    // alert(`Role received in HelperSignup: ${role}`);
-    // Dispatch the setRole action
-    setValue("role", role)
-    dispatch(setRole(role));
-  }, [role, dispatch]);
+  // useEffect(() => {
+  //   console.log("Role received in HelperSignup:", role);
+  //   // alert(`Role received in HelperSignup: ${role}`);
+  //   // Dispatch the setRole action
+  //   setValue("role", role)
+  //   dispatch(setRole(role));
+  // }, [role, dispatch]);
 
   const [formData, setFormData] = useState({
     fullName: "",

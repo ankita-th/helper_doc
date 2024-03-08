@@ -15,14 +15,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import SideMenuBar from "../../Common/SideMenuBar";
-import LocationAutocomplete from "../../Common/LocationAutocomplete";
 import { IconButton } from "@mui/material";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import ResponsivePagination from "react-responsive-pagination";
-import HelperProfileComplete from "../../Signup/HelperRegistrationSteps/HelperProfileComplete";
-import HelperUserDetails from "../../Signup/HelperRegistrationSteps/HelperUserDetails";
 import ProgressBar from "@ramonak/react-progress-bar";
 import BookmarkedJobs from "./BookmarkedJobs";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -30,6 +23,8 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import "react-responsive-pagination/themes/classic.css";
 import "./HelperDashboard.css"; // Import the CSS file
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import SideMenuBar from "../../Components/Common/SideMenubar/SideMenuBar";
+import HelperUserDetails from "../../Components/Signup/HelperRegistrationSteps/HelperUserDetails";
 
 
 const MyProfile = ({ formData, setFormData }) => {
@@ -38,7 +33,7 @@ const MyProfile = ({ formData, setFormData }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
-  const [profilePic, setProfilePic] = useState<File | null>(null);
+  const [profilePic, setProfilePic] = useState(null);
 
   const handleProfilePicUpload = (
     event

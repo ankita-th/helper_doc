@@ -3,6 +3,8 @@ import { Box, Typography, IconButton, Grid } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CloseIcon from "@mui/icons-material/Close";
 import SideMenuBar from "./SideMenubar/SideMenuBar";
+import { useLocation } from "react-router-dom";
+import EmpSideBar from "./SideMenubar/EmpSideBar";
 // import NotificationItem from "./NotificationItem"; // Import NotificationItem component
 
 const notifications = [
@@ -30,23 +32,26 @@ const notifications = [
 ];
 
 const Notifications = () => {
+  const { pathname } = useLocation();
   const handleRemoveNotification = (id) => {
     // Add logic to remove notification by ID
   };
   return (
     <>
-    <Grid container className="dashboardRow">
-      {/* Sidebar Component */}
-      <Grid className="dashboardSidebar">
-        <SideMenuBar />
-      </Grid>
-      {/* Main Content */}
-      <Grid className="dashboardContentArea">
-        <Box maxWidth="xl" sx={{ padding: "20px" }}>
+      <Grid container className="dashboardRow">
+        {/* Sidebar Component */}
+        <Grid className="dashboardSidebar">
+          {pathname === '/employee/notification' ? <EmpSideBar /> : <SideMenuBar />}
+        </Grid>
+        {/* Main Content */}
+        <Grid className="dashboardContentArea">
+          <Box maxWidth="xl" sx={{ padding: "20px" }}>
             <Box display="flex" alignItems="center" mb={2}>
               {/* <NotificationsIcon fontSize="large" color="primary" /> */}
               <Box ml={2}>
-                <Typography variant="h2" className="commonTitle">All Notifications</Typography>
+                <Typography variant="h2" className="commonTitle">
+                  All Notifications
+                </Typography>
                 <Typography variant="body1">
                   Every job notification you've ever received.
                 </Typography>
@@ -55,9 +60,10 @@ const Notifications = () => {
 
             <Grid className="JobsListRow">
               <Grid item md={12}>
-                  <Typography variant="h5">Earlier</Typography>
+                <Typography variant="h5">Earlier</Typography>
               </Grid>
-              <Box className="profileCardBox"
+              <Box
+                className="profileCardBox"
                 border={1}
                 borderRadius={8}
                 borderColor="#DDDDDD"
@@ -67,13 +73,18 @@ const Notifications = () => {
                 mt={2}
               >
                 {notifications.map((notification) => (
-                  <Box className="notificationList"
+                  <Box
+                    className="notificationList"
                     key={notification.id}
                     display="flex"
                     alignItems="center"
                     mb={2}
                   >
-                    <NotificationsIcon fontSize="large" color="primary" className="notificationIcon" />
+                    <NotificationsIcon
+                      fontSize="large"
+                      color="primary"
+                      className="notificationIcon"
+                    />
                     <Box ml={2}>
                       <Typography variant="subtitle1">
                         {notification.title}
@@ -96,8 +107,8 @@ const Notifications = () => {
               </Box>
             </Grid>
           </Box>
+        </Grid>
       </Grid>
-    </Grid>
     </>
   );
 };

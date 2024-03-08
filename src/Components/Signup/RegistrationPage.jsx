@@ -5,30 +5,31 @@ import { Link, useNavigate } from "react-router-dom";
 // import rootReducer, { RootState } from "../../redux/reducers";
 // import Avatar from "@mui/joy/Avatar";
 // import FormLabel from "@mui/joy/FormLabel";
-// import Radio, { radioClasses } from "@mui/joy/Radio";
-// import RadioGroup from "@mui/joy/RadioGroup";
-// import Sheet from "@mui/joy/Sheet";
+import Radio, { radioClasses } from "@mui/joy/Radio";
+import RadioGroup from "@mui/joy/RadioGroup";
+import Sheet from "@mui/joy/Sheet";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { FormControlLabel, Box, Link as MuiLink } from "@mui/material";
-// import "./Signup.css"; // Import your CSS file
+import "./SignUp.css"; // Import your CSS file
 
 const RegistrationPage = () => {
-//   const dispatch = useDispatch();
-//   const selectedRole = useSelector((state) => state.role);
+  //   const dispatch = useDispatch();
+  //   const selectedRole = useSelector((state) => state.role);
   const [isChecked, setIsChecked] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("");
   const navigate = useNavigate();
 
-//   useEffect(() => {
-//     if (isChecked && selectedRole) {
-//       navigate(`/signup/${selectedRole}?role=${selectedRole}`);
-//     }
-//   }, [isChecked, selectedRole, navigate]);
+  useEffect(() => {
+    if (isChecked && selectedRole) {
+      navigate(`/signup/${selectedRole}?role=${selectedRole}`);
+    }
+  }, [isChecked, selectedRole, navigate]);
 
   const handleRoleSelection = (role) => {
-    // dispatch(setRole(role));
+    setSelectedRole(role);
   };
 
   const handleCheckboxChange = () => {
@@ -72,7 +73,7 @@ const RegistrationPage = () => {
         <div className="registrationPageContent">
           <h2>Select Your Role:</h2>
           <div className="roleCheckboxGroup">
-            {/* <RadioGroup
+            <RadioGroup
               aria-label="role"
               defaultValue="Helper"
               name="role"
@@ -125,7 +126,7 @@ const RegistrationPage = () => {
                   <Typography variant="body1">{role.description}</Typography>
                   <Radio
                     value={role.value}
-                    // checked={selectedRole === role.value}
+                    checked={selectedRole === role.value}
                     onChange={() => handleRoleSelection(role.value)}
                     checkedIcon={<CheckCircleRoundedIcon />}
                     sx={{
@@ -145,9 +146,9 @@ const RegistrationPage = () => {
                   />
                 </Sheet>
               ))}
-            </RadioGroup>    */}
+            </RadioGroup>
           </div>
-          {/* {selectedRole && (
+          {selectedRole && (
             <div className="selectedRoleContainer">
               <h3>You've selected the role: {selectedRole}</h3>
               <MuiLink
@@ -159,7 +160,7 @@ const RegistrationPage = () => {
                 Continue
               </MuiLink>
             </div>
-          )} */}
+          )}
         </div>
       </Box>
     </div>

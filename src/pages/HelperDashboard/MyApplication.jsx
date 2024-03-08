@@ -16,8 +16,6 @@ import {
   List,
   ListItem,
 } from "@mui/material";
-import SideMenuBar from "../../Common/SideMenuBar";
-import LocationAutocomplete from "../../Common/LocationAutocomplete";
 import { IconButton } from "@mui/material";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
@@ -26,12 +24,14 @@ import AppliedJobs from "./AppliedJobs";
 import BookmarkedJobs from "./BookmarkedJobs";
 import "react-responsive-pagination/themes/classic.css";
 import "./HelperDashboard.css"; // Import the CSS file
+import SideMenuBar from "../../Components/Common/SideMenubar/SideMenuBar";
+import LocationAutocomplete from "../../Components/Common/LocationAutocomplete";
 
 const MyApplication = () => {
   // Sample data for recommended jobs
-  const [currentLocation, setCurrentLocation] = useState<string>("");
+  const [currentLocation, setCurrentLocation] = useState("");
   const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
-  const [activeTab, setActiveTab] = useState<string>("applied");
+  const [activeTab, setActiveTab] = useState("applied");
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
   const handleSelectLocation = (location) => {

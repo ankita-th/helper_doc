@@ -14,22 +14,24 @@ import {
   List,
   ListItem,
 } from "@mui/material";
-import SideMenuBar from "../../Common/SideMenuBar";
-import LocationAutocomplete from "../../Common/LocationAutocomplete";
+// import LocationAutocomplete from "../../Common/LocationAutocomplete";
 import { IconButton } from "@mui/material";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ResponsivePagination from "react-responsive-pagination";
 import "react-responsive-pagination/themes/classic.css";
-import { Link } from "react-router-dom";
-import Footer from "../../Common/Footer";
+import { Link, useNavigate } from "react-router-dom";
+// import Footer from "../../Common/Footer";
+import SideMenuBar from "../../Components/Common/SideMenubar/SideMenuBar";
+import LocationAutocomplete from "../../Components/Common/LocationAutocomplete";
 
 const JobsList = () => {
   // Sample data for recommended jobs
-  const [currentLocation, setCurrentLocation] = useState<string>("");
+  const [currentLocation, setCurrentLocation] = useState("");
   const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
+  const navigate = useNavigate()
   const handleSelectLocation = (location) => {
     setCurrentLocation(location);
   };
@@ -132,7 +134,7 @@ const JobsList = () => {
                     <Box className="JobInfoBox">
                       <Box className="jobsFlex">
                         <img src="/work.svg" alt="Logo" className="work" />
-                        <Box className="JobTitle">
+                        <Box className="JobTitle" onClick={()=>navigate("/helper/job-details")} >
                           <Typography variant="h6">{job.title}</Typography>
                           <Typography variant="body1">{job.location}</Typography>
                         </Box>
