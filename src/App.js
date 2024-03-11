@@ -74,6 +74,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/employee-dashboard" element={<EmployerDashboard />} />
           <Route path="/subscription-plans" element={<SubscriptionPlans />} />
+          <Route path="/employee/subscription-plans" element={<SubscriptionPlans />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/notifications" element={<Notification />} />
           <Route path="/services" element={<OurServices />} />

@@ -35,7 +35,7 @@ export default function ApplicantDetails() {
             <Grid md={3} className="applicantSidebar Inner">
               <Box>
                 <Box className="applicantAvtr">
-                  <img src="./applicantImg.jpg" />
+                  <img src="/applicantImg.jpg" />
                 </Box>
                 <Box className="applicantInfo">
                   <Typography variant="h3">Peter J.</Typography>
@@ -44,11 +44,11 @@ export default function ApplicantDetails() {
                   </Typography>
                   <List>
                     <ListItem>
-                      <img src="./calendar.svg" alt="calendar" />
+                      <img src="/calendar.svg" alt="calendar" />
                       <strong>Date of Need:</strong> 30/01/2024
                     </ListItem>
                     <ListItem>
-                      <img src="./hours.svg" alt="calendar" />
+                      <img src="/hours.svg" alt="calendar" />
                       <strong>Min. hours:</strong> 10 hrs
                     </ListItem>
                   </List>
@@ -57,7 +57,7 @@ export default function ApplicantDetails() {
 
               <Box mt={3} className="helpder_details_dmc">
                 <Typography variant="h4">
-                  <img src="./domesticlocation.svg" /> Domestic Helper Near Me
+                  <img src="/domesticlocation.svg" /> Domestic Helper Near Me
                 </Typography>
                 <List>
                   <ListItem>
