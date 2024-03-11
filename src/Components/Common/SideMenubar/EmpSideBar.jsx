@@ -9,7 +9,7 @@ const EmpSideBar = () => {
 
   useEffect(() => {
     setActiveLink(location.pathname);
-  }, [location]);
+  }, []);
 
   const handleLinkClick = (link) => {
     setActiveLink(link);
