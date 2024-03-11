@@ -14,7 +14,6 @@ const EmpSideBar = () => {
   const handleLinkClick = (link) => {
     setActiveLink(link);
   };
-
   return (
     <>
       <List className="sidebar">
@@ -88,15 +87,15 @@ const EmpSideBar = () => {
 
           <ListItemText primary="Find Applicants" />
         </ListItem>
-        {/* Subcription plan */}
-        <ListItem
+       {/* Subcription plan */}
+      <ListItem
           button
           className={
-            activeLink === "/employee/message" ? "sidebarItem active" : "sidebarItem"
+            activeLink === "/employee/subscription-plans" ? "sidebarItem active" : "sidebarItem"
           }
           component={Link}
-          to=""
-          onClick={() => handleLinkClick("/employee/message")}
+          to="/employee/subscription-plans"
+          onClick={() => handleLinkClick("/employee/subscription-plans")}
         >
           <img src="/subscription_logo.svg" alt="Logo" className="chat" />
           <ListItemText primary="Subscription Plan" />

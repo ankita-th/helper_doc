@@ -119,7 +119,7 @@ const Login = ({ onLogin }) => {
     if(data.email === "helper@yopmail.com"){
       navigate("/helper_dashboard");
     } else {
-      navigate("/employ-dashboard");
+      navigate("/employee-dashboard");
     }
     // setTermsAndConditions(true);
     // Dispatch the updateFormData action

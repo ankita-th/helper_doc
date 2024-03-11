@@ -15,15 +15,17 @@ import {
   Tabs,
   Tab,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import SideMenuBar from "../../Components/Common/SideMenubar/SideMenuBar";
 import { useTranslation } from "react-i18next";
 import PillsTabs from "../../Components/Common/PillsTabs";
 import { TABS } from "../../Components/SubscriptionPlanSection/Constant";
+import EmpSideBar from "../../Components/Common/SideMenubar/EmpSideBar";
 
 export default function SubscriptionPlans() {
     const { t } = useTranslation();
     const [selectedTab, setSelectedTab] = useState(0);
+    const {pathname} = useLocation()
 
     const handleChange = (event, newValue) => {
         setSelectedTab(newValue);
@@ -73,13 +75,13 @@ export default function SubscriptionPlans() {
       <Grid container className="dashboardRow">
         {/* Sidebar Component */}
         <Grid className="dashboardSidebar">
-          <SideMenuBar />
+        {pathname === '/employee/subscription-plans' ? <EmpSideBar /> : <SideMenuBar />}
         </Grid>
         {/* Main Content */}
         <Grid className="dashboardContentArea">
             <Box maxWidth="xl" sx={{ padding: "20px" }}>
               <Typography variant="h2" className="commonTitle">
-                    <Button className="customBack"><img src="./longArrow.svg" alt="Long Arrow"/></Button>Subscription Plans
+                    <Button className="customBack"><img src="/longArrow.svg" alt="Long Arrow"/></Button>Subscription Plans
               </Typography>
               <Typography variant="body1" ml={8}>
                 We offer great price plan for the application
