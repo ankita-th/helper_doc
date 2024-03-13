@@ -98,30 +98,51 @@ const HelperUserDetails= ({}) => {
         <Grid item xs={12} md={6}>
           <FormControl className="queRow" fullWidth>
             <FormLabel className="formLabel">Name *</FormLabel>
-            <TextField variant="outlined" className="formInputFiled" fullWidth/>
+            <TextField variant="outlined" className="formInputFiled" value="John Smith" fullWidth/>
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className="queRow" fullWidth>
             <FormLabel className="formLabel">Email *</FormLabel>
-            <TextField variant="outlined" className="formInputFiled" fullWidth/>
+            <TextField variant="outlined" className="formInputFiled" value="contact@gmail.com" fullWidth/>
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className="queRow" fullWidth>
             <FormLabel className="formLabel">Phone Number *</FormLabel>
-            <TextField variant="outlined" className="formInputFiled" fullWidth/>
+            <TextField variant="outlined" className="formInputFiled" fullWidth value="+63 9867432567"/>
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl className="queRow" fullWidth>
             <FormLabel className="formLabel">Current Location *</FormLabel>
-            <TextField variant="outlined" className="formInputFiled" fullWidth />
+            <TextField variant="outlined" className="formInputFiled" fullWidth value="Hong Kong"/>
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl fullWidth className="queRow">
-            <FormLabel id="educationLevel" className="formLabel">Education Level</FormLabel>
+            <FormLabel id="educationLevel" className="formLabel">Current job last day *</FormLabel>
+            <input type="date" variant="outlined" className="formInputFiled customInput" fullWidth value="Select from calendar"/>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6} className="workingExp">
+          <FormControl fullWidth className="queRow">
+            <FormLabel className="formLabel" id="moreWorkExperince">Working experiences?</FormLabel>
+            <RadioGroup className="radioCheckBtn"
+              row
+              aria-labelledby="moreWorkExperince"
+              name="row-radio-buttons-group"
+              value={isMoreWorkExperince}
+              onChange={handleMoreWorkExperinceChange}
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControl fullWidth className="queRow">
+            <FormLabel id="educationLevel" className="formLabel">Highest Degree *</FormLabel>
             <Select className="formInputFiled">
               <MenuItem value="o-level">O-level</MenuItem>
               <MenuItem value="a-level">A-level</MenuItem>
@@ -132,14 +153,19 @@ const HelperUserDetails= ({}) => {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl fullWidth className="queRow">
+            <FormLabel className="formLabel">Age *</FormLabel>
+            <TextField variant="outlined" className="formInputFiled" fullWidth value="e.g. 25"/>
+          </FormControl>
+        </Grid>
+        {/* <Grid item xs={12} md={6}>
+          <FormControl fullWidth className="queRow">
             <FormLabel className="formLabel">Study Major</FormLabel>
             <Select className="formInputFiled">
               <MenuItem value="English">English</MenuItem>
               <MenuItem value="Spanish">Spanish</MenuItem>
-              {/* Add more options as needed */}
             </Select>
           </FormControl>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} md={6}>
           <FormControl fullWidth className="queRow">
             <FormLabel className="formLabel">Gender</FormLabel>
@@ -152,11 +178,20 @@ const HelperUserDetails= ({}) => {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl fullWidth className="queRow">
+            <FormLabel className="formLabel">Region they would like to serve into *</FormLabel>
+            <Select className="formInputFiled">
+              <MenuItem value="male">Region 1</MenuItem>
+              <MenuItem value="female">Region 2</MenuItem>
+              {/* Add more options as needed */}
+            </Select>
+          </FormControl>
+        </Grid>
+        {/* <Grid item xs={12} md={6}>
+          <FormControl fullWidth className="queRow">
             <FormLabel className="formLabel">Native Language</FormLabel>
             <Select className="formInputFiled">
               <MenuItem value="English">English</MenuItem>
               <MenuItem value="Spanish">Spanish</MenuItem>
-              {/* Add more options as needed */}
             </Select>
           </FormControl>
         </Grid>
@@ -175,7 +210,6 @@ const HelperUserDetails= ({}) => {
             >
               <MenuItem value="Single">Single</MenuItem>
               <MenuItem value="Married">Married</MenuItem>
-              {/* Add more options as needed */}
             </Select>
           </FormControl>
         </Grid>
@@ -201,22 +235,7 @@ const HelperUserDetails= ({}) => {
               />
             </RadioGroup>
           </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormControl fullWidth className="queRow">
-            <FormLabel className="formLabel" id="moreWorkExperince">Working experiences?</FormLabel>
-            <RadioGroup className="radioCheckBtn"
-              row
-              aria-labelledby="moreWorkExperince"
-              name="row-radio-buttons-group"
-              value={isMoreWorkExperince}
-              onChange={handleMoreWorkExperinceChange}
-            >
-              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-              <FormControlLabel value="no" control={<Radio />} label="No" />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
           <FormControl fullWidth className="queRow">
             <FormLabel className="formLabel" id="skills">Skills</FormLabel>
@@ -227,23 +246,45 @@ const HelperUserDetails= ({}) => {
                   <FormGroup className="radioCheckBtn">
                     <FormControlLabel
                       control={
-                        <Checkbox
-                          checked={selectedSkills.includes("New Born")}
-                          onChange={handleSkillsChange}
-                          name="New Born"
-                        />
+                        <Checkbox checked={selectedSkills.includes("New Born")} onChange={handleSkillsChange} name="New Born"/>
                       }
-                      label="New Born"
+                      label="Newborn(0-1)"
                     />
                     <FormControlLabel
                       control={
-                        <Checkbox
-                          checked={selectedSkills.includes("Baby Sitting")}
-                          onChange={handleSkillsChange}
-                          name="Baby Sitting"
-                        />
+                        <Checkbox checked={selectedSkills.includes("Toddler")} onChange={handleSkillsChange} name="Toddler"/>
                       }
-                      label="Baby Sitting"
+                      label="Toddler(1-3)"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Child")} onChange={handleSkillsChange} name="Child"/>
+                      }
+                      label="Child(4-12)"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Teen")} onChange={handleSkillsChange} name="Teen"/>
+                      }
+                      label="Teen (13-17)"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Elderly")} onChange={handleSkillsChange} name="Elderly"/>
+                      }
+                      label="Elderly (>70)"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Special Care")} onChange={handleSkillsChange} name="Special Care"/>
+                      }
+                      label="Special Care"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Pet")} onChange={handleSkillsChange} name="Pet"/>
+                      }
+                      label="Pet"
                     />
                   </FormGroup>
                 </FormGroup>
@@ -252,23 +293,51 @@ const HelperUserDetails= ({}) => {
                   <FormGroup className="radioCheckBtn">
                     <FormControlLabel
                       control={
-                        <Checkbox
-                          checked={selectedSkills.includes("Indian Cooking")}
-                          onChange={handleSkillsChange}
-                          name="Indian Cooking"
-                        />
+                        <Checkbox checked={selectedSkills.includes("Arabic")} onChange={handleSkillsChange} name="Arabic"/>
                       }
-                      label="Indian Cooking"
+                      label="Arabic"
                     />
                     <FormControlLabel
                       control={
-                        <Checkbox
-                          checked={selectedSkills.includes("Chinese Cooking")}
-                          onChange={handleSkillsChange}
-                          name="Chinese Cooking"
-                        />
+                        <Checkbox checked={selectedSkills.includes("Chinese")} onChange={handleSkillsChange} name="Chinese"/>
                       }
-                      label="Chinese Cooking"
+                      label="Chinese"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Indian")} onChange={handleSkillsChange} name="Indian"/>
+                      }
+                      label="Indian"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Thai")} onChange={handleSkillsChange} name="Thai"/>
+                      }
+                      label="Thai"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Western")} onChange={handleSkillsChange} name="Western"/>
+                      }
+                      label="Western"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Vegetarian")} onChange={handleSkillsChange} name="Vegetarian"/>
+                      }
+                      label="Vegetarian"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Baking")} onChange={handleSkillsChange} name="Baking"/>
+                      }
+                      label="Baking"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Dessert")} onChange={handleSkillsChange} name="Dessert"/>
+                      }
+                      label="Dessert"
                     />
                   </FormGroup>
                 </FormGroup>
@@ -277,23 +346,27 @@ const HelperUserDetails= ({}) => {
                   <FormGroup className="radioCheckBtn">
                     <FormControlLabel
                       control={
-                        <Checkbox
-                          checked={selectedSkills.includes("Gardening")}
-                          onChange={handleSkillsChange}
-                          name="Gardening"
-                        />
+                        <Checkbox checked={selectedSkills.includes("Car Washing")} onChange={handleSkillsChange} name="Car Washing"/>
                       }
-                      label="Gardening"
+                      label="Car Washing"
                     />
                     <FormControlLabel
                       control={
-                        <Checkbox
-                          checked={selectedSkills.includes("Driving")}
-                          onChange={handleSkillsChange}
-                          name="Driving"
-                        />
+                        <Checkbox checked={selectedSkills.includes("Cleaning")} onChange={handleSkillsChange} name="Cleaning"/>
                       }
-                      label="Driving"
+                      label="Cleaning"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Marketing")} onChange={handleSkillsChange} name="Marketing"/>
+                      }
+                      label="Marketing"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={selectedSkills.includes("Gardening")} onChange={handleSkillsChange} name="Gardening"/>
+                      }
+                      label="Gardening"
                     />
                   </FormGroup>
                 </FormGroup>
@@ -340,7 +413,7 @@ const HelperUserDetails= ({}) => {
         <Grid item xs={12}>
           <FormControl fullWidth className="queRow">
             <FormLabel id="introVideo" className="formLabel">Self intro video link*</FormLabel>
-            <TextField className="formInputFiled" fullWidth variant="outlined" />
+            <TextField className="formInputFiled" fullWidth variant="outlined" placeholder="e.g. https://www.youtube.com/Self-intro-video-link"/>
           </FormControl>
         </Grid>
 
@@ -377,6 +450,10 @@ const HelperUserDetails= ({}) => {
               </div>
             </div>
           </FormControl>
+        </Grid>
+
+        <Grid className="noteSpecified">
+          <Typography variant="body1">NOTE: ALL THE DETAILS WILL SHOW HERE IN DEVELOPMENT MODE</Typography>
         </Grid>
         
         <Grid container justifyContent="center" spacing={2}>

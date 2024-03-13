@@ -13,6 +13,8 @@ import {
   FormGroup,
   FormLabel,
   Grid,
+  List,
+  ListItem,
   Step,
   StepLabel,
   Stepper,
@@ -20,7 +22,7 @@ import {
   styled,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const TitleWrapper = styled("div")({
   textAlign: "center",
@@ -116,7 +118,7 @@ const HelperPublicProfileView = ({
 
   return (
     <>
-      <HeaderBar>
+      <HeaderBar className="HeaderProfile">
         <TitleWrapper>
           <Button onClick={handleBack} style={{ alignSelf: "flex-start" }}>
             <ArrowBack style={{ color: "white" }} />
@@ -129,7 +131,7 @@ const HelperPublicProfileView = ({
           </Typography>
         </TitleWrapper>
       </HeaderBar>
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" className="CvView">
         <Grid container spacing={3} alignItems="center">
           <Grid item xs={12} md={6}>
             <Box display="flex" alignItems="center">
@@ -137,8 +139,8 @@ const HelperPublicProfileView = ({
                 <img id="avatar" src={`/default.png`} alt="Avatar" />
               </Avatar>
               <div style={{ marginLeft: "16px" }}>
-                <Typography variant="h5">Yee Ting </Typography>
-                <div
+                <Typography variant="h5">Hiroshi Nomura </Typography>
+                <div className="hightlightProfile"
                   style={{
                     display: "flex",
                     flexDirection: "row",
@@ -153,14 +155,14 @@ const HelperPublicProfileView = ({
               </div>
             </Box>
           </Grid>
-          <Grid item xs={12} md={6} sx={{ textAlign: "right" }}>
+          {/* <Grid item xs={12} md={6} sx={{ textAlign: "right" }}>
             <Button variant="contained" color="primary">
               View CV
             </Button>
-          </Grid>
+          </Grid> */}
         </Grid>
         <Box marginY={5}>
-          <Typography>
+          <Typography className="CustomPara">
             There are many variations of passages of Lorem Ipsum available, but
             the majority have suffered alteration in some form, by injected
             humour, or randomised words which don't look even slightly
@@ -172,40 +174,43 @@ const HelperPublicProfileView = ({
             slightly believable.
           </Typography>
         </Box>
+        <Box className="aboutProfile">
+          <Typography variant="h6">About Hiroshi Noruma</Typography>
+          <List>
+            <ListItem><b>Nationality</b><span>HongKong</span></ListItem>
+            <ListItem><b>Date of Birth</b><span>01/01/2001</span></ListItem>
+            <ListItem><b>Marital Status</b><span>Single</span></ListItem>
+            <ListItem><b>Current Location</b><span>HongKong</span></ListItem>
+            <ListItem><b>Religion</b><span>Islamic</span></ListItem>
+            <ListItem><b>Religion</b><span>Islamic</span></ListItem>
+            <ListItem><b>Height</b><span>170cm</span></ListItem>
+            <ListItem><b>Passport No</b><span>X123456(A)</span></ListItem>
+            <ListItem><b>Weight</b><span>65kg</span></ListItem>
+          </List>
+        </Box>
         <Box marginY={5}>
-          <Card variant="outlined">
+          <Card variant="outlined" className="profileCard">
             <CardContent>
               <Typography variant="h5">Experience</Typography>
               <Stepper orientation="vertical">
                 {experienceData.map((item, index) => (
-                  <Box
+                  <Box className="expList"
                     key={index}
                     display="flex"
                     alignItems="center"
                     marginBottom={1}
                   >
-                    <div
-                      style={{
-                        marginRight: "8px",
-                        border: "1px solid #55DBA6",
-                        borderRadius: "20%",
-                        padding: "4px",
-                      }}
-                    >
+                    <div className="expImgWrap">
                       <img
                         src={`/experience.svg`}
                         alt="experience"
-                        style={{
-                          width: "24px",
-                          height: "24px",
-                        }}
                       />
                     </div>
                     <div>
                       <Typography variant="h6">{item.title}</Typography>
-                      <Typography variant="body1">{item.duration}</Typography>
-                      <Typography variant="body1">{item.role}</Typography>
-                      <Typography variant="body1">
+                      <Typography variant="body1" className="date">{item.duration}</Typography>
+                      <Typography variant="body1" className="profileRole">{item.role}</Typography>
+                      <Typography variant="body1" className="description">
                         {item.description}
                       </Typography>
                     </div>
@@ -216,38 +221,27 @@ const HelperPublicProfileView = ({
           </Card>
         </Box>
         <Box marginY={5}>
-          <Card variant="outlined">
+          <Card variant="outlined" className="profileCard">
             <CardContent>
               <Typography variant="h5">Education</Typography>
               <Stepper orientation="vertical">
                 {educationData.map((item, index) => (
-                  <Box
+                  <Box className="expList"
                     key={index}
                     display="flex"
                     alignItems="center"
                     marginBottom={1}
                   >
-                    <div
-                      style={{
-                        marginRight: "8px",
-                        border: "1px solid #55DBA6",
-                        borderRadius: "20%",
-                        padding: "4px",
-                      }}
-                    >
+                    <div className="expImgWrap">
                       <img
                         src={`/graduation.svg`}
                         alt="graduation"
-                        style={{
-                          width: "24px",
-                          height: "24px",
-                        }}
                       />
                     </div>
                     <div>
-                      <Typography variant="h6">{item.institute}</Typography>
-                      <Typography variant="body1">{item.year}</Typography>
-                      <Typography variant="body1">{item.study}</Typography>
+                      <Typography variant="h6" >{item.institute}</Typography>
+                      <Typography variant="body1" className="date">{item.year}</Typography>
+                      <Typography variant="body1" className="profileRole">{item.study}</Typography>
                     </div>
                   </Box>
                 ))}
@@ -256,7 +250,7 @@ const HelperPublicProfileView = ({
           </Card>
         </Box>
         <Box marginY={5}>
-          <Card variant="outlined">
+          <Card variant="outlined"  className="profileCard">
             <CardContent>
               <FormControl fullWidth>
                 <Typography variant="h5" id="skills">
@@ -268,86 +262,41 @@ const HelperPublicProfileView = ({
                       <Typography variant="body1" component="legend">
                         Care
                       </Typography>
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={selectedSkills.includes("New Born")}
-                              onChange={handleSkillsChange}
-                              name="New Born"
-                            />
-                          }
-                          label="New Born"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={selectedSkills.includes("Baby Sitting")}
-                              onChange={handleSkillsChange}
-                              name="Baby Sitting"
-                            />
-                          }
-                          label="Baby Sitting"
-                        />
-                      </FormGroup>
+                      <List className="profileSkillset">
+                        <ListItem>Newborn(0-1)</ListItem>
+                        <ListItem>Toddler(1-3)</ListItem>
+                        <ListItem>Child(4-12)</ListItem>
+                        <ListItem>Teen (13-17)</ListItem>
+                        <ListItem>Elderly (>70)</ListItem>
+                        <ListItem>Special Care</ListItem>
+                        <ListItem>Pet</ListItem>
+                      </List>
                     </FormGroup>
                     <FormGroup>
                       <Typography variant="body1" component="legend">
                         Cooking
                       </Typography>
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={selectedSkills.includes(
-                                "Indian Cooking"
-                              )}
-                              onChange={handleSkillsChange}
-                              name="Indian Cooking"
-                            />
-                          }
-                          label="Indian Cooking"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={selectedSkills.includes(
-                                "Chinese Cooking"
-                              )}
-                              onChange={handleSkillsChange}
-                              name="Chinese Cooking"
-                            />
-                          }
-                          label="Chinese Cooking"
-                        />
-                      </FormGroup>
+                      <List className="profileSkillset">
+                        <ListItem>Arabic</ListItem>
+                        <ListItem>Chinese</ListItem>
+                        <ListItem>Indian</ListItem>
+                        <ListItem>Thai</ListItem>
+                        <ListItem>Western</ListItem>
+                        <ListItem>Vegetarian</ListItem>
+                        <ListItem>Baking</ListItem>
+                        <ListItem>Dessert</ListItem>
+                      </List>
                     </FormGroup>
                     <FormGroup>
                       <Typography variant="body1" component="legend">
                         Household
                       </Typography>
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={selectedSkills.includes("Gardening")}
-                              onChange={handleSkillsChange}
-                              name="Gardening"
-                            />
-                          }
-                          label="Gardening"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={selectedSkills.includes("Driving")}
-                              onChange={handleSkillsChange}
-                              name="Driving"
-                            />
-                          }
-                          label="Driving"
-                        />
-                      </FormGroup>
+                      <List className="profileSkillset">
+                        <ListItem>Car Washing</ListItem>
+                        <ListItem>Cleaning</ListItem>
+                        <ListItem>Marketing</ListItem>
+                        <ListItem>Gardening</ListItem>
+                      </List>
                     </FormGroup>
                   </FormControl>
                 </FormGroup>
@@ -356,28 +305,17 @@ const HelperPublicProfileView = ({
           </Card>
         </Box>
         <Box marginY={5}>
-          <Card variant="outlined">
+          <Card variant="outlined"  className="profileCard">
             <CardContent>
               <Typography variant="h5">Languages Known</Typography>
               <Grid container spacing={2}>
                 {knownLanguageData.map((item, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={index}>
-                    <Box display="flex" alignItems="center" marginBottom={1}>
-                      <div
-                        style={{
-                          marginRight: "8px",
-                          border: "1px solid #55DBA6",
-                          borderRadius: "20%",
-                          padding: "4px",
-                        }}
-                      >
+                  <Grid item xs={12} sm={6} md={4} key={index} className="LangDisplay">
+                    <Box display="flex" alignItems="center" marginBottom={1} className="expList">
+                      <div className="expImgWrap">
                         <img
                           src={`/language.svg`}
                           alt="language"
-                          style={{
-                            width: "30px",
-                            height: "30px",
-                          }}
                         />
                       </div>
                       <div>
@@ -387,6 +325,35 @@ const HelperPublicProfileView = ({
                     </Box>
                   </Grid>
                 ))}
+              </Grid>
+            </CardContent>
+          </Card>
+        </Box>
+        <Box marginY={5}>
+          <Card variant="outlined"  className="profileCard">
+            <CardContent>
+              <Typography variant="h5">Documents</Typography>
+              <Grid container spacing={2}>
+                <List className="docListProfile">
+                  <ListItem>
+                    <Link>
+                        <img src="./profileDoc.svg"/>
+                        <Typography>profiledoc.doc</Typography>
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <Link>
+                        <img src="./Pdf.svg"/>
+                        <Typography>drivinglicense.pdf</Typography>
+                    </Link>
+                  </ListItem>
+                  <ListItem>
+                    <Link>
+                        <img src="./profileDoc.svg"/>
+                        <Typography>profiledoc.doc</Typography>
+                    </Link>
+                  </ListItem>
+                </List>
               </Grid>
             </CardContent>
           </Card>

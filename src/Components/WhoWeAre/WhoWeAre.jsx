@@ -25,9 +25,7 @@ const WhoWeAre = () => {
           <Grid item xs={12} md={6}>
             <div className="whoWeContent">
               <Typography variant="h6">{t("whoWeAreTitle")}</Typography>
-              <Typography variant="h2" className="title">
-                {t("whoWeAreHeader")}
-              </Typography>
+              <Typography variant="h2" className="title">{t("whoWeAreHeader")}</Typography>
               <Typography variant="body1">{t("whoWeAreContent")}</Typography>
               <List className="whoWeAreList">
                 {WHO_WE_ARE.map((title, index) => (

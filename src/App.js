@@ -33,6 +33,8 @@ import Notifications from "./Components/Common/Notification";
 import Chat from "./pages/HelperDashboard/Chat";
 import ApplicantDetails from "./Components/Common/Applicants/ApplicantDetails";
 import JobDetails from "./pages/HelperDashboard/Jobs/JobDetails";
+import PostJobSteps from "./Components/Common/PostJob/PostJobSteps";
+import PostJobStep1 from "./Components/Common/PostJob/PostJobStep1";
 
 function App() {
   const [formData, setFormData] = useState({
@@ -84,6 +86,8 @@ function App() {
           <Route path="/registration_page" element={<RegistrationPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/jobs" element={<JobsSection />} />
+          <Route path="/postJob" element={<PostJobStep1 />}/>
+          <Route path="/postJob1" element={<PostJobSteps />}/>
           <Route
               path="/signup/helper"
               element={<HelperSignup role={formData.role} />}

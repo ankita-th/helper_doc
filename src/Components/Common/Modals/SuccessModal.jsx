@@ -17,8 +17,8 @@ const SuccessModal = ({
 }) => {
   return (
     <Container maxWidth="xl">
-      <Dialog open={open} onClose={handleClose}>
-        <Box
+      <Dialog open={open} onClose={handleClose} className="customModal">
+        <Box className="innerModal"
           sx={{
             textAlign: "center",
             mt: 8,
