@@ -19,7 +19,6 @@ const CountryDropdown = ({ field }) => {
       <InputLabel>{t("select_country")}</InputLabel>
       <Select
         {...field}
-        multiple
         defaultValue={[]}
         // IconComponent={() => (
         //   <IconButton size="small">
@@ -27,8 +26,7 @@ const CountryDropdown = ({ field }) => {
         //   </IconButton>
         // )}
         renderValue={(selected) =>
-          selected &&
-          selected.map((code) => isoCountries.getName(code, "en")).join(", ")
+          selected && isoCountries.getName(selected, "en")
         }
       >
         {Object.keys(isoCountries.getNames("en")).map((countryCode) => (

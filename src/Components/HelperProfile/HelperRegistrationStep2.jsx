@@ -166,42 +166,42 @@ const HelperRegistrationStep2 = ({ formData, setFormData }) => {
   };
 
   // Function to handle next button click
-  const handleNext = () => {
+  const handleNext = (data) => {
+    console.log(data, "dataa");
     // If the user is on the last step, navigate to Step 3 with the form data
     if (stepperActiveStep === steps.length - 1) {
-      const formDataForStep3 = {
-        fullName: formData.fullName,
-        phoneNumber: formData.phoneNumber,
-        whatsappNumber: whatsappNumber,
-        email: formData.email,
-        password: formData.password,
-        passwordConfirmation: formData.passwordConfirmation,
-        termsAndConditions: formData.termsAndConditions,
-        role: formData.role,
-        gender: gender,
-        passportNumber: passportNumber,
-        maritalStatus: maritalStatus,
-        religion: religion,
-        dob: dob,
-        height: height,
-        weight: weight,
-        currentLocation: currentLocation,
-        selectedSkills: selectedSkills,
-        familyData: familyData,
-        educationData: {
-          ...educationData,
-          // Include otherLanguages in educationData
-          otherLanguages: educationData.otherLanguages.map((language) => ({
-            name: language.name,
-            proficiency: language.proficiency,
-          })),
-        },
-      };
-
+      // const formDataForStep3 = {
+      //   fullName: formData.fullName,
+      //   phoneNumber: formData.phoneNumber,
+      //   whatsappNumber: whatsappNumber,
+      //   email: formData.email,
+      //   password: formData.password,
+      //   passwordConfirmation: formData.passwordConfirmation,
+      //   termsAndConditions: formData.termsAndConditions,
+      //   role: formData.role,
+      //   gender: gender,
+      //   passportNumber: passportNumber,
+      //   maritalStatus: maritalStatus,
+      //   religion: religion,
+      //   dob: dob,
+      //   height: height,
+      //   weight: weight,
+      //   currentLocation: currentLocation,
+      //   selectedSkills: selectedSkills,
+      //   familyData: familyData,
+      //   educationData: {
+      //     ...educationData,
+      //     // Include otherLanguages in educationData
+      //     otherLanguages: educationData.otherLanguages.map((language) => ({
+      //       name: language.name,
+      //       proficiency: language.proficiency,
+      //     })),
+      //   },
+      // };
       // Navigate to Step 3 and pass the data in the location state
-      navigate("/registration_steps/step3", {
-        state: { formData: formDataForStep3, otherLanguages: otherLanguages },
-      });
+      // navigate("/registration_steps/step3", {
+      //   state: { formData: formDataForStep3, otherLanguages: otherLanguages },
+      // });
     } else {
       // If the user is not on the last step, proceed to the next step
       setStepperActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -233,30 +233,27 @@ const HelperRegistrationStep2 = ({ formData, setFormData }) => {
         <>
           <FormControl className="queRow" fullWidth>
             <FormLabel className="formLabel" id="fullName">
-              Full Name *
+              {t("full_name")} *
             </FormLabel>
             <TextField
               className="formInputFiled"
               name="fullName"
               placeholder="John Smith"
               {...register("fullName", {
-                required: "Full Name is required",
+                required: t('name_required'),
               })}
-              // value={formData.fullName}
-              // onChange={handleInputChange}
-              // required
             />
             {errors.fullName && <ErrorMessage msg={errors.fullName?.message} />}
           </FormControl>
           <FormControl className="queRow" fullWidth>
             <FormLabel className="formLabel" id="gender">
-              Gender *
+              {t("gender")} *
             </FormLabel>
             <Controller
               name="gender"
               control={control}
               defaultValue=""
-              rules={{ required: "Gender is required" }}
+              rules={{ required: t('gender_required') }}
               render={({ field }) => (
                 <RadioGroupField
                   radioOptions={["Female", "Male"]}
@@ -277,7 +274,7 @@ const HelperRegistrationStep2 = ({ formData, setFormData }) => {
               placeholder="e.g. X123456(A)"
               variant="outlined"
               {...register("passportOrHKID", {
-                required: "Passport/HKID is required",
+                required: t('passport_hkid_required'),
               })}
             />
             {errors.passportOrHKID && (
@@ -318,7 +315,7 @@ const HelperRegistrationStep2 = ({ formData, setFormData }) => {
                   name="religion"
                   control={control}
                   defaultValue=""
-                  rules={{ required: "Religion is required" }}
+                  rules={{ required: t('religion_required') }}
                   render={({ field }) => (
                     <SingleSelectField
                       field={field}
@@ -348,7 +345,7 @@ const HelperRegistrationStep2 = ({ formData, setFormData }) => {
               name="whatsapp"
               control={control}
               defaultValue=""
-              rules={{ required: "Whatsapp Number is required" }}
+              rules={{ required: t('whatsapp_required') }}
               render={({ field }) => (
                 <PhoneInput
                   {...field}
@@ -361,22 +358,13 @@ const HelperRegistrationStep2 = ({ formData, setFormData }) => {
           </FormControl>
           <FormGroup>
             <Controller
-              name="whatsappNumberVisibleToEmployee"
+              name="isWhatsappNumberVisible"
               control={control}
-              defaultValue=""
-              // rules={{ required: "Whatsapp Number is required" }}
+              defaultValue={false}
               render={({ field }) => (
                 <FormControlLabel
                   className="switcher"
-                  control={
-                    <Switch
-                      {...field}
-                      // checked={isWhatsappNumberVisible}
-                      // onChange={(e) =>
-                      //   setIsWhatsappNumberVisible(e.target.checked)
-                      // }
-                    />
-                  }
+                  control={<Switch {...field} />}
                   label="Visible to subscribed employers interested to have interview with you?"
                 />
               )}
@@ -387,28 +375,28 @@ const HelperRegistrationStep2 = ({ formData, setFormData }) => {
             <FormLabel className="formLabel" id="dob">
               Date of Birth{" "}
             </FormLabel>
+
             <Controller
               name="dob"
-              control={control}
               defaultValue=""
-              rules={{ required: "Date of birth is required" }}
-              render={({ field }) => (
-                <DatePicker
-                  {...field}
-                  showIcon
-                  // selected={dob ? new Date(dob) : null}
-                  // onChange={(date) =>
-                  //   setDob(date ? date.toISOString().split("T")[0] : "")
-                  // }
-                  peekNextMonth
-                  showMonthDropdown
-                  showYearDropdown
-                  dropdownMode="select"
-                  isClearable
-                  placeholderText="Select Date of Birth"
-                  className="formInputFiled full-width-datepicker"
-                />
-              )}
+              control={control}
+              rules={{ required: t('dob_required') }}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <DatePicker
+                    onChange={onChange}
+                    selected={value}
+                    showIcon
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    // isClearable
+                    placeholderText="Select Date of Birth"
+                    className="formInputFiled full-width-datepicker"
+                  />
+                );
+              }}
             />
             {errors.dob && <ErrorMessage msg={errors.dob?.message} />}
           </FormControl>
@@ -489,7 +477,7 @@ const HelperRegistrationStep2 = ({ formData, setFormData }) => {
               name="location"
               control={control}
               defaultValue=""
-              rules={{ required: "Location is required" }}
+              rules={{ required: t('location_required') }}
               render={({ field }) => (
                 <LocationAutocomplete
                   onSelect={handleSelectLocation}
@@ -1077,7 +1065,7 @@ const HelperRegistrationStep2 = ({ formData, setFormData }) => {
   return (
     <Grid item xs={12} md={6} className="stepsForm">
       <Box sx={{ maxWidth: 800 }} className="StepFormCol formDataInfo">
-        <form onSubmit={handleSubmit(handleNextStep)}>
+        <form onSubmit={handleSubmit(handleNext)}>
           <Stepper activeStep={stepperActiveStep} orientation="vertical">
             {steps.map((step, index) => (
               <Step key={step.label}>
