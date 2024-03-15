@@ -87,16 +87,16 @@ const Header = () => {
             {!isMobileOrTablet && (
               <Toolbar>
                 <div className="menubarLink">
-                  <MuiLink color="inherit" component={Link} to="/jobs">
+                  <MuiLink color="inherit" component={Link} to="/feature-jobs">
                     {t("jobs")}
                   </MuiLink>
-                  <MuiLink color="inherit" component={Link} to="/employers">
+                  <MuiLink color="inherit" component={Link} to="/feature-employers">
                     {t("employers")}
                   </MuiLink>
-                  <MuiLink color="inherit" component={Link} to="/services">
+                  <MuiLink color="inherit" component={Link} to="/our-service">
                     {t("services")}
                   </MuiLink>
-                  <MuiLink color="inherit" component={Link} to="/news">
+                  <MuiLink color="inherit" component={Link} to="/news-feed">
                     {t("news")}
                   </MuiLink>
 
@@ -113,7 +113,7 @@ const Header = () => {
                       <MuiLink
                         color="inherit"
                         component={Link}
-                        to="/registration_page"
+                        to="/register"
                         className="signUpButton"
                       >
                         {t("signup")}

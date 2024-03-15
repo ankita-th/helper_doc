@@ -1,7 +1,7 @@
 // src/components/News/News.tsx
 import React, { useState, useEffect } from 'react';
 
-const News= () => {
+const NewsFeed= () => {
   const [news, setNews] = useState([]);
   useEffect(() => {
     // Fetch news from the server or an API endpoint
@@ -31,4 +31,4 @@ const News= () => {
   );
 };
 
-export default News;
+export default NewsFeed;

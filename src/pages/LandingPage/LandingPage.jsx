@@ -7,7 +7,7 @@ import HowItWorks from "../../Components/HowItWorks/HowItWorks";
 import WhoWeAre from "../../Components/WhoWeAre/WhoWeAre";
 import WhyChooseUs from "../../Components/WhyUs/WhyChooseUs";
 import HelperSection from "../../Components/HelperSection/HelperSection";
-import JobsSection from "../../Components/JobsSection/JobsSection";
+import JobsSection from "../FeatureJobs/FeatureJobs";
 import SubscriptionPlanSection from "../../Components/SubscriptionPlanSection/SubscriptionPlanSection";
 import TestimonialSection from "../../Components/TestimonialSection/TestimonialSection";
 
