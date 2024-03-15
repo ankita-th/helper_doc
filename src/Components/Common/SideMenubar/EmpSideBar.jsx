@@ -91,11 +91,11 @@ const EmpSideBar = () => {
       <ListItem
           button
           className={
-            activeLink === "/employee/subscription-plans" ? "sidebarItem active" : "sidebarItem"
+            activeLink === "/subscription-plans" ? "sidebarItem active" : "sidebarItem"
           }
           component={Link}
-          to="/employee/subscription-plans"
-          onClick={() => handleLinkClick("/employee/subscription-plans")}
+          to=""
+          onClick={() => handleLinkClick("/subscription-plans")}
         >
           <img src="/subscription_logo.svg" alt="Logo" className="chat" />
           <ListItemText primary="Subscription Plan" />

@@ -1,11 +1,11 @@
 import { Container, Grid, Typography } from "@mui/material";
 import React from "react";
-import ArrowButton from "../Common/ArrowButton";
+import ArrowButton from "../../Components/Common/ArrowButton";
 import { useTranslation } from "react-i18next";
-import HelperCard from "../Common/HelperCard";
+import HelperCard from "../../Components/Common/HelperCard";
 import { JOBS } from "./Constant";
 
-const JobsSection = () => {
+const FeatureJobs = () => {
   const { t } = useTranslation();
 
   return (
@@ -34,4 +34,4 @@ const JobsSection = () => {
   );
 };
 
-export default JobsSection;
+export default FeatureJobs;

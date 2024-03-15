@@ -28,7 +28,7 @@ const NewsLetter = () => {
 
   const handleSubscribe = async () => {
     if (!isValidEmail(email)) {
-      setModalMessage(t("enter_valid_email"));
+      setModalMessage(t("valid_email_msg"));
       setOpenModal(true);
       return;
     }

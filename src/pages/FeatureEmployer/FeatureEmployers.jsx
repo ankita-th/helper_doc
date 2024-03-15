@@ -23,7 +23,7 @@ const employersData = [
   },
 ];
 
-const Employers = () => {
+const FeatureEmployers = () => {
   return (
     <section className="employersSection">
       <Container className="employersContainer pageContainer">
@@ -54,4 +54,4 @@ const Employers = () => {
   );
 };
 
-export default Employers;
+export default FeatureEmployers;
