@@ -37,7 +37,7 @@ const StyledImageContainer = styled("div")({
 });
 
 const HelperProfileDetailsSteps = () => {
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
   const [stepDetails, setStepDetails] = useState({});
   const { t } = useTranslation();
   const { step } = useParams();
@@ -72,44 +72,24 @@ const HelperProfileDetailsSteps = () => {
     setActiveStep(currentStep);
   }, [step]);
 
-  useState(() => {
-    getStepperData(activeStep, userId)
-      .then((res) => {
-        console.log(res);
-        setStepDetails(res.data)
-      })
-      .catch((err) => {
-        console.log(err, "error");
-      });
+  useEffect(() => {
+    if (activeStep !== 0) {
+      getStepperData(activeStep, userId)
+        .then((res) => {
+          setStepDetails(res.data);
+        })
+        .catch((err) => {
+          console.log(err, "error");
+        });
+    }
   }, [activeStep]);
 
   const saveStepDetails = (answerArray) => {
-    // const answerArray = [];
-
-    // Iterate over originalObject
-    // for (const key in questAnswer) {
-    //   if (key.startsWith("answer_")) {
-    //     const questionId = key.split("_")[1]; // Extract questionId
-    //     const subKey = `sub_que_${questionId}`;
-    //     // const subAnswer = Array.isArray(questAnswer[subKey])
-    //     //   ? questAnswer[subKey].join(", ")
-    //     //   : questAnswer[subKey] || "";
-    //     const subAnswer = questAnswer[subKey] || "";
-
-    //     answerArray.push({
-    //       questionId,
-    //       answer: questAnswer[key],
-    //       subAnswer: subAnswer || "",
-    //     });
-    //   }
-    // }
-
     const payload = {
       userId: userId,
-      answer: answerArray,
+      answers: answerArray,
     };
-
-    addStepperData(activeStep, payload,userId)
+    addStepperData(activeStep, payload, userId)
       .then((res) => {
         navigate("/register/helper/profile-steps/applicant_info", {
           state: { prevRoute: "/register/helper" },
@@ -117,9 +97,6 @@ const HelperProfileDetailsSteps = () => {
         console.log(res, "ressss");
       })
       .catch((err) => {
-        navigate("/register/helper/profile-steps/applicant_info", {
-          state: { prevRoute: "/register/helper" },
-        });
         console.log(err);
       });
   };
@@ -138,22 +115,40 @@ const HelperProfileDetailsSteps = () => {
           <ProfileDiscrimination />
           <Grid container spacing={3} className="shadow-box stepsFormRow">
             {activeStep === 1 && (
-              <HelperRegistrationStep1 saveStepDetails={saveStepDetails} stepDetails={stepDetails} />
+              <HelperRegistrationStep1
+                saveStepDetails={saveStepDetails}
+                stepDetails={stepDetails}
+              />
             )}
             {activeStep === 2 && (
-              <HelperRegistrationStep2 saveStepDetails={saveStepDetails} stepDetails={stepDetails} />
+              <HelperRegistrationStep2
+                saveStepDetails={saveStepDetails}
+                stepDetails={stepDetails}
+              />
             )}
             {activeStep === 3 && (
-              <HelperRegistrationStep1 saveStepDetails={saveStepDetails} stepDetails={stepDetails} />
+              <HelperRegistrationStep1
+                saveStepDetails={saveStepDetails}
+                stepDetails={stepDetails}
+              />
             )}
             {activeStep === 4 && (
-              <HelperRegistrationStep1 saveStepDetails={saveStepDetails} stepDetails={stepDetails} />
+              <HelperRegistrationStep1
+                saveStepDetails={saveStepDetails}
+                stepDetails={stepDetails}
+              />
             )}
             {activeStep === 5 && (
-              <HelperRegistrationStep1 saveStepDetails={saveStepDetails} stepDetails={stepDetails} />
+              <HelperRegistrationStep1
+                saveStepDetails={saveStepDetails}
+                stepDetails={stepDetails}
+              />
             )}
             {activeStep === 6 && (
-              <HelperRegistrationStep1 saveStepDetails={saveStepDetails} stepDetails={stepDetails} />
+              <HelperRegistrationStep1
+                saveStepDetails={saveStepDetails}
+                stepDetails={stepDetails}
+              />
             )}
             <Grid
               item
