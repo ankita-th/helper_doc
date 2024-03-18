@@ -4,15 +4,24 @@ import React from "react";
 const CheckBoxField = ({ checkBoxesValues, field }) => {
   return (
     <FormGroup className="radioCheckBtn">
-      {checkBoxesValues.map((check) => (
+      {checkBoxesValues.map((opt) => (
         <FormControlLabel
           control={
             <Checkbox
               {...field}
-              name={check}
+              onChange={(e) => {
+                const isChecked = e.target.checked;
+                field.onChange(
+                  isChecked
+                    ? [...field.value, opt.type]
+                    : field.value.filter((value) => value !== opt.type)
+                );
+              }}
+              name={opt.type}
+              value={opt.type}
             />
           }
-          label={check}
+          label={opt.type}
         />
       ))}
     </FormGroup>

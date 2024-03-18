@@ -12,6 +12,10 @@ import {
   getStepperData,
 } from "../../Services/ProfileServices/StepperServices";
 import HelperRegistrationStep2 from "../../Components/HelperProfile/HelperRegistrationStep2";
+import HelperRegistrationStep3 from "../../Components/HelperProfile/HelperRegistrationStep3";
+import HelperRegistrationStep4 from "../../Components/HelperProfile/HelperRegistrationStep4";
+import HelperRegistrationStep5 from "../../Components/HelperProfile/HelperRegistrationStep5";
+import HelperRegistrationStep6 from "../../Components/HelperProfile/HelperRegistrationStep6";
 
 const TitleWrapper = styled("div")({
   textAlign: "center",
@@ -84,19 +88,22 @@ const HelperProfileDetailsSteps = () => {
     }
   }, [activeStep]);
 
-  const saveStepDetails = (answerArray) => {
+  const saveStepDetails = (answer, nextStep) => {
     const payload = {
       userId: userId,
-      answers: answerArray,
+      ...answer
     };
     addStepperData(activeStep, payload, userId)
       .then((res) => {
-        navigate("/register/helper/profile-steps/applicant_info", {
+        navigate(`/register/helper/profile-steps/${nextStep}`, {
           state: { prevRoute: "/register/helper" },
         });
         console.log(res, "ressss");
       })
       .catch((err) => {
+        navigate(`/register/helper/profile-steps/${nextStep}`, {
+          state: { prevRoute: "/register/helper" },
+        });
         console.log(err);
       });
   };
@@ -112,7 +119,7 @@ const HelperProfileDetailsSteps = () => {
       <Container maxWidth="xl" className="stepsContainer">
         <Grid container spacing={3} className="stepsRow">
           <HelperProfileStepSection activeStep={activeStep} />
-          <ProfileDiscrimination />
+          {activeStep === 1 && <ProfileDiscrimination />}
           <Grid container spacing={3} className="shadow-box stepsFormRow">
             {activeStep === 1 && (
               <HelperRegistrationStep1
@@ -127,25 +134,25 @@ const HelperProfileDetailsSteps = () => {
               />
             )}
             {activeStep === 3 && (
-              <HelperRegistrationStep1
+              <HelperRegistrationStep3
                 saveStepDetails={saveStepDetails}
                 stepDetails={stepDetails}
               />
             )}
             {activeStep === 4 && (
-              <HelperRegistrationStep1
+              <HelperRegistrationStep4
                 saveStepDetails={saveStepDetails}
                 stepDetails={stepDetails}
               />
             )}
             {activeStep === 5 && (
-              <HelperRegistrationStep1
+              <HelperRegistrationStep5
                 saveStepDetails={saveStepDetails}
                 stepDetails={stepDetails}
               />
             )}
             {activeStep === 6 && (
-              <HelperRegistrationStep1
+              <HelperRegistrationStep6
                 saveStepDetails={saveStepDetails}
                 stepDetails={stepDetails}
               />
