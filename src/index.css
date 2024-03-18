@@ -959,7 +959,7 @@ img.agency_role, img.employer_role, img.helper_role{
     margin: 0;
 }
 .stepsRow .MuiStepConnector-alternativeLabel {
-    top: 25px;
+    top: 36px;
     z-index: -1;
 }
 .stepsRow .MuiStep-alternativeLabel {
@@ -981,7 +981,7 @@ img.agency_role, img.employer_role, img.helper_role{
     font-size: 20px;
     font-weight: 600;
     margin-top: 8px;
-    line-height: normal;
+    line-height: 22px;
 }
 .stepsRow {
     margin-top: 0 !important;
@@ -3204,4 +3204,36 @@ input.formInputFiled {
     text-transform: none;
     letter-spacing: 0;
     box-shadow: none;
+}
+
+
+
+/* Stepper Navigation  */
+
+.stepperNavigation {
+    width: 100%;
+}
+
+.stepperNavigation .step-icon {
+    width: 70px;
+    height: 70px;
+    border: 1px solid #DDDDDD;
+    background: #fff;
+}
+
+.stepperNavigation .active-step {
+    width: 70px;
+    height: 70px;
+    border: 1px solid #DDDDDD;
+    display: flex;
+    align-items: center;
+    background: #0a6259;
+}
+
+.stepperNavigation .active-step img {
+    filter: invert(1);
+}
+
+.stepperNavigation .step-icon img {
+    filter: invert(1);
 }
