@@ -25,6 +25,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.7",
     "bootstrap": "^5.3.3",
+    "google-libphonenumber": "^3.2.34",
     "i18n-iso-countries": "^7.10.1",
     "i18next": "^23.10.0",
     "moment": "^2.30.1",

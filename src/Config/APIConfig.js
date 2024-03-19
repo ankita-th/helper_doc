@@ -22,4 +22,17 @@ APIAxios.interceptors.request.use((config) => {
   return config;
 });
 
-export { APIAxios, authAxios };
+const FormAxios = axios.create({
+  baseURL: BASE_URL,
+});
+FormAxios.interceptors.request.use((config) => {
+  let token = localStorage.getItem("token")
+    ? `Bearer ${localStorage.getItem("token")}`
+    : "Token";
+  config.headers["content-type"] = "multipart/form-data";
+  config.headers["Authorization"] = token;
+
+  return config;
+});
+
+export { APIAxios, authAxios, FormAxios };

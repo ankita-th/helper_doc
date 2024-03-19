@@ -125,7 +125,7 @@ const SignUp = () => {
         }
       })
       .catch((err) => {
-        if (err?.response?.status === 400) {
+        if (err?.response?.status === 400 || err?.response?.status === 409) {
           setShowErrorMsg({ show: true, msg: err.response.data?.message });
         }
         if (err?.response?.data?.message) {

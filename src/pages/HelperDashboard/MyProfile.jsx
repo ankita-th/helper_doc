@@ -1,5 +1,5 @@
 // JobsList.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -16,7 +16,6 @@ import {
   Typography,
 } from "@mui/material";
 import { IconButton } from "@mui/material";
-import ProgressBar from "@ramonak/react-progress-bar";
 import BookmarkedJobs from "./BookmarkedJobs";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
@@ -27,15 +26,26 @@ import SideMenuBar from "../../Components/Common/SideMenubar/SideMenuBar";
 import HelperUserDetails from "../../Components/Signup/HelperRegistrationSteps/HelperUserDetails";
 import HelperDashboardSubHeader from "../../Components/Common/Headers/HelperDashboardSubHeader";
 import { useTranslation } from "react-i18next";
+import { getProfileData } from "../../Services/ProfileServices/ProfileService";
 
 const MyProfile = ({ formData, setFormData }) => {
-  const [errors, setErrors] = useState([]); // State to manage errors
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
   const [profilePic, setProfilePic] = useState(null);
+  const [loader, setLoader] = useState(true);
   const { t } = useTranslation();
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    getProfileData(userId)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleProfilePicUpload = (event) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -82,7 +92,6 @@ const MyProfile = ({ formData, setFormData }) => {
           title={t("profile")}
           description={t("manage_or_update_profile")}
         />
-        {/* <Divider sx={{ mb: 2 }} /> */}
         <Box
           className="profileCardBox"
           border={1}

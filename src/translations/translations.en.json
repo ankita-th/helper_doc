@@ -199,8 +199,9 @@
     "invalid_job": "Invalid job Id",
     "job_details": "Job Details",
     "applications": "Applications",
-    "view_job":"View Job",
-    "profile":"Profile",
-    "manage_or_update_profile":"Manage or edit your profile."
+    "view_job": "View Job",
+    "profile": "Profile",
+    "manage_or_update_profile": "Manage or edit your profile.",
+    "valid_mobile_number_msg": "Please enter a valid mobile number"
   }
 }

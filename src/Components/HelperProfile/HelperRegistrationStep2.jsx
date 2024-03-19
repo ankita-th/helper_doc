@@ -27,6 +27,7 @@ import { PhoneInput } from "react-international-phone";
 // import { FormControl as MuiFormControl } from "@mui/material";
 import LocationAutocomplete from "../Common/LocationAutocomplete";
 import DatePicker from "react-datepicker";
+import { PhoneNumberUtil } from "google-libphonenumber";
 
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
@@ -59,6 +60,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import DocumnetIcon from "../../Assets/SVGIcons/DocumentIcon";
 import FileUploaderField from "../Common/FormFields/FileUploaderField";
+import { isPhoneValid } from "../../Utils/MobileNumberValidation";
+import { uploadFileInS3Bucket } from "../../Services/FileUploadService/FileUploadService";
 const StyledImage = styled("img")({
   maxWidth: "100%",
   maxHeight: "100%",
@@ -107,7 +110,11 @@ const HelperRegistrationStep2 = ({
   const [passportNumber, setPassportNumber] = useState("");
   const [maritalStatus, setMaritalStatus] = useState("");
   const [religion, setReligion] = useState("");
-  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [whatsappNumber, setWhatsappNumber] = useState({
+    error: false,
+    msg: "",
+    number: "",
+  });
   const [isWhatsappNumberVisible, setIsWhatsappNumberVisible] = useState(false);
   const [dob, setDob] = useState("");
   const [height, setHeight] = useState("");
@@ -185,6 +192,50 @@ const HelperRegistrationStep2 = ({
     setCurrentLocation(location);
   };
 
+  const handleOnBlurWhatsappNumber = () => {
+    if (whatsappNumber.number.length === 0) {
+      setWhatsappNumber({
+        ...whatsappNumber,
+        error: true,
+        msg: t("whatsapp_required"),
+      });
+    } else if (isPhoneValid(whatsappNumber.number)) {
+      setWhatsappNumber({
+        ...whatsappNumber,
+        error: false,
+      });
+    } else {
+      setWhatsappNumber({
+        ...whatsappNumber,
+        error: true,
+        msg: t("valid_mobile_number_msg"),
+      });
+    }
+  };
+
+  const handleBeforeSubmit = (e) => {
+    e.preventDefault();
+    if (whatsappNumber.number.length === 0) {
+      setWhatsappNumber({
+        ...whatsappNumber,
+        error: true,
+        msg: t("valid_mobile_number_msg"),
+      });
+    } else if (!isPhoneValid(whatsappNumber.number)) {
+      setWhatsappNumber({
+        ...whatsappNumber,
+        error: true,
+        msg: t("valid_mobile_number_msg"),
+      });
+    }
+    handleSubmit(handleNext)();
+  };
+
+  const uploadFileINS3 = async (file) => {
+    const res = await uploadFileInS3Bucket();
+    console.log(res);
+  };
+
   // Function to handle next button click
   const handleNext = (data) => {
     if (stepperActiveStep < steps.length - 1) {
@@ -198,7 +249,7 @@ const HelperRegistrationStep2 = ({
           maritalStatus: data.maritalStatus,
           religion: data.religion,
           whatsapp: {
-            number: data.whatsapp,
+            number: whatsappNumber.number,
             isVisible: data.isWhatsappNumberVisible,
           },
           dob: data.dob,
@@ -206,7 +257,7 @@ const HelperRegistrationStep2 = ({
             height: data.height,
             weight: data.weight,
           },
-          location: data.location,
+          location: currentLocation,
           skills: data.skills,
         },
         aboutYourFamily: {
@@ -290,8 +341,10 @@ const HelperRegistrationStep2 = ({
   };
 
   // Function to handle back button click
-  const handleBack = () => {
-    setStepperActiveStep((prevActiveStep) => prevActiveStep - 1);
+  const handleChangeTab = (step) => {
+    if (step < stepperActiveStep) {
+      setStepperActiveStep(step);
+    }
   };
 
   // Event handlers for file uploads
@@ -413,22 +466,19 @@ const HelperRegistrationStep2 = ({
             <FormLabel className="formLabel" id="whatsappNumber">
               Whatsapp Number *
             </FormLabel>
-            <Controller
-              name="whatsapp"
-              control={control}
-              defaultValue=""
-              rules={{ required: t("whatsapp_required") }}
-              render={({ field: { onChange, value } }) => (
-                <PhoneInput
-               className="phone-input"
-                 value={value}
-                 onChange={onChange}
-                 defaultCountry="HK"
-                  placeholder="Enter phone number"
-             />
-              )}
+            <PhoneInput
+              className="phone-input"
+              value={whatsappNumber.number}
+              onChange={(phone) =>
+                setWhatsappNumber({ ...whatsappNumber, number: phone })
+              }
+              onBlur={handleOnBlurWhatsappNumber}
+              defaultCountry="hk"
+              placeholder="Enter phone number"
+              inputStyle={{ width: "100%" }}
             />
-            {errors.whatsapp && <ErrorMessage msg={errors.whatsapp?.message} />}
+            {whatsappNumber.error && <ErrorMessage msg={whatsappNumber.msg} />}
+            {/* {errors.whatsapp && <ErrorMessage msg={errors.whatsapp?.message} />} */}
           </FormControl>
           <FormGroup>
             <Controller
@@ -910,16 +960,11 @@ const HelperRegistrationStep2 = ({
                     name={"drivingLicenseFile"}
                     control={control}
                     setFile={setDrivingLicenseFile}
+                    disable={hasDrivingLicense}
                   />
-                  {/* <DocumnetIcon />
-                  <Input
-                    type="file"
-                    onChange={(e) =>
-                      handleFileUpload(setDrivingLicenseFile, e.target.files)
-                    }
-                  /> */}
                 </div>
               </div>
+              {drivingLicenseFile?.name && <p>{drivingLicenseFile.name}</p>}
             </Grid>
           </Grid>
           <Grid container className="queRow certificate UploadFileCustom">
@@ -940,12 +985,13 @@ const HelperRegistrationStep2 = ({
                 </FormGroup>
                 <div className="inputFile">
                   <FileUploaderField
-                    name={"drivingLicenseFile"}
                     control={control}
                     setFile={setFirstAidFile}
+                    disable={hasFirstAidCertification}
                   />
                 </div>
               </div>
+              {firstAidFile?.name && <p>{firstAidFile.name}</p>}
             </Grid>
           </Grid>
           <Grid container className="queRow certificate UploadFileCustom">
@@ -966,12 +1012,15 @@ const HelperRegistrationStep2 = ({
                 </FormGroup>
                 <div className="inputFile">
                   <FileUploaderField
-                    name={"drivingLicenseFile"}
                     control={control}
                     setFile={setElderlyCaregivingFile}
+                    disable={hasElderlyCaregiving}
                   />
                 </div>
               </div>
+              {elderlyCaregivingFile?.name && (
+                <p>{elderlyCaregivingFile.name}</p>
+              )}
             </Grid>
           </Grid>
           <Grid container className="queRow certificate UploadFileCustom">
@@ -992,12 +1041,15 @@ const HelperRegistrationStep2 = ({
                 </FormGroup>
                 <div className="inputFile">
                   <FileUploaderField
-                    name={"drivingLicenseFile"}
                     control={control}
                     setFile={setNewBornCaregivingFile}
+                    disable={hasNewBornCaregiving}
                   />
                 </div>
               </div>
+              {newBornCaregivingFile?.name && (
+                <p>{newBornCaregivingFile.name}</p>
+              )}
             </Grid>
           </Grid>
           <Grid
@@ -1024,9 +1076,13 @@ const HelperRegistrationStep2 = ({
                     name={"drivingLicenseFile"}
                     control={control}
                     setFile={setAppliedCountryLicenseFile}
+                    disable={hasAppliedCountryLicense}
                   />
                 </div>
               </div>
+              {appliedCountryLicenseFile?.name && (
+                <p>{appliedCountryLicenseFile.name}</p>
+              )}
             </Grid>
           </Grid>
         </>
@@ -1041,11 +1097,13 @@ const HelperRegistrationStep2 = ({
   return (
     <Grid item xs={12} md={6} className="stepsForm">
       <Box sx={{ maxWidth: 800 }} className="StepFormCol formDataInfo">
-        <form onSubmit={handleSubmit(handleNext)}>
+        <form onSubmit={handleBeforeSubmit}>
           <Stepper activeStep={stepperActiveStep} orientation="vertical">
             {steps.map((step, index) => (
               <Step key={step.label}>
-                <StepLabel>{step.label}</StepLabel>
+                <StepLabel onClick={() => handleChangeTab(index)}>
+                  {step.label}
+                </StepLabel>
                 <StepContent>
                   {step.content}
                   <Box sx={{ mb: 2 }}>
@@ -1057,15 +1115,8 @@ const HelperRegistrationStep2 = ({
                         // onClick={handleNext}
                         sx={{ mt: 1, mr: 1 }}
                       >
-                        {index === steps.length - 1 ? "Next" : "Next"}
+                        Next
                       </Button>
-                      {/*<Button
-                              disabled={index === 0}
-                              onClick={handleBack}
-                              sx={{ mt: 1, mr: 1 }}
-                            >
-                              
-                            </Button>*/}
                     </div>
                   </Box>
                 </StepContent>
