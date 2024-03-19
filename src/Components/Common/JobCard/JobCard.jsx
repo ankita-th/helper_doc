@@ -153,10 +153,12 @@ export default function JobCard({
           {badge === JOB_STATUS.APPLIED && <AppliedBadgeIcon />}
           {badge === JOB_STATUS.SAVED && <SaveBadgeIcon />}
 
-          <div className="featuredTag">
-            <FeatureIcon />
-            {t("featured")}
-          </div>
+          {jobDetails?.isFeatured && (
+            <div className="featuredTag">
+              <FeatureIcon />
+              {t("featured")}
+            </div>
+          )}
 
           <Typography variant="h6">
             {jobDetails?.jobDetails?.jobTitle}
