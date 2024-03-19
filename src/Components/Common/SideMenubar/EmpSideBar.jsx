@@ -9,12 +9,11 @@ const EmpSideBar = () => {
 
   useEffect(() => {
     setActiveLink(location.pathname);
-  }, [location]);
+  }, []);
 
   const handleLinkClick = (link) => {
     setActiveLink(link);
   };
-
   return (
     <>
       <List className="sidebar">
@@ -88,8 +87,8 @@ const EmpSideBar = () => {
 
           <ListItemText primary="Find Applicants" />
         </ListItem>
-        {/* Subcription plan */}
-        <ListItem
+       {/* Subcription plan */}
+      <ListItem
           button
           className={
             activeLink === "/subscription-plans" ? "sidebarItem active" : "sidebarItem"

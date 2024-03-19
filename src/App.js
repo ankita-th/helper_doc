@@ -33,6 +33,8 @@ import Notifications from "./Components/Common/Notification";
 import Chat from "./pages/HelperDashboard/Chat";
 import ApplicantDetails from "./Components/Common/Applicants/ApplicantDetails";
 import JobDetails from "./pages/HelperDashboard/Jobs/JobDetails";
+import PostJobSteps from "./Components/Common/PostJob/PostJobSteps";
+import PostJobStep1 from "./Components/Common/PostJob/PostJobStep1";
 import { route } from "./Routes/routes";
 import HelperLayout from "./Layouts/HelperLayout";
 import ApplicantLayout from "./Layouts/ApplicantLayout";
@@ -88,6 +90,7 @@ function App() {
           {/* <Route path="/" element={<LandingPage />} />
           <Route path="/employee-dashboard" element={<EmployerDashboard />} />
           <Route path="/subscription-plans" element={<SubscriptionPlans />} />
+          <Route path="/employee/subscription-plans" element={<SubscriptionPlans />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/notifications" element={<Notification />} />
           <Route path="/services" element={<OurServices />} />
@@ -97,6 +100,8 @@ function App() {
           <Route path="/registration_page" element={<RegistrationPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/jobs" element={<JobsSection />} />
+          <Route path="/postJob" element={<PostJobStep1 />}/>
+          <Route path="/postJob1" element={<PostJobSteps />}/>
           <Route
               path="/signup/helper"
               element={<HelperSignup role={formData.role} />}

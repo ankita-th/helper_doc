@@ -712,6 +712,7 @@ footer p {
     font-family: 'Nunito Sans', sans-serif !important;
 }
 .newsletterForm label.Mui-focused{
+    color: #0a6259;
     webkit-transform: translate(14px, -9px) scale(1);
     -moz-transform: translate(14px, -9px) scale(1);
     -ms-transform: translate(14px, -9px) scale(1);
@@ -958,7 +959,7 @@ img.agency_role, img.employer_role, img.helper_role{
     margin: 0;
 }
 .stepsRow .MuiStepConnector-alternativeLabel {
-    top: 25px;
+    top: 36px;
     z-index: -1;
 }
 .stepsRow .MuiStep-alternativeLabel {
@@ -980,7 +981,7 @@ img.agency_role, img.employer_role, img.helper_role{
     font-size: 20px;
     font-weight: 600;
     margin-top: 8px;
-    line-height: normal;
+    line-height: 22px;
 }
 .stepsRow {
     margin-top: 0 !important;
@@ -1203,9 +1204,13 @@ ul.sidebar {
     padding-top: 20px;
     background: transparent !important;
     color: var(--Is-black) !important;
+    transition: 0.4s ease-in-out;
 }
 .sidebarItem.logout:hover{
     opacity: .7;
+}
+.sidebarItem.logout:hover svg.customSvG * {
+    fill: #646464 !important;
 }
 .sidebarItem.logout:hover img {
     filter: none !important;
@@ -1255,6 +1260,7 @@ h2.commonTitle {
     line-height: 1.2;
     font-size: 18px;
     font-weight: 700;
+    cursor: pointer;
 }
 .featuredTag {
     display: flex;
@@ -1919,6 +1925,7 @@ label.profileUpload button {
 
 .notificationList:last-child {
     border: none;
+    margin: 0;
 }
 
 .notificationList h6 {
@@ -2377,7 +2384,7 @@ hr.hrSetting {
 
 .planName {
     background: #D8AD30;
-    padding: 30px;
+    padding: 25px;
     text-align: center;
     border-radius: 10px;
     color: #fff;
@@ -2410,7 +2417,7 @@ hr.hrSetting {
 
 .planName .arrowButton.whitebtn:hover {
     color: #fff !important;
-    background-color: #d8ad30 !important;
+    background-color: transparent !important;
 }
 
 .subscriptionPlans_ds {
@@ -2485,7 +2492,7 @@ hr.hrSetting {
     width: 50%;
     background: #0a6259;
     text-align: center;
-    padding: 9px 25px!important;
+    padding: 9px 18px!important;
 }
 
 .jobPost {
@@ -2607,6 +2614,7 @@ hr.hrSetting {
     padding: 0px 10px;
     width: 100%;
     text-align: center;
+    text-wrap: nowrap;
 }
 
 .employerFooter ul li:last-child {
@@ -2878,4 +2886,660 @@ a.greenLink {
 .highlightsApplicant .dutiesList ul {
   display: inline-block;
   width: 100%;
+}
+
+    .wishlistIcon img {
+    transition: 0.4s ease-in-out;
+}
+
+.wishlistIcon img:hover {
+    filter: brightness(0.3);
+}
+
+.HeaderProfile {
+    padding: 30px !important;
+}
+
+.HeaderProfile button {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    border: 1px solid #fff;
+    padding: 0;
+    min-width: auto;
+}
+
+.hightlightProfile p {
+    margin: 0;
+    font-size: 18px;
+    color: #000000;
+}
+
+.hightlightProfile button {
+    border: 1px solid #B4EDD6;
+    background: #E0FFF3;
+    color: #000;
+    border-radius: 50px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px !important;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.CvView {
+    padding-top: 40px;
+}
+
+.CvView img#avatar {
+    border: 4px solid #0a6259;
+    border-radius: 50px;
+}
+
+.CvView h5 {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.CustomPara {
+    font-size: 18px !important;
+    color: #000000;
+    line-height: 30px;
+}
+
+.aboutProfile ul {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-gap: 8px;
+}
+
+.aboutProfile ul li {
+    padding: 0;
+}
+
+.aboutProfile ul li b {width: 140px;}
+
+.aboutProfile ul li span {
+    width: calc(100% - 140px);
+    color: #646464;
+}
+
+.aboutProfile h6 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.profileCard {
+    box-shadow: 0 0 20px 4px #0000001a;
+    border-radius: 20px !important;
+}
+
+.profileCard .MuiCardContent-root {
+    padding: 40px;
+}
+
+.profileCard .MuiCardContent-root h5 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.expList .expImgWrap {
+    border: 1px solid rgb(85, 219, 166);
+    border-radius: 20%;
+    padding: 6px;
+    margin-right: 20px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: #fff;
+    z-index: 1;
+}
+
+.expList .expImgWrap:after {
+    content: '';
+    position: absolute;
+    height: 100px;
+    width: 1px;
+    background: #55DBA6;
+    z-index: -1;
+    top: 100%;
+}
+
+.expList .expImgWrap img {
+    max-width: 100%;
+}
+
+.expList h6 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.expList .date {
+    color: #646464;
+    margin: 0;
+    font-size: 16px !important;
+}
+
+.expList p.profileRole {
+    font-size: 14px !important;
+    letter-spacing: 0;
+}
+
+.expList p.description {
+    font-size: 16px !important;
+}
+
+.expList:last-child .expImgWrap:after {
+    display: none;
+}
+
+.LangDisplay .expList h6 {
+    font-size: 18px !important;
+    font-weight: 700;
+}
+
+.LangDisplay .expList p {
+    margin: 0;
+    font-size: 16px !important;
+    color: #646464 !important;
+}
+
+.profileSkillset li {
+    display: inline-block;
+    width: auto;
+    padding: 10px 24px;
+    border: 1px solid #C9C9C9;
+    margin-right: 10px;
+    border-radius: 40px;
+    color: #808285;
+}
+
+.profileSkillset {
+    margin-bottom: 20px;
+}
+
+.docListProfile {
+    display: flex;
+}
+
+.docListProfile li {
+    border: 1px solid #55DBA6;
+    margin-right: 10px;
+    border-radius: 17px;
+    padding: 16px;
+}
+
+.docListProfile li a {
+    text-align: center;
+    display: inline-block;
+    color: #000;
+    text-decoration: none;
+}
+
+.docListProfile li a img {
+    display: block;
+    margin: 0 auto 10px;
+}
+
+.docListProfile li p {
+    margin: 0;
+    font-size: 12px !important;
+    width: 100px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+input.formInputFiled {
+    padding: 13px 15px;
+    height: auto;
+    outline: none;
+}
+
+.workingExp label#moreWorkExperince {
+    margin-bottom: 10px !important;
+}
+
+.workingExp .radioCheckBtn label .PrivateSwitchBase-root:before {
+    border-radius: 10px;
+    padding: 13px 15px;
+}
+
+.workingExp .radioCheckBtn label {
+    padding: 13px 15px;
+}
+
+.skillsCol {
+    margin-bottom: 23px;
+}
+
+.skillsCol .radioCheckBtn label {
+    padding: 10px 16px 10px 11px;
+}
+
+.profile-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-section .file-input {
+    width: 100%;
+    border: 1px dashed #aaa;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 150px;
+}
+
+.profile-section .file-input input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.profile-section .file-input label.file-upload-label span {
+    display: block;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+.profile-section .file-input label.file-upload-label {
+    text-align: center;
+}
+
+.noteSpecified {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+}
+
+.noteSpecified p {
+    margin: 0;
+    color: #FF0000;
+    font-size: 22px !important;
+}
+
+.customModal .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+    width: 100%;
+    background: transparent;
+    box-shadow: none;
+}
+
+.customModal .innerModal {
+    margin: 0;
+    width: 100%;
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+    padding: 40px;
+}
+
+.customModal .innerModal h4 {
+    color: #000000;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+}
+
+.customModal .innerModal p {
+    margin-top: 0;
+    font-size: 14px !important;
+}
+
+.customModal .innerModal  button {
+    padding: 9px 25px !important;
+    min-width: 140px !important;
+    background: #55dba6;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
+    color: #000;
+    text-transform: none;
+    letter-spacing: 0;
+    box-shadow: none;
+}
+
+
+
+/* Stepper Navigation  */
+
+.stepperNavigation {
+    width: 100%;
+}
+
+.stepperNavigation .step-icon {
+    width: 70px;
+    height: 70px;
+    border: 1px solid #DDDDDD;
+    background: #fff;
+}
+
+.stepperNavigation .active-step {
+    width: 70px;
+    height: 70px;
+    border: 1px solid #DDDDDD;
+    display: flex;
+    align-items: center;
+    background: #0a6259;
+}
+
+.stepperNavigation .active-step img {
+    filter: invert(1);
+}
+
+.stepperNavigation .step-icon img {
+    filter: invert(1);
+}
+
+
+
+/* Thank you Popup */
+
+.thankYou .card {
+    max-width: 645px;
+    margin: 0 auto;
+    padding: 40px;
+    border: 1px solid #ffffff;
+    box-shadow: 0 0 20px #00000021;
+    display: block;
+    border-radius: 30px;
+}
+
+.thankYou h2 {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.thankYou p {
+    font-size: 18px !important;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.thankYou a.buttonThanks {
+    background: #0a6259;
+    padding: 9px 25px !important;
+    background-repeat: no-repeat;
+    background-position: 20px 13px;
+    color: var(--Is-white);
+    display: inline-flex;
+    width: 100%;
+    text-decoration: none;
+    margin: 20px 0px;
+    align-items: center;
+    max-width: 80%;
+    transition: 0.4s ease-in-out;
+    justify-content: center;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
+}
+
+.thankYou a.buttonThanks:hover {
+    background: #034b44;
+}
+
+.thankYou .successBtns a {
+    width: 100%;
+}
+
+.topImg {
+    width: 100%;
+}
+
+.profilePreview .imgWrapper img {
+    border: 4px solid #0a6259;
+    border-radius: 50%;
+}
+
+.profileName {
+    margin-left: 16px;
+}
+
+.profileName h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.profileName p {
+    font-size: 18px !important;
+    color: #000000;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.highlightedText {
+    font-weight: 600;
+    border: 1px solid #B4EDD6;
+    background: #E0FFF3;
+    padding: 3px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.numberVerify {
+    margin: 20px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.numberVerify h5 {
+    font-weight: 700;
+    font-size: 20px !important;
+}
+
+.numberVerify .highlightedText {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+p.description {
+    font-size: 18px !important;
+    color: #000000;
+}
+
+.profileAbout {
+    margin: 20px 0 40px;
+    display: inline-block;
+    width: 100%;
+}
+
+.profileTitle {
+    font-size: 20px !important;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.profileAbout ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.profileAbout ul li {display: inline-block;width: 100%;margin-bottom: 8px;}
+
+.profileAbout ul b {
+    width: 160px;
+    float: left;
+    color: #000;
+    font-weight: 600;
+}
+
+.profileAbout ul span {
+    color: #646464;
+    font-weight: 500;
+    width: calc(100% - 160px);
+    float: left;
+}
+
+.experiencesList .card {
+    width: 50%;
+    float: left;
+    border: none;
+    box-shadow: none;
+}
+
+.profileCard .profileTop {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.profileCard .profileTop .avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 17px;
+    border: 1px solid #55DBA6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.profileCard .profileTop .expMain h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.profileCard .profileTop .expMain .timeSpan {
+    color: #646464 !important;
+    font-weight: 600;
+    margin: 0;
+}
+
+.profileCard .profileTop .expMain .role {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.profileCard .profileInner ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profileCard .profileInner ul li {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.profileCard .profileInner ul li b {
+    width: 210px;
+    float: left;
+    color: #000;
+    font-weight: 600;
+}
+
+.profileCard .profileInner ul li span {
+    color: #646464;
+    font-weight: 500;
+    width: calc(100% - 210px);
+    float: left;
+}
+
+.profileCard .profileInner .description {
+    font-size: 16px !important;
+}
+
+.certificates {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.certificates li {
+    text-align: center;
+}
+
+.certificates li a {
+    border: 1px solid #55DBA6;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    border-radius: 17px;
+    padding: 10px;
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.certificates li a img {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.experiencesList {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.skillsetList {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.experiencesList {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.education {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.skillsetList .skillUInner {margin-bottom: 23px;display: inline-block;width: 100%;}
+
+.skillsetList .skillUInner h4 {
+    font-size: 16px;
+    color: #000000;
+}
+
+.skillsetList .skillUInner ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 12px;
+}
+
+.skillsetList .skillUInner ul li {
+    border: 1px solid #C9C9C9;
+    padding: 10px 25px;
+    border-radius: 50px;
+    color: #808285;
+}
+
+.documentations ul.certificates {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 20px;
+}
+
+.documentations ul.certificates a {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }

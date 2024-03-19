@@ -6,14 +6,14 @@ import { useTranslation } from "react-i18next";
 const HelperProfileStepSection = ({ activeStep, steps, titles, stepIcons }) => {
   const { t } = useTranslation();
   return (
-    <div className="">
+    <div className="stepperNavigation">
       <Stepper activeStep={activeStep} alternativeLabel>
         {HELPER_STEP_DETAILS.map((step, index) => (
           <Step key={step.step_key} completed={index+1 === activeStep}>
             <div className="step-wrapper">
               <div
                 className={`${
-                  index+1 === activeStep ? "step-icon" : "active-step"
+                  index+1 === activeStep ? "active-step" : "step-icon"
                 }`}
               >
                 <img src={step.img} alt={`Step ${index + 1}`} />
