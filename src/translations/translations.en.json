@@ -108,6 +108,7 @@
     "location_required":"Location is required",
     "skill_required":"Skill is required",
     "passport_hkid_required":"Passport/HKID is required",
+    "age_required":"Age is required",
     "select_your_role": "Select Your Role",
     "helper": "Helper",
     "helper_disc": "Get a chance to freely choose your future employer and be hired.",

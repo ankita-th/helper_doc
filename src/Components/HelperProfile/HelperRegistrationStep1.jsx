@@ -34,7 +34,10 @@ const HelperRegistrationStep1 = ({ saveStepDetails, stepDetails }) => {
         });
       }
     }
-    saveStepDetails(answerArray);
+    const payload ={
+      answers: answerArray
+    }
+    saveStepDetails(payload, 'applicant_info');
     // Iterate over originalObject
     // for (const key in questAnswer) {
     //   if (key.startsWith("answer_")) {

@@ -73,7 +73,7 @@ const Login = () => {
 
   const handleOnSubmit = (data) => {
     const captchaValue = captchaRef?.current?.getValue();
-    if (captchaValue.length <= 0) {
+    if (captchaValue?.length <= 0) {
       setShowErrorMsg({ show: true, msg: t("captcha_select_msg") });
       return;
     }

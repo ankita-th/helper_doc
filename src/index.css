@@ -3237,3 +3237,309 @@ input.formInputFiled {
 .stepperNavigation .step-icon img {
     filter: invert(1);
 }
+
+
+
+/* Thank you Popup */
+
+.thankYou .card {
+    max-width: 645px;
+    margin: 0 auto;
+    padding: 40px;
+    border: 1px solid #ffffff;
+    box-shadow: 0 0 20px #00000021;
+    display: block;
+    border-radius: 30px;
+}
+
+.thankYou h2 {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.thankYou p {
+    font-size: 18px !important;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.thankYou a.buttonThanks {
+    background: #0a6259;
+    padding: 9px 25px !important;
+    background-repeat: no-repeat;
+    background-position: 20px 13px;
+    color: var(--Is-white);
+    display: inline-flex;
+    width: 100%;
+    text-decoration: none;
+    margin: 20px 0px;
+    align-items: center;
+    max-width: 80%;
+    transition: 0.4s ease-in-out;
+    justify-content: center;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
+}
+
+.thankYou a.buttonThanks:hover {
+    background: #034b44;
+}
+
+.thankYou .successBtns a {
+    width: 100%;
+}
+
+.topImg {
+    width: 100%;
+}
+
+.profilePreview .imgWrapper img {
+    border: 4px solid #0a6259;
+    border-radius: 50%;
+}
+
+.profileName {
+    margin-left: 16px;
+}
+
+.profileName h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.profileName p {
+    font-size: 18px !important;
+    color: #000000;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.highlightedText {
+    font-weight: 600;
+    border: 1px solid #B4EDD6;
+    background: #E0FFF3;
+    padding: 3px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.numberVerify {
+    margin: 20px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.numberVerify h5 {
+    font-weight: 700;
+    font-size: 20px !important;
+}
+
+.numberVerify .highlightedText {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+p.description {
+    font-size: 18px !important;
+    color: #000000;
+}
+
+.profileAbout {
+    margin: 20px 0 40px;
+    display: inline-block;
+    width: 100%;
+}
+
+.profileTitle {
+    font-size: 20px !important;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.profileAbout ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.profileAbout ul li {display: inline-block;width: 100%;margin-bottom: 8px;}
+
+.profileAbout ul b {
+    width: 160px;
+    float: left;
+    color: #000;
+    font-weight: 600;
+}
+
+.profileAbout ul span {
+    color: #646464;
+    font-weight: 500;
+    width: calc(100% - 160px);
+    float: left;
+}
+
+.experiencesList .card {
+    width: 50%;
+    float: left;
+    border: none;
+    box-shadow: none;
+}
+
+.profileCard .profileTop {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.profileCard .profileTop .avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 17px;
+    border: 1px solid #55DBA6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.profileCard .profileTop .expMain h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.profileCard .profileTop .expMain .timeSpan {
+    color: #646464 !important;
+    font-weight: 600;
+    margin: 0;
+}
+
+.profileCard .profileTop .expMain .role {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.profileCard .profileInner ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profileCard .profileInner ul li {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.profileCard .profileInner ul li b {
+    width: 210px;
+    float: left;
+    color: #000;
+    font-weight: 600;
+}
+
+.profileCard .profileInner ul li span {
+    color: #646464;
+    font-weight: 500;
+    width: calc(100% - 210px);
+    float: left;
+}
+
+.profileCard .profileInner .description {
+    font-size: 16px !important;
+}
+
+.certificates {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.certificates li {
+    text-align: center;
+}
+
+.certificates li a {
+    border: 1px solid #55DBA6;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    border-radius: 17px;
+    padding: 10px;
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.certificates li a img {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.experiencesList {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.skillsetList {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.experiencesList {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.education {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.skillsetList .skillUInner {margin-bottom: 23px;display: inline-block;width: 100%;}
+
+.skillsetList .skillUInner h4 {
+    font-size: 16px;
+    color: #000000;
+}
+
+.skillsetList .skillUInner ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 12px;
+}
+
+.skillsetList .skillUInner ul li {
+    border: 1px solid #C9C9C9;
+    padding: 10px 25px;
+    border-radius: 50px;
+    color: #808285;
+}
+
+.documentations ul.certificates {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 20px;
+}
+
+.documentations ul.certificates a {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}

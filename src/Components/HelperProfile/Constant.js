@@ -79,30 +79,162 @@ export const STEP1_QUESTIONS = [
   },
 ];
 
-export const SKILLS = {
-  care: [
-    { type: "new_born(0-1)" },
-    { type: "toddler(1-3)" },
-    { type: "child(4-12)" },
-    { type: "teen(13-17)" },
-    { type: "elderly(>70)" },
-    { type: "special_care" },
-    { type: "pet" },
-  ],
-  cooking: [
-    { type: "arabic" },
-    { type: "chinese" },
-    { type: "indian" },
-    { type: "thai" },
-    { type: "western" },
-    { type: "vegetarian" },
-    { type: "baking" },
-    { type: "dessert" },
-  ],
-  householdChore: [
-    { activity: "car_washing" },
-    { activity: "cleaning" },
-    { activity: "marketing" },
-    { activity: "gardening" },
-  ],
-};
+export const SKILLS = [
+  {
+    skill_type: "Care",
+    skile_opt: [
+      { type: "new_born(0-1)" },
+      { type: "toddler(1-3)" },
+      { type: "child(4-12)" },
+      { type: "teen(13-17)" },
+      { type: "elderly(>70)" },
+      { type: "special_care" },
+      { type: "pet" },
+    ],
+  },
+  {
+    skill_type: "Cooking",
+    skile_opt: [
+      { type: "arabic" },
+      { type: "chinese" },
+      { type: "indian" },
+      { type: "thai" },
+      { type: "western" },
+      { type: "vegetarian" },
+      { type: "baking" },
+      { type: "dessert" },
+    ],
+  },
+  {
+    skill_type: "HouseholdChore",
+    skile_opt: [
+      { type: "car_washing" },
+      { type: "cleaning" },
+      { type: "marketing" },
+      { type: "gardening" },
+    ],
+  },
+];
+
+export const MARITAL_STATUS = [
+  { value_key: "Single" },
+  { value_key: "Married" },
+];
+
+export const RELIGION = [
+  { value_key: "Hindu" },
+  { value_key: "Christian" },
+  { value_key: "Islam" },
+  { value_key: "Buddhist" },
+  { value_key: "Other" },
+];
+
+export const EDUCATION_LEVEL = [
+  {
+    value_key: "O-level",
+  },
+  {
+    value_key: "A-level",
+  },
+  {
+    value_key: "1 university year",
+  },
+  {
+    value_key: "2 university year",
+  },
+];
+
+export const MAJOR_STUDY = [
+  {
+    value_key: "Elementary",
+  },
+  {
+    value_key: "Junior High School<",
+  },
+  {
+    value_key: "Senior High School",
+  },
+  {
+    value_key: "College",
+  },
+  {
+    value_key: "Undergraduate",
+  },
+  {
+    value_key: "Graduate",
+  },
+];
+
+// [
+//   "elementary",
+//   "junior_high_school",
+//   "senior_high_school",
+//   "college",
+//   "undergraduate",
+//   "graduate"
+// ]
+
+export const SPOKEN_LANGUAGE = [
+  {
+    value_key: "English",
+  },
+  {
+    value_key: "Spanish",
+  },
+  {
+    value_key: "German",
+  },
+  {
+    value_key: "French",
+  },
+];
+
+export const LANGUAGE_LEVEL = [
+  {
+    value_key: "Beginner",
+  },
+  {
+    value_key: "Intermediate",
+  },
+  {
+    value_key: "Advanced",
+  },
+];
+
+export const EXPERIENCE_LIST = [
+  { value_key: "No prior experience" },
+  { value_key: "Less then 1 year of experience" },
+  { value_key: "1 year of experience" },
+  { value_key: "2 year of experience" },
+  { value_key: "3 year of experience" },
+  { value_key: "4 year of experience" },
+];
+
+export const SPECIAL_HELP_REQUIREMENT = [
+  {
+    type: "Changing Diaper",
+  },
+  {
+    type: "Bedridden",
+  },
+  {
+    type: "Wheelchair",
+  },
+];
+
+export const CURRENCY_LIST = [
+  {
+    value_key: "USD",
+  },
+  {
+    value_key: "HK",
+  },
+];
+export const YES_NO = [
+  {
+    value_key: "YES",
+  },
+  {
+    value_key: "NO",
+  },
+];

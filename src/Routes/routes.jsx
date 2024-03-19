@@ -1,4 +1,6 @@
 import { lazy } from "react";
+import ThanksForRegister from "../pages/HelperSteps/ThanksForRegister";
+import ProfilePreview from "../pages/HelperSteps/ProfilePreview";
 const LandingPage = lazy(() => import("../pages/LandingPage/LandingPage"));
 const Login = lazy(() => import("../pages/Login/Login"));
 const SelectRole = lazy(() => import("../pages/Registration/SelectRole"));
@@ -67,5 +69,13 @@ export const route = [
     path: "/register/helper/profile-steps/:step",
     element: <HelperProfileDetailsSteps />,
     stepper: true,
+  },
+  {
+    path: "/thankyou",
+    element: <ThanksForRegister />,
+  },
+  {
+    path: "/profile-preview",
+    element: <ProfilePreview />,
   },
 ];
