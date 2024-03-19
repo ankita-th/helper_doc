@@ -25,6 +25,7 @@ const MyApplication = lazy(() =>
   import("../pages/HelperDashboard/MyApplication")
 );
 const MyProfile = lazy(() => import("../pages/HelperDashboard/MyProfile"));
+const MyNotification = lazy(() => import("../pages/HelperDashboard/Notification"))
 
 export const route = [
   {
@@ -108,6 +109,12 @@ export const route = [
   {
     path: "/helper/my-profile",
     element: <MyProfile />,
+    private: true,
+    helper: true,
+  },
+  {
+    path: "/helper/notification",
+    element: <MyNotification />,
     private: true,
     helper: true,
   },

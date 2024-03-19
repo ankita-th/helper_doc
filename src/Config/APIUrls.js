@@ -27,3 +27,8 @@ export const GET_PROFILE_PERCENTAGE = (userId) =>
 
 // Upload file in s3
 export const UPLOAD_FILE_IN_S3 = "upload/presigned-url"
+
+// Get All Notifications List
+export const GET_ALL_NOTIFICATION = (userId) => `notifications/${userId}`;
+
+export const DELETE_NOTIFICATION = (userId,notificationId) => `notifications/${userId}/${notificationId}`;

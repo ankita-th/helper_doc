@@ -200,6 +200,15 @@
     "view_job": "查看工作",
     "profile": "个人资料",
     "manage_or_update_profile": "管理或编辑您的个人资料。",
-    "valid_mobile_number_msg": "请输入有效的手机号码"
+    "valid_mobile_number_msg": "请输入有效的手机号码",
+    "all_Notification": "所有通知",
+    "notification_sub_title": "您收到的每条工作通知。",
+    "earlier": "早些时候",
+    "notification_deleted_success": "通知删除成功",
+    "confirm_delete_notification": "删除模态框",
+    "confirm_delete_notification_message": "您确定要删除此通知吗？",
+    "delete": "删除",
+    "cancel": "取消",
+    "no_notification_found": "未找到通知"
   }
 }
