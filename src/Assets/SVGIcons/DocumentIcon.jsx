@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function DocumnetIcon() {
+export default function DocumentIcon() {
   return (
     <svg
       width="24"

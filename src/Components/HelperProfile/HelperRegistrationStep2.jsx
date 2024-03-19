@@ -57,7 +57,7 @@ import {
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import DocumnetIcon from "../../Assets/SVGIcons/DocumnetIcon";
+import DocumnetIcon from "../../Assets/SVGIcons/DocumentIcon";
 import FileUploaderField from "../Common/FormFields/FileUploaderField";
 const StyledImage = styled("img")({
   maxWidth: "100%",
@@ -418,12 +418,14 @@ const HelperRegistrationStep2 = ({
               control={control}
               defaultValue=""
               rules={{ required: t("whatsapp_required") }}
-              render={({ field }) => (
+              render={({ field: { onChange, value } }) => (
                 <PhoneInput
-                  {...field}
-                  defaultCountry="hk"
-                  inputStyle={{ width: "100%" }}
-                />
+               className="phone-input"
+                 value={value}
+                 onChange={onChange}
+                 defaultCountry="HK"
+                  placeholder="Enter phone number"
+             />
               )}
             />
             {errors.whatsapp && <ErrorMessage msg={errors.whatsapp?.message} />}

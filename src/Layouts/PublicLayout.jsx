@@ -8,7 +8,7 @@ const PublicLayout = () => {
   return (
     <>
       <Header />
-      {!isToken ? <Outlet /> : <Navigate to="/dashboard" />}
+      {!isToken ? <Outlet /> : <Navigate to="/helper/job-dashboard" />}
       <PublicFooter />
     </>
   );

@@ -17,6 +17,14 @@ const HelperRegistrationStep1 = lazy(() =>
 const HelperProfileDetailsSteps = lazy(() =>
   import("../pages/HelperSteps/HelperProfileDetailsSteps")
 );
+const Jobs = lazy(() => import("../pages/HelperDashboard/Jobs/Jobs"));
+const JobDetails = lazy(() =>
+  import("../pages/HelperDashboard/Jobs/JobDetails")
+);
+const MyApplication = lazy(() =>
+  import("../pages/HelperDashboard/MyApplication")
+);
+const MyProfile = lazy(() => import("../pages/HelperDashboard/MyProfile"));
 
 export const route = [
   {
@@ -77,5 +85,30 @@ export const route = [
   {
     path: "/profile-preview",
     element: <ProfilePreview />,
+  },
+  // Helper dashboard
+  {
+    path: "/helper/job-dashboard",
+    element: <Jobs />,
+    private: true,
+    helper: true,
+  },
+  {
+    path: "/helper/job-detail/:id",
+    element: <JobDetails />,
+    private: true,
+    helper: true,
+  },
+  {
+    path: "/helper/my-applications",
+    element: <MyApplication />,
+    private: true,
+    helper: true,
+  },
+  {
+    path: "/helper/my-profile",
+    element: <MyProfile />,
+    private: true,
+    helper: true,
   },
 ];

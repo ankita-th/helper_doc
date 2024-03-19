@@ -26,7 +26,7 @@ import OurServices from "./pages/OurServices/OurServices";
 // import HelperPublicProfileView from "./Components/Signup/HelperRegistrationSteps/HelperPublicProfileView";
 import HelperSignup from "./Components/Signup/HelperSignup";
 import ThankYou from "./Components/Common/ThankYou";
-import JobsList from "./pages/HelperDashboard/JobsList";
+// import JobsList from "./pages/HelperDashboard/JobsList";
 import MyApplication from "./pages/HelperDashboard/MyApplication";
 import MyProfile from "./pages/HelperDashboard/MyProfile";
 import Notifications from "./Components/Common/Notification";
@@ -38,50 +38,25 @@ import HelperLayout from "./Layouts/HelperLayout";
 import ApplicantLayout from "./Layouts/ApplicantLayout";
 import CommonLayout from "./Layouts/CommonLayout";
 import PublicLayout from "./Layouts/PublicLayout";
-import PageLoader from "./Components/Common/Loader/PageLoader";
-import { useSelector } from "react-redux";
-import SnackMessageBar from "./Components/Common/SnackBar/SnackBar";
 import StepperLayout from "./Layouts/StepperLayout";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    phoneNumber: "",
-    whatsappNumber: "",
-    email: "",
-    password: "",
-    passwordConfirmation: "",
-    termsAndConditions: false,
-    role: "helper",
-    workExperience: {
-      workingExperience: "",
-      workingLocation: "",
-      employerNationality: "",
-      numberOfFamilyMembers: 0,
-      houseArea: 0,
-      startedDate: "",
-      releasedDate: "",
-      currency: "",
-      salary: 0,
-      coHelperNumber: 0,
-      isAnyLetter: false,
-      experinceRemark: "",
-      familyMembers: [
-        {
-          age: 0,
-          gender: "",
-          requireSpecialHelp: [],
-        },
-      ],
-    },
-  });
-  const { isPageLoader } = useSelector((state) => state.common);
-  const { snackBar } = useSelector((state) => state.common);
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Suspense>
-        {isPageLoader && <PageLoader />}
-        {/* {snackBar.show && <SnackMessageBar />} */}
         <Routes>
           {route.map((item, index) =>
             item.private ? (
@@ -96,7 +71,7 @@ function App() {
                   </Route>
                 )}
               </Fragment>
-            ) : item.private === false ? (
+            ) : item.public ? (
               <Route key={index} element={<PublicLayout />}>
                 <Route path={item.path} element={item.element} />
               </Route>

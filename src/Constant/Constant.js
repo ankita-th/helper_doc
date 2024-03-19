@@ -11,3 +11,10 @@ export const STEPPER_ROUTES = [
   "q_&_a",
   "final",
 ];
+
+export const successType = "success";
+
+export const JOB_STATUS = {
+  APPLIED: "applied",
+  SAVED: "saved",
+};

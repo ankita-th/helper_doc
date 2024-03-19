@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -25,8 +25,9 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
+  const navigate = useNavigate()
   //   const isMobileOrTablet = useMediaQuery(theme?.breakpoints?.down("md"));
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem("userId");
   const [isMobileOrTablet, setIsMobileOrTablet] = useState(
     window.innerWidth <= 768
   );
@@ -41,7 +42,12 @@ const Header = () => {
     setIsMobileOrTablet(window.innerWidth <= 768);
   };
 
-  const onLogout = () => {};
+  const onLogout = () => {
+    localStorage.clear();
+    // persistStore(reduxStore).purge();
+    // toastMessage(t("logout_successfully"), successType);
+    navigate("/login");
+  };
 
   const handleLanguageMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);

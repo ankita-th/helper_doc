@@ -90,7 +90,12 @@ const Login = () => {
         localStorage.setItem("token", res.data.accessToken);
         localStorage.setItem("refresh_token", res.data.refreshToken);
         localStorage.setItem("selectedRole", res.data.role);
-        navigate("/dashboard");
+        localStorage.setItem("userId", res.data.userId);
+        if (res.data.role === "helper") {
+          navigate("/helper/job-dashboard");
+        } else {
+          navigate("/dashboard");
+        }
       })
       .catch((err) => {
         if (err?.response?.status === 400) {
@@ -104,7 +109,6 @@ const Login = () => {
         console.log(err, "/////");
       });
   };
-
 
   const handleChange = () => {
     if (showErrorMsg.show) {

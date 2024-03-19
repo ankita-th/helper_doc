@@ -25,7 +25,8 @@ import "./HelperDashboard.css"; // Import the CSS file
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SideMenuBar from "../../Components/Common/SideMenubar/SideMenuBar";
 import HelperUserDetails from "../../Components/Signup/HelperRegistrationSteps/HelperUserDetails";
-
+import HelperDashboardSubHeader from "../../Components/Common/Headers/HelperDashboardSubHeader";
+import { useTranslation } from "react-i18next";
 
 const MyProfile = ({ formData, setFormData }) => {
   const [errors, setErrors] = useState([]); // State to manage errors
@@ -34,10 +35,9 @@ const MyProfile = ({ formData, setFormData }) => {
   const location = useLocation();
   const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
   const [profilePic, setProfilePic] = useState(null);
+  const { t } = useTranslation();
 
-  const handleProfilePicUpload = (
-    event
-  ) => {
+  const handleProfilePicUpload = (event) => {
     if (event.target.files && event.target.files.length > 0) {
       setProfilePic(event.target.files[0]);
     }
@@ -77,139 +77,116 @@ const MyProfile = ({ formData, setFormData }) => {
   };
   return (
     <>
-    
-    <Grid container className="dashboardRow">
-      {/* Sidebar Component */}
-      <Grid className="dashboardSidebar">
-        <SideMenuBar />
-      </Grid>
-      
-      <Grid className="dashboardContentArea">
       <Box maxWidth="xl" sx={{ padding: "20px" }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
-                <Typography variant="h2" className="commonTitle">Profile</Typography>
-                <Typography variant="body1">
-                  Manage or edit your profile.
-                </Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <ProgressBar completed={80} bgColor="#0a6259" />
-                <Typography variant="body1" className="profileCompletion">
-                  <strong>80%</strong> of your profile is complete {">"} <Link to={"/"}>Get Verified</Link> +20%
-                </Typography>
-              </Grid>
-            </Grid>
-            {/* <Divider sx={{ mb: 2 }} /> */}
-            <Box className="profileCardBox"
-              border={1}
-              borderRadius={8}
-              borderColor="#DDDDDD"
-              py={6}
-              px={10}
-              mb={2}
-              mt={2}
-            >
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-                mb={2}
-              >
-                <Box display="flex" alignItems="center">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleProfilePicUpload}
-                    style={{ display: "none" }}
-                    id="profile-pic-upload"
-                  />
-                  <label htmlFor="profile-pic-upload" className="profileUpload">
-                    <Box position="relative">
-                      <IconButton component="span">
-                        {profilePic ? (
-                          <img
-                            src={URL.createObjectURL(profilePic)}
-                            alt="Profile"
-                            style={{
-                              borderRadius: "50%",
-                              maxWidth: "130px",
-                              maxHeight: "130px",
-                            }}
-                          />
-                        ) : (
-                          <Avatar sx={{ width: 130, height: 130 }}>
-                            <AccountCircleIcon />
-                          </Avatar>
-                        )}
-                      </IconButton>
-                      <IconButton
-                        style={{ position: "absolute", bottom: 0, right: 0 }}
-                        onClick={() => {
-                          const fileInput =
-                            document.getElementById("profile-pic-upload");
-                          if (fileInput) {
-                            fileInput.click();
-                          }
+        <HelperDashboardSubHeader
+          title={t("profile")}
+          description={t("manage_or_update_profile")}
+        />
+        {/* <Divider sx={{ mb: 2 }} /> */}
+        <Box
+          className="profileCardBox"
+          border={1}
+          borderRadius={8}
+          borderColor="#DDDDDD"
+          py={6}
+          px={10}
+          mb={2}
+          mt={2}
+        >
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            mb={2}
+          >
+            <Box display="flex" alignItems="center">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleProfilePicUpload}
+                style={{ display: "none" }}
+                id="profile-pic-upload"
+              />
+              <label htmlFor="profile-pic-upload" className="profileUpload">
+                <Box position="relative">
+                  <IconButton component="span">
+                    {profilePic ? (
+                      <img
+                        src={URL.createObjectURL(profilePic)}
+                        alt="Profile"
+                        style={{
+                          borderRadius: "50%",
+                          maxWidth: "130px",
+                          maxHeight: "130px",
                         }}
-                      >
-                        <CameraAltIcon />
-                      </IconButton>
-                    </Box>
-                  </label>
-                  <Box ml={2} className="TopDesc">
-                    <Typography variant="h5"><strong>John Smith</strong></Typography>
-                    <Box display="flex" alignItems="center">
-                      <Box
-                        width={8}
-                        height={8}
-                        borderRadius="50%"
-                        bgcolor="success.main"
-                        mr={1}
                       />
-                      <Typography variant="body2" color="textSecondary" style={{ marginBottom: 0 }}>
-                        Available
-                      </Typography>
-                    </Box>
-                    <Typography variant="body2" color="textSecondary">
-                      <strong>Status:</strong> <span className="dangerText">Weak</span>
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Recently Updated on <span>19/01/2024</span>
-                    </Typography>
-                  </Box>
+                    ) : (
+                      <Avatar sx={{ width: 130, height: 130 }}>
+                        <AccountCircleIcon />
+                      </Avatar>
+                    )}
+                  </IconButton>
+                  <IconButton
+                    style={{ position: "absolute", bottom: 0, right: 0 }}
+                    onClick={() => {
+                      const fileInput =
+                        document.getElementById("profile-pic-upload");
+                      if (fileInput) {
+                        fileInput.click();
+                      }
+                    }}
+                  >
+                    <CameraAltIcon />
+                  </IconButton>
                 </Box>
-                <Button className="arrowButton"
-                  variant="contained"
-                  color="primary"
-                  onClick={handleViewPublicProfile}
-                >
-                  View Profile
-                </Button>
+              </label>
+              <Box ml={2} className="TopDesc">
+                <Typography variant="h5">
+                  <strong>John Smith</strong>
+                </Typography>
+                <Box display="flex" alignItems="center">
+                  <Box
+                    width={8}
+                    height={8}
+                    borderRadius="50%"
+                    bgcolor="success.main"
+                    mr={1}
+                  />
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    style={{ marginBottom: 0 }}
+                  >
+                    Available
+                  </Typography>
+                </Box>
+                <Typography variant="body2" color="textSecondary">
+                  <strong>Status:</strong>{" "}
+                  <span className="dangerText">Weak</span>
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Recently Updated on <span>19/01/2024</span>
+                </Typography>
               </Box>
-              <HelperUserDetails />
             </Box>
-            <BookmarkedJobs
-              jobs={recommendedJobsSaved}
-              handleBookmarkToggle={handleBookmarkToggle}
-              isBookmarked={isBookmarked}
-            />
+            <Button
+              className="arrowButton"
+              variant="contained"
+              color="primary"
+              onClick={handleViewPublicProfile}
+            >
+              View Profile
+            </Button>
           </Box>
-      </Grid>
-    </Grid>
-    {/* <Box>
-      <Grid container spacing={3}>
-        {/* Sidebar Component 
-        <Grid item md={2}>
-          <SideMenuBar />
-        </Grid>
-        {/* Main Content 
-        <Grid item md={10} style={{ marginTop: "16px" }}>
-          
-        </Grid>
-      </Grid>
-    </Box> */}
-    </>    
+          <HelperUserDetails />
+        </Box>
+        <BookmarkedJobs
+          jobs={recommendedJobsSaved}
+          handleBookmarkToggle={handleBookmarkToggle}
+          isBookmarked={isBookmarked}
+        />
+      </Box>
+    </>
   );
 };
 

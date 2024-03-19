@@ -7,6 +7,7 @@ const initialState = {
     msg: "",
     type: "",
   },
+  profilePercentage: 0,
 };
 
 export const commonSlice = createSlice({
@@ -19,9 +20,12 @@ export const commonSlice = createSlice({
     setSnackBarSlice: (state, action) => {
       state.snackBar = action.payload;
     },
+    setProfilePercentage: (state, action) => {
+      state.profilePercentage = action.payload;
+    },
   },
 });
 
-export const { setPageLoader, setSnackBarSlice } = commonSlice.actions;
+export const { setPageLoader, setSnackBarSlice, setProfilePercentage } = commonSlice.actions;
 
 export default commonSlice.reducer;

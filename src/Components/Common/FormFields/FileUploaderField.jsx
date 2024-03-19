@@ -1,5 +1,5 @@
 import React from "react";
-import DocumnetIcon from "../../../Assets/SVGIcons/DocumnetIcon";
+import DocumnetIcon from "../../../Assets/SVGIcons/DocumentIcon";
 import { Controller } from "react-hook-form";
 import { Input } from "@mui/material";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
