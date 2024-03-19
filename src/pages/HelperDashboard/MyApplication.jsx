@@ -34,15 +34,15 @@ const MyApplication = () => {
 
   useEffect(() => {
     // const param = `?jobTab=applied&page=${currentPage.page}&limit=10&location=${filters.location}&empType=${filters.empType}&sortBy=${filters.sortBy}`;
-    const param = `?jobTab=${activeTab}`;
+    const param = `?jobTab=${activeTab}&page=${currentPage.page}&limit=10`;
     getJobsByStatus(userId, param)
       .then((res) => {
         setLoader(false);
         console.log(res.data);
         const responseData =
           activeTab === JOB_STATUS.APPLIED
-            ? res.data.appliedJobs
-            : res.data.savedJobs;
+            ? res.data?.userActions?.appliedJobs
+            : res.data?.userActions?.savedJobs;
         setJobDetails(responseData);
         setTotalPage(res.data.totalPages);
       })
