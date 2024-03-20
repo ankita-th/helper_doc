@@ -32,3 +32,5 @@ export const UPLOAD_FILE_IN_S3 = "upload/presigned-url"
 export const GET_ALL_NOTIFICATION = (userId) => `notifications/${userId}`;
 
 export const DELETE_NOTIFICATION = (userId,notificationId) => `notifications/${userId}/${notificationId}`;
+//get all messages
+export const GET_ALL_MESSAGES  = (userId)=> `/messages/${userId}`;

@@ -2,6 +2,7 @@ import { APIAxios } from "../../Config/APIConfig";
 import {
   APPLY_JOB,
   GET_ALL_JOBS,
+  GET_ALL_MESSAGES,
   GET_JOBS_BY_STATUS,
   GET_PROFILE_PERCENTAGE,
   SAVE_JOB,
@@ -27,3 +28,6 @@ export const getProfilePercentage = (userId) =>
 
 // Get jobs by status
 export const getJobsByStatus = (userId, param) => APIAxios.get(`${GET_JOBS_BY_STATUS(userId)}${param}`);
+//get all messages
+export const getAllMessages = (userId,param) => APIAxios.get(`/messages/${userId}${param}`);
+// export const getAllMessages = (userId) => APIAxios.get(`${GET_ALL_MESSAGES(userId)}`);

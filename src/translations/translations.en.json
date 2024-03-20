@@ -185,6 +185,7 @@
     "chat": "Chat",
     "setting": "Setting",
     "no_job_found": "No Job Found",
+    "no_message_found":"No Message Found",
     "start_date": "Start Date",
     "type": "Type",
     "experience": "Experience",
