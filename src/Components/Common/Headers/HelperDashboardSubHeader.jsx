@@ -1,11 +1,18 @@
-import { Typography } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ProfileCompletionProgressBar from "../Profile/ProfileCompletionProgressBar";
 import { getProfilePercentage } from "../../../Services/JobsServices/JobServices";
 import { useDispatch } from "react-redux";
 import { setProfilePercentage } from "../../../Redux/CommonSlice";
 
-export default function HelperDashboardSubHeader({ title, description }) {
+export default function HelperDashboardSubHeader({
+  title,
+  description,
+  progessBar = true,
+  isChat = false,
+  filter,
+  setFilter
+}) {
   const userId = localStorage.getItem("userId");
   const [percentage, setPercentage] = useState(0);
   const dispatch = useDispatch();
@@ -27,7 +34,32 @@ export default function HelperDashboardSubHeader({ title, description }) {
       <Typography variant="body1" className="commonDesc">
         {description}
       </Typography>
-      <ProfileCompletionProgressBar profilePercentage={percentage} />
+      {progessBar && (
+        <ProfileCompletionProgressBar profilePercentage={percentage} />
+      )}
+       {
+        isChat && (  <FormControl
+          variant="outlined"
+          sx={{ minWidth: 300 }}
+          className="queRow"
+        >
+          <InputLabel id="filter-messages-label">
+            All Messages
+          </InputLabel>
+          <Select
+            className="formInputFiled"
+            labelId="filter-messages-label"
+            id="filter-messages"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            label="Filter Messages"
+          >
+            <MenuItem value="">All Messages</MenuItem>
+            <MenuItem value="John Doe">John Doe</MenuItem>
+            <MenuItem value="Jane Smith">Jane Smith</MenuItem>
+          </Select>
+        </FormControl>)
+      }
     </>
   );
 }

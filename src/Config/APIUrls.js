@@ -21,3 +21,6 @@ export const SAVE_JOB = (jobId) => `users/${jobId}/save-job`;
 // Get profile percentage
 export const GET_PROFILE_PERCENTAGE = (userId) =>
   `/complete-profile/${userId}/profile-completion`;
+
+//get all messages
+export const GET_ALL_MESSAGES  = (userId)=> `/messages/${userId}`;

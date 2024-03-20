@@ -89,11 +89,6 @@ const Setting = () => {
   return (
     <>
     <Grid container className="dashboardRow">
-      {/* Sidebar Component */}
-      <Grid className="dashboardSidebar">
-      {pathname === '/employee/settings' ? <EmpSideBar /> : <SideMenuBar />}
-      </Grid>
-      {/* Main Content */}
       <Grid className="dashboardContentArea">
           <Box>
             <Box display="flex" alignItems="center" mb={2}>

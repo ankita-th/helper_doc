@@ -1,6 +1,8 @@
 import { lazy } from "react";
 import ThanksForRegister from "../pages/HelperSteps/ThanksForRegister";
 import ProfilePreview from "../pages/HelperSteps/ProfilePreview";
+import Setting from "../Components/Common/Setting/Settings";
+const Chat  = lazy(()=>import("../pages/HelperDashboard/Chat"));
 const LandingPage = lazy(() => import("../pages/LandingPage/LandingPage"));
 const Login = lazy(() => import("../pages/Login/Login"));
 const SelectRole = lazy(() => import("../pages/Registration/SelectRole"));
@@ -108,6 +110,18 @@ export const route = [
   {
     path: "/helper/my-profile",
     element: <MyProfile />,
+    private: true,
+    helper: true,
+  },
+  {
+    path: "/helper/chat",
+    element: <Chat />,
+    private: true,
+    helper: true,
+  },
+  {
+    path: "/helper/setting",
+    element: <Setting />,
     private: true,
     helper: true,
   },
