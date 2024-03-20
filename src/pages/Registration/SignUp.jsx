@@ -117,7 +117,7 @@ const SignUp = () => {
         localStorage.setItem("token", res.data.user.accessToken);
         localStorage.setItem("refresh_token", res.data.user.refreshToken);
         localStorage.setItem("selectedRole", res.data.user.user.role);
-        localStorage.setItem("userID", res.data.user.user.id);
+        localStorage.setItem("userId", res.data.user.user.id);
         if (role === "helper") {
           navigate("/register/helper/profile-steps/disclaimer", {
             state: { prevRoute: "/register/helper" },
