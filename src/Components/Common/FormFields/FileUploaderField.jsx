@@ -5,21 +5,28 @@ import { Input } from "@mui/material";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 export default function FileUploaderField({
-  rules,
-  control,
+  name,
   errors,
   setFile,
-  disable = true,
+  disable = false,
 }) {
   const handleUploadedFile = (e) => {
+    if (!e?.target?.files || e?.target?.files?.length === 0) {
+      return;
+    }
     const file = e.target.files[0];
-    setFile(file);
+    setFile(e.target.name, file);
   };
   return (
     <>
       <>
         <DocumnetIcon />
-        <Input disabled={!disable} type="file" onChange={handleUploadedFile} />
+        <Input
+          name={name}
+          disabled={disable}
+          type="file"
+          onChange={handleUploadedFile}
+        />
       </>
       {errors && <ErrorMessage msg={errors} />}
     </>

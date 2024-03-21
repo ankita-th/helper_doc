@@ -28,7 +28,7 @@ const Chat = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [messages, setMessages] = useState([]);
   const { t } = useTranslation();
-  const userID = localStorage.getItem("userID");
+  const userID = localStorage.getItem("userId");
   useEffect(() => {
     //commented for future use
     // const param = `?page=${currentPage.page}&limit=${ItemsPerPage}&fiter=${filter}`;
@@ -50,7 +50,7 @@ const Chat = () => {
   const handleBack = () => {
     setSelectedMessage(null);
   };
-  const handleChangePagination = (event,page) => {
+  const handleChangePagination = (event, page) => {
     setCurrentPage({ page: page });
   };
   return (

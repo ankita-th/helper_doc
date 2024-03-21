@@ -34,10 +34,10 @@ const HelperRegistrationStep1 = ({ saveStepDetails, stepDetails }) => {
         });
       }
     }
-    const payload ={
-      answers: answerArray
-    }
-    saveStepDetails(payload, 'applicant_info');
+    const payload = {
+      answers: answerArray,
+    };
+    saveStepDetails(payload, "applicant_info");
     // Iterate over originalObject
     // for (const key in questAnswer) {
     //   if (key.startsWith("answer_")) {
@@ -106,38 +106,38 @@ const HelperRegistrationStep1 = ({ saveStepDetails, stepDetails }) => {
                   </Typography>
                   {ques.subQuestionType === "country_dropdown" ? (
                     <>
-                      <Controller
-                        name={`sub_que_${ques.id}`}
+                      <CountryDropdown
                         control={control}
-                        type="text"
-                        rules={{ required: t("answer_required_msg") }}
-                        defaultValue={""}
-                        render={({ field }) => (
-                          <CountryDropdown field={field} />
-                        )}
+                        name={`sub_que_${ques.id}`}
+                        isRequired={true}
+                        errors={errors}
                       />
                     </>
                   ) : (
-                    <Controller
-                      name={`sub_que_${ques.id}`}
-                      control={control}
-                      defaultValue=""
-                      rules={{ required: t("answer_required_msg") }}
-                      render={({ field }) => (
-                        <TextField
-                          {...field}
-                          className="formInputFiled"
-                          multiline
-                          fullWidth
-                          rows={4}
-                          variant="outlined"
-                          label="Your answer..."
+                    <>
+                      <Controller
+                        name={`sub_que_${ques.id}`}
+                        control={control}
+                        defaultValue=""
+                        rules={{ required: t("answer_required_msg") }}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            className="formInputFiled"
+                            multiline
+                            fullWidth
+                            rows={4}
+                            variant="outlined"
+                            label="Your answer..."
+                          />
+                        )}
+                      />
+                      {errors[`sub_que_${ques.id}`] && (
+                        <ErrorMessage
+                          msg={errors[`sub_que_${ques.id}`]?.message}
                         />
                       )}
-                    />
-                  )}
-                  {errors[`sub_que_${ques.id}`] && (
-                    <ErrorMessage msg={errors[`sub_que_${ques.id}`]?.message} />
+                    </>
                   )}
                 </div>
               )}

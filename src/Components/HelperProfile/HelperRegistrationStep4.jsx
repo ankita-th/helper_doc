@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Paper,
@@ -9,107 +9,47 @@ import {
   Step,
   StepLabel,
   StepContent,
-  FormControlLabel,
-  RadioGroup,
   FormGroup,
   FormLabel,
-  Radio,
   FormControl,
-  TextField,
-  Select,
-  MenuItem,
-  Container,
 } from "@mui/material";
-import { styled } from "@mui/system";
-import HelperStepNavigation from "../Signup/HelperRegistrationSteps/HelperStepNavigation";
-import { useLocation, useNavigate } from "react-router-dom";
-
-const StyledImage = styled("img")({
-  maxWidth: "100%",
-  maxHeight: "100%",
-});
-
-const StyledImageContainer = styled("div")({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-});
-
-const TitleWrapper = styled("div")({
-  textAlign: "center",
-  marginTop: " 0, 20px,", // Remove margin from the top
-  color: "white", // Change color to white
-});
-
-const HeaderBar = styled("div")({
-  backgroundColor: "#0a6259", // Background color
-  padding: "10px 0", // Padding top and bottom
-  marginBottom: "20px", // Margin bottom
-});
+import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import RadioGroupField from "../Common/FormFields/RadioGroupField";
+import ErrorMessage from "../Common/ErrorMessage/ErrorMessage";
+import NumberField from "../Common/FormFields/NumberField";
+import SelectWithController from "../Common/FormFields/SelectWithController";
+import {
+  CURRENCY_LIST,
+  LIVING_ARRANGEMENT,
+  PREFERRED_DAY_OFF,
+  SLEEPING_ARRANGEMENT,
+} from "./Constant";
+import CountryDropdown from "../Common/FormFields/CountryDropdown";
 
 const HelperRegistrationStep4 = ({ saveStepDetails }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const [activeStep, setActiveStep] = useState(3);
   const [stepperActiveStep, setStepperActiveStep] = useState(0);
-  const [currency, setCurrency] = useState("");
-  const [jobType, setJobType] = useState("");
-  const [preferredDayOff, setPreferredDayOff] = useState("");
-  const [sleepingArrangement, setSleepingArrangement] = useState("");
-  const [shareWork, setShareWork] = useState("");
-  const [livingArrangement, setLivingArrangement] = useState("");
-  const [preferredLocation, setPreferredLocation] = useState("");
-  const [formData, setFormData] = useState({})
+  const { t } = useTranslation();
 
-  const handleNext = () => {
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   workExperience: {
-    //     ...prevFormData.workExperience,
-    //     // familyMembers: familyMembers,
-    //     currency,
-    //     jobType,
-    //     preferredDayOff,
-    //     sleepingArrangement,
-    //     shareWork,
-    //     livingArrangement,
-    //     preferredLocation,
-    //   },
-    // }));
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
 
+  const handleNext = (data) => {
     if (stepperActiveStep === steps.length - 1) {
-      saveStepDetails({...formData}, "q_&_a");
+      saveStepDetails(data, "q_&_a");
     } else {
       setStepperActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
   };
-  const handleBack = () => {
-    setStepperActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+  const handleChangeTab = (step) => {
+    if (step < stepperActiveStep) {
+      setStepperActiveStep(step);
+    }
   };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      workExperience: {
-        ...prevFormData.workExperience,
-        [name]: value,
-      },
-    }));
-  };
-
-  const handleJobType = (event) => {
-    setJobType(event.target.value);
-  };
-
-  useEffect(() => {
-    // eslint-disable-next-line no-restricted-globals
-    const formDataFromStep3 = location.state.formData;
-    console.log("Data from Step 3:", formDataFromStep3);
-  }, [location.state.formData]);
-
-  const StyledFormContainer = styled(Grid)({});
 
   const steps = [
     {
@@ -120,25 +60,19 @@ const HelperRegistrationStep4 = ({ saveStepDetails }) => {
             <FormLabel className="formLabel" id="jobType">
               Choose the type of employment *
             </FormLabel>
-            <RadioGroup
-              className="radioCheckBtn"
-              row
-              aria-labelledby="jobType"
-              name="row-radio-buttons-group"
-              value={jobType}
-              onChange={handleJobType}
-            >
-              <FormControlLabel
-                value="full_time"
-                control={<Radio />}
-                label="Full Time"
-              />
-              <FormControlLabel
-                value="part_time"
-                control={<Radio />}
-                label="Part Time"
-              />
-            </RadioGroup>
+            <Controller
+              name="jobType"
+              control={control}
+              defaultValue=""
+              rules={{ required: t("answer_required_msg") }}
+              render={({ field }) => (
+                <RadioGroupField
+                  radioOptions={["Full Time", "Part Time"]}
+                  field={field}
+                />
+              )}
+            />
+            {errors.jobType && <ErrorMessage msg={errors.jobType?.message} />}
           </FormControl>
         </>
       ),
@@ -150,112 +84,79 @@ const HelperRegistrationStep4 = ({ saveStepDetails }) => {
           <FormGroup>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
-                <FormControl fullWidth className="queRow">
-                  <FormLabel id="salary" className="formLabel">
-                    Salary
-                  </FormLabel>
-                  <TextField
-                    className="formInputFiled"
-                    name="salary"
-                    value={formData?.workExperience?.salary}
-                    onChange={handleInputChange}
-                    type="number"
-                    required
-                  />
-                </FormControl>
+                <NumberField
+                  control={control}
+                  name={"salary"}
+                  errors={errors}
+                  placeholder={"Eg. 10000"}
+                  label={"Salary"}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
-                <FormControl fullWidth className="queRow">
-                  <FormLabel id="currency" className="formLabel">
-                    Currency
-                  </FormLabel>
-                  <Select
-                    className="formInputFiled"
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
-                  >
-                    <MenuItem value="usd">USD</MenuItem>
-                    <MenuItem value="hk">HK</MenuItem>
-                    {/* Add more options as needed */}
-                  </Select>
-                </FormControl>
+                <SelectWithController
+                  control={control}
+                  name={"currency"}
+                  options={CURRENCY_LIST}
+                  label={"Currency"}
+                />
               </Grid>
             </Grid>
           </FormGroup>
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="dayOff" className="formLabel">
-              Preferred Day Off *
-            </FormLabel>
-            <Select
-              className="formInputFiled"
-              value={preferredDayOff}
-              onChange={(e) => setPreferredDayOff(e.target.value)}
-            >
-              <MenuItem value="flexibleDay">Flexible</MenuItem>
-              <MenuItem value="sunday">Sunday</MenuItem>
-              <MenuItem value="monday">Monday</MenuItem>
-              <MenuItem value="tuesday">Tuesday</MenuItem>
-              <MenuItem value="wednesday">Wednesday</MenuItem>
-              <MenuItem value="thursday">Thrusday</MenuItem>
-              <MenuItem value="friday">Friday</MenuItem>
-              <MenuItem value="saturday">Saturday</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="dayOff" className="formLabel">
-              Sleeping Arrangement *
-            </FormLabel>
-            <Select
-              className="formInputFiled"
-              value={sleepingArrangement}
-              onChange={(e) => setSleepingArrangement(e.target.value)}
-            >
-              <MenuItem value="flexibleSleeping">Flexible</MenuItem>
-              <MenuItem value="alone">Alone</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="shareWork" className="formLabel">
-              Share work with co-worker *
-            </FormLabel>
-            <Select
-              className="formInputFiled"
-              value={shareWork}
-              onChange={(e) => setShareWork(e.target.value)}
-            >
-              <MenuItem value="flexibleWork">Flexible</MenuItem>
-              <MenuItem value="alone">Alone</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="livingArrangement" className="formLabel">
-              Living arrangement *
-            </FormLabel>
-            <Select
-              className="formInputFiled"
-              value={livingArrangement}
-              onChange={(e) => setLivingArrangement(e.target.value)}
-            >
-              <MenuItem value="flexibleLive">Flexible</MenuItem>
-              <MenuItem value="livein">Live In</MenuItem>
-              <MenuItem value="liveout">Live Out</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth className="queRow">
+          <SelectWithController
+            control={control}
+            name={"preferredDayOff"}
+            options={PREFERRED_DAY_OFF}
+            errors={errors}
+            isRequired={true}
+            label={"Preferred Day Off"}
+          />
+          <SelectWithController
+            control={control}
+            name={"sleepingArrangement"}
+            options={SLEEPING_ARRANGEMENT}
+            errors={errors}
+            isRequired={true}
+            label={"Sleeping Arrangement"}
+          />
+          <SelectWithController
+            control={control}
+            name={"shareWork"}
+            options={SLEEPING_ARRANGEMENT}
+            errors={errors}
+            isRequired={true}
+            label={"Share work with co-worker"}
+          />
+          <SelectWithController
+            control={control}
+            name={"livingArrangement"}
+            options={LIVING_ARRANGEMENT}
+            errors={errors}
+            isRequired={true}
+            label={"Living arrangement"}
+          />
+          <CountryDropdown
+            control={control}
+            name={"preferredLocation"}
+            label={"Preferred working Location"}
+            isRequired={true}
+            errors={errors}
+          />
+          {/* <FormControl fullWidth className="queRow">
             <FormLabel id="preferredLocation" className="formLabel">
               Preferred working Location *
             </FormLabel>
-            <Select
-              className="formInputFiled"
-              value={preferredLocation}
-              onChange={(e) => setPreferredLocation(e.target.value)}
-            >
-              <MenuItem value="hong-kong">Hong Kong</MenuItem>
-              <MenuItem value="singapur">Singapur</MenuItem>
-              <MenuItem value="kuwait">Kuwait</MenuItem>
-              <MenuItem value="saudi-arabia">Saudi Arabia</MenuItem>
-            </Select>
-          </FormControl>
+            <Controller
+              name="preferredLocation"
+              control={control}
+              type="text"
+              rules={{ required: t("answer_required_msg") }}
+              defaultValue={""}
+              render={({ field }) => <CountryDropdown field={field} />}
+            />
+            {errors && errors.preferredLocation && (
+              <ErrorMessage msg={errors.preferredLocation.message} />
+            )}
+          </FormControl> */}
         </>
       ),
     },
@@ -266,35 +167,33 @@ const HelperRegistrationStep4 = ({ saveStepDetails }) => {
     <>
       <Grid item xs={12} md={6} className="workingExperienceTab">
         <Box sx={{ maxWidth: 800 }} className="StepFormCol formDataInfo">
-          <Stepper activeStep={stepperActiveStep} orientation="vertical">
-            {steps.map((step, index) => (
-              <Step key={step.label}>
-                <StepLabel>{step.label}</StepLabel>
-                <StepContent>
-                  {step.content}
-                  <Box sx={{ mb: 2 }}>
-                    <div>
-                      <Button
-                        className="arrowButton"
-                        variant="contained"
-                        onClick={handleNext}
-                        sx={{ mt: 1, mr: 1 }}
-                      >
-                        {index === steps.length - 1 ? "Next" : "Next"}
-                      </Button>
-                      {/* <Button
-                              disabled={index === 0}
-                              onClick={handleBack}
-                              sx={{ mt: 1, mr: 1 }}
-                            >
-                              Back
-                            </Button> */}
-                    </div>
-                  </Box>
-                </StepContent>
-              </Step>
-            ))}
-          </Stepper>
+          <form onSubmit={handleSubmit(handleNext)}>
+            <Stepper activeStep={stepperActiveStep} orientation="vertical">
+              {steps.map((step, index) => (
+                <Step key={step.label}>
+                  <StepLabel onClick={() => handleChangeTab(index)}>
+                    {step.label}
+                  </StepLabel>
+                  <StepContent>
+                    {step.content}
+                    <Box sx={{ mb: 2 }}>
+                      <div>
+                        <Button
+                          className="arrowButton"
+                          variant="contained"
+                          type="submit"
+                          // onClick={handleNext}
+                          sx={{ mt: 1, mr: 1 }}
+                        >
+                          {index === steps.length - 1 ? "Next" : "Next"}
+                        </Button>
+                      </div>
+                    </Box>
+                  </StepContent>
+                </Step>
+              ))}
+            </Stepper>
+          </form>
           {stepperActiveStep === steps.length && (
             <Paper square elevation={0} sx={{ p: 3 }}>
               <Typography>

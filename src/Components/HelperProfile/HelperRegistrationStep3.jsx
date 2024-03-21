@@ -1,26 +1,16 @@
-import React, { ChangeEvent, FC, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Grid,
-  Paper,
-  Typography,
   Button,
   FormControl,
   FormLabel,
-  Select,
-  MenuItem,
   TextField,
   FormControlLabel,
-  Radio,
-  Checkbox,
   RadioGroup,
   FormGroup,
   Switch,
-  Input,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
-import HelperStepNavigation from "../Signup/HelperRegistrationSteps/HelperStepNavigation";
 import LocationAutocomplete from "../Common/LocationAutocomplete";
-import { Container, styled } from "@mui/system";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -28,11 +18,11 @@ import StepLabel from "@mui/material/StepLabel";
 import StepContent from "@mui/material/StepContent";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
   CURRENCY_LIST,
+  DUTIES_OTHER_TASK,
   EXPERIENCE_LIST,
   SPECIAL_HELP_REQUIREMENT,
   YES_NO,
@@ -44,58 +34,18 @@ import CheckBoxField from "../Common/FormFields/CheckBoxField";
 import moment from "moment";
 import NumberField from "../Common/FormFields/NumberField";
 import FileUploaderField from "../Common/FormFields/FileUploaderField";
+import ErrorMessage from "../Common/ErrorMessage/ErrorMessage";
+import { handleFileUploadToS3Bucket } from "../../Utils/CommonAPIs";
+import SelectWithController from "../Common/FormFields/SelectWithController";
+import RadioGroupWithController from "../Common/FormFields/RadioGroupWithController";
+import CheckBoxFieldWithController from "../Common/FormFields/CheckBoxFieldWithController";
+import DatePickerWIthController from "../Common/FormFields/DatePickerWIthController";
 
-const StyledImage = styled("img")({
-  maxWidth: "100%",
-  maxHeight: "100%",
-});
-
-const StyledImageContainer = styled("div")({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-});
-
-const TitleWrapper = styled("div")({
-  textAlign: "center",
-  marginTop: " 0, 20px,", // Remove margin from the top
-  color: "white", // Change color to white
-});
-
-const HeaderBar = styled("div")({
-  backgroundColor: "#0a6259", // Background color
-  padding: "10px 0", // Padding top and bottom
-  marginBottom: "20px", // Margin bottom
-});
-
-const HelperRegistrationStep3 = ({saveStepDetails}) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [activeStep, setActiveStep] = useState(2);
+const HelperRegistrationStep3 = ({ saveStepDetails, setPageLoader }) => {
   const [stepperActiveStep, setStepperActiveStep] = useState(0);
   const [currentLocation, setCurrentLocation] = useState("");
-  const [startedDate, setstartedDate] = useState("");
-  const [releasedDate, setreleasedDate] = useState("");
-  const [isJobStillGoing, setIsJobStillGoing] = useState(false);
-  const [currency, setCurrency] = useState("");
-  const [isAnyLetter, setIsAnyLetter] = useState(false);
-  const [provideLater, setProvideLater] = useState("");
-  const [uploadLetter, setIsuploadLetter] = useState("");
-  const [letterFile, setLetterFile] = useState(null);
-  const [selectedDuties, setDuties] = useState([]);
-  const [gender, setGender] = useState("");
-  const [referenceAvailability, setReferenceAvailability] = useState("");
-  const [isMoreWorkExperince, setIsMoreWorkExperince] = useState("");
-  const [reasonForLeaving, setReasonForLeaving] = useState("");
-  const [helperWorkingExperience, setHelperWorkingExperience] = useState({
-    workingExperience: "",
-    workingLocation: "",
-    employerNationality: "",
-    numberOfFamilyMembers: 0,
-  });
 
-  const [familyMembers, setFamilyMembers] = useState([]);
-  const [formData, setFormData] = useState({});
+  const [letterFile, setLetterFile] = useState(null);
 
   const { t } = useTranslation();
   const {
@@ -107,135 +57,65 @@ const HelperRegistrationStep3 = ({saveStepDetails}) => {
     formState: { errors },
   } = useForm();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      workExperience: {
-        ...prevFormData.workExperience,
-        [name]: value,
-      },
-    }));
-  };
-
   const handleSelectLocation = (location) => {
     setCurrentLocation(location);
   };
 
-  useEffect(() => {
-    const formDataFromStep2 = location.state.formData;
-    console.log("Data from Step 2:", formDataFromStep2);
-  }, [location.state.formData]);
-
-  const handleFamilyMemberChange = (e, index) => {
-    const { name, value, checked } = e.target;
-
-    // Extract the property name and index
-    const [property] = name.split(".").slice(1); // Extracts the index and property
-
-    const updatedFamilyMembers = [...familyMembers];
-    const existingMember = updatedFamilyMembers[index] || {
-      age: 0,
-      gender: "",
-      requireSpecialHelp: [],
-    }; // Initialize with default if not exists
-
-    let updatedSpecialHelp = [...existingMember.requireSpecialHelp];
-    if (property === "age") {
-      updatedFamilyMembers[index] = {
-        ...existingMember,
-        age: parseInt(value),
-      };
-    } else if (property === "requireSpecialHelp") {
-      if (checked) {
-        updatedSpecialHelp.push(value);
-      } else {
-        updatedSpecialHelp = updatedSpecialHelp.filter(
-          (item) => item !== value
-        );
+  const handleNext = async (data) => {
+    setPageLoader(true);
+    console.log(data, "///data");
+    const payload = { ...data };
+    payload.location = currentLocation;
+    let familMemberDetail = [];
+    if (payload.familySize > 0) {
+      for (let i = 0; i < payload.familySize; i++) {
+        const familyDetail = {
+          age: payload[`familyMembers${i}_age`],
+          gender: payload[`familyMembers${i}_gender`],
+          specialNeeds: payload[`familyMembers${i}_requireSpecialHelp`],
+        };
+        delete payload[`familyMembers${i}_age`];
+        delete payload[`familyMembers${i}_gender`];
+        delete payload[`familyMembers${i}_requireSpecialHelp`];
+        familMemberDetail.push(familyDetail);
       }
-      updatedFamilyMembers[index] = {
-        ...existingMember,
-        requireSpecialHelp: updatedSpecialHelp,
-      };
-    } else {
-      updatedFamilyMembers[index] = {
-        ...existingMember,
-        [property]: value,
-      };
+      payload["familyMembers"] = familMemberDetail;
     }
-
-    setFamilyMembers(updatedFamilyMembers);
-  };
-  const handleNext = (data) => {
-    saveStepDetails({}, "job_details");
-    console.log({}, "///");
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   workExperience: {
-    //     ...prevFormData.workExperience,
-    //   },
-    // }));
-
-    // if (stepperActiveStep === steps.length - 1) {
-    //   navigate("/registration_steps/step4", { state: { formData } });
-    //   // navigate("/registration_steps/step4", { state: location.state });
-    // } else {
-    //   setStepperActiveStep((prevActiveStep) => prevActiveStep + 1);
-    // }
-  };
-
-  const handleBack = () => {
-    setStepperActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-  const handleUploadLetter = (e) => {
-    const isChecked = e.target.checked;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      workExperience: {
-        ...prevFormData.workExperience,
-        uploadLetter: isChecked,
-      },
-    }));
-  };
-
-  const handleProvideLater = (e) => {
-    const isChecked = e.target.checked;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      workExperience: {
-        ...prevFormData.workExperience,
-        provideLater: isChecked,
-      },
-    }));
-  };
-
-  const handleFileUpload = (setState, files) => {
-    if (files && files.length > 0) {
-      setState(files[0]);
+    payload.period = {
+      start: payload.startedDate,
+      end: payload.releasedDate,
+    };
+    delete payload.startedDate;
+    delete payload.releasedDate;
+    payload.compensation = {
+      currency: payload.currency,
+      salary: payload.salary,
+    };
+    delete payload.currency;
+    delete payload.salary;
+    let fileUrl = "";
+    if (letterFile?.name) {
+      const fileUpload = await handleFileUploadToS3Bucket(letterFile);
+      if (!fileUpload.error) {
+        fileUrl = fileUpload.uploadedUrl;
+      } else {
+        setPageLoader(false);
+        return;
+      }
     }
+    payload.references = {
+      letter: payload.refrence_letter === "Upload Letter",
+      available: payload.referenceAvailability,
+      fileUrl: fileUrl,
+    };
+    delete payload.refrence_letter;
+    delete payload.referenceAvailability;
+    console.log(payload, "payload");
+    saveStepDetails(payload, "job_details");
   };
 
-  const handleReferenceAvailabilityChange = (event) => {
-    setReferenceAvailability(event.target.value);
-  };
-
-  const handleMoreWorkExperinceChange = (event) => {
-    setIsMoreWorkExperince(event.target.value);
-  };
-  const handleDuties = (event) => {
-    const duties = event.target.name;
-    if (event.target.checked) {
-      setDuties((prevSelectedDuties) => [...prevSelectedDuties, duties]);
-    } else {
-      setDuties((prevSelectedDuties) =>
-        prevSelectedDuties.filter((s) => s !== duties)
-      );
-    }
-  };
-
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
+  const handleFileUpload = (uploadFile, file) => {
+    setLetterFile(file);
   };
 
   const steps = [
@@ -246,23 +126,12 @@ const HelperRegistrationStep3 = ({saveStepDetails}) => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               {/* Marital Status */}
-              <FormControl className="queRow" fullWidth>
-                <FormLabel className="formLabel" id="marital_status">
-                  Experiences as Domestic Helper
-                </FormLabel>
-                <Controller
-                  name="workingExperience"
-                  control={control}
-                  defaultValue=""
-                  // rules={{ required: "Marital Status is required" }}
-                  render={({ field }) => (
-                    <SingleSelectField
-                      field={field}
-                      selectMenu={EXPERIENCE_LIST}
-                    />
-                  )}
-                />
-              </FormControl>
+              <SelectWithController
+                control={control}
+                name={"experience"}
+                options={EXPERIENCE_LIST}
+                label={"Experiences as Domestic Helper"}
+              />
             </Grid>
             <Grid item xs={12} md={6}>
               <FormControl className="queRow LocationAutocomplete" fullWidth>
@@ -277,220 +146,90 @@ const HelperRegistrationStep3 = ({saveStepDetails}) => {
                   control={control}
                   defaultValue=""
                   // rules={{ required: t("location_required") }}
-                  render={({ field }) => <LocationAutocomplete field={field} />}
+                  render={({ field }) => (
+                    <LocationAutocomplete
+                      onSelect={handleSelectLocation}
+                      field={field}
+                    />
+                  )}
                 />
               </FormControl>
             </Grid>
           </Grid>
-          <FormControl className="queRow LocationAutocomplete" fullWidth>
-            <FormLabel id="employerNationality" className="formLabel">
-              Employer Nationality *
-            </FormLabel>
-            <Controller
-              name={"employerNationality"}
-              control={control}
-              type="text"
-              // rules={{ required: t("answer_required_msg") }}
-              defaultValue={""}
-              render={({ field }) => <CountryDropdown field={field} />}
-            />
-            {/* <LocationAutocomplete onSelect={handleSelectLocation} /> */}
-          </FormControl>
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="numberOfFamilyMembers" className="formLabel">
-              Number of Family Members
-            </FormLabel>
-            <Controller
-              name="numberOfFamilyMembers"
-              control={control}
-              defaultValue=""
-              // rules={{ required: "Whatsapp Number is required" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  onChange={(e) => {
-                    // Allow only numeric input
-                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
-                    field.onChange(numericValue);
-                  }}
-                  className="formInputFiled"
-                  placeholder="1"
-                  fullWidth
-                  variant="outlined"
-                />
-              )}
-            />
-          </FormControl>
-          {Array.from(
-            { length: watch("numberOfFamilyMembers") },
-            (_, index) => (
-              <div key={index}>
-                <Box className="customAgeBox">
-                  {/* <Typography variant="h6">
-                    Family Member {index + 1} Details
-                  </Typography> */}
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
-                      <FormControl fullWidth>
-                        <FormLabel className="age formLabel">Age</FormLabel>
-                        <Controller
-                          name={`familyMembers${index}_age`}
-                          control={control}
-                          defaultValue=""
-                          // rules={{ required: "Whatsapp Number is required" }}
-                          render={({ field }) => (
-                            <TextField
-                              {...field}
-                              onChange={(e) => {
-                                // Allow only numeric input
-                                const numericValue = e.target.value.replace(
-                                  /[^0-9]/g,
-                                  ""
-                                );
-                                field.onChange(numericValue);
-                              }}
-                              className="formInputFiled"
-                              placeholder="65"
-                              fullWidth
-                              variant="outlined"
-                            />
-                          )}
-                        />
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={8}>
-                      <FormControl className="queRow" fullWidth>
-                        <FormLabel className="formLabel">Gender</FormLabel>
-                        <Controller
-                          name={`familyMembers${index}_gender`}
-                          control={control}
-                          defaultValue=""
-                          // rules={{ required: t("gender_required") }}
-                          render={({ field }) => (
-                            <RadioGroupField
-                              radioOptions={["Female", "Male"]}
-                              field={field}
-                            />
-                          )}
-                        />
-                      </FormControl>
-                    </Grid>
+          <CountryDropdown
+            control={control}
+            name={"employerNationality"}
+            label={"Employer Nationality"}
+            isRequired={true}
+            errors={errors}
+          />
+          <NumberField
+            control={control}
+            name={"familySize"}
+            errors={errors}
+            placeholder={"1"}
+            label={"Number of Family Members"}
+          />
+          {Array.from({ length: watch("familySize") }, (_, index) => (
+            <div key={index}>
+              <Box className="customAgeBox">
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <NumberField
+                      control={control}
+                      name={`familyMembers${index}_age`}
+                      errors={errors}
+                      placeholder={"40"}
+                      label={"Age"}
+                    />
                   </Grid>
-                  <FormGroup>
-                    <FormLabel className="formLabel" component="legend">
-                      Require Special Care
-                    </FormLabel>
-                    <RadioGroup className="radioCheckBtn">
-                      <FormControlLabel
-                        control={
-                          <Controller
-                            name={`familyMembers${index}_requireSpecialHelp`}
-                            control={control}
-                            defaultValue={[]}
-                            // rules={{ required: "Select at least one skill" }}
-                            render={({ field }) => (
-                              <CheckBoxField
-                                field={field}
-                                checkBoxesValues={SPECIAL_HELP_REQUIREMENT}
-                              />
-                            )}
-                          />
-                        }
-                      />
-                    </RadioGroup>
-                  </FormGroup>
-                </Box>
-                {/* Add more form controls for gender and special help */}
-              </div>
-            )
-          )}
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="houseArea" className="formLabel">
-              House area (Square Feet)
-            </FormLabel>
-            <Controller
-              name="houseArea"
-              control={control}
-              defaultValue=""
-              // rules={{ required: "Whatsapp Number is required" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  onChange={(e) => {
-                    // Allow only numeric input
-                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
-                    field.onChange(numericValue);
-                  }}
-                  className="formInputFiled"
-                  placeholder="65"
-                  fullWidth
-                  variant="outlined"
+                  <Grid item xs={12} md={8}>
+                    <RadioGroupWithController
+                      label={t("gender")}
+                      name={`familyMembers${index}_gender`}
+                      radioOptions={["Female", "Male"]}
+                      control={control}
+                    />
+                  </Grid>
+                </Grid>
+                <CheckBoxFieldWithController
+                  label={"Require Special Care"}
+                  name={`familyMembers${index}_requireSpecialHelp`}
+                  checkBoxesOptions={SPECIAL_HELP_REQUIREMENT}
+                  control={control}
                 />
-              )}
-            />
-          </FormControl>
+              </Box>
+              {/* Add more form controls for gender and special help */}
+            </div>
+          ))}
+          <NumberField
+            control={control}
+            name={"houseArea"}
+            placeholder={"40"}
+            label={"House area (Square Feet)"}
+          />
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <FormControl fullWidth className="queRow">
-                <FormLabel id="startedDate" className="formLabel">
-                  Date started{" "}
-                </FormLabel>
-                <Controller
-                  name="startedDate"
-                  defaultValue=""
-                  control={control}
-                  // rules={{ required: t("dob_required") }}
-                  render={({ field: { onChange, value } }) => {
-                    return (
-                      <DatePicker
-                        onChange={(date) =>
-                          onChange(moment(date).format("YYYY-MM-DD"))
-                        }
-                        selected={value}
-                        showIcon
-                        peekNextMonth
-                        showMonthDropdown
-                        showYearDropdown
-                        dropdownMode="select"
-                        // isClearable
-                        placeholderText="Select Date of Birth"
-                        className="formInputFiled full-width-datepicker"
-                      />
-                    );
-                  }}
-                />
-              </FormControl>
+              <DatePickerWIthController
+                name={"startedDate"}
+                maxDate={new Date().toISOString()}
+                label={"Date started"}
+                control={control}
+                placeholder={"Select Start Date"}
+              />
             </Grid>
             <Grid item xs={12} md={6}>
-              <FormControl fullWidth className="queRow">
-                <FormLabel id="releasedDate" className="formLabel">
-                  Date released{" "}
-                </FormLabel>
-                <Controller
-                  name="releasedDate"
-                  defaultValue=""
-                  control={control}
-                  // rules={{ required: t("dob_required") }}
-                  render={({ field: { onChange, value } }) => {
-                    return (
-                      <DatePicker
-                        onChange={(date) =>
-                          onChange(moment(date).format("YYYY-MM-DD"))
-                        }
-                        selected={value}
-                        showIcon
-                        peekNextMonth
-                        showMonthDropdown
-                        showYearDropdown
-                        dropdownMode="select"
-                        // isClearable
-                        placeholderText="Select Date of Birth"
-                        className="formInputFiled full-width-datepicker"
-                      />
-                    );
-                  }}
-                />
-              </FormControl>
+              <DatePickerWIthController
+                name={"releasedDate"}
+                maxDate={
+                  watch("startedDate")
+                    ? moment(watch("startedDate")).toISOString()
+                    : moment().toISOString()
+                }
+                label={"Date released"}
+                control={control}
+                placeholder={"Select Released Date"}
+              />
             </Grid>
           </Grid>
           <FormGroup>
@@ -509,191 +248,98 @@ const HelperRegistrationStep3 = ({saveStepDetails}) => {
           </FormGroup>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <FormControl fullWidth className="queRow">
-                <FormLabel id="currency" className="formLabel">
-                  Currency
-                </FormLabel>
-                <Controller
-                  name="currency"
-                  control={control}
-                  defaultValue=""
-                  // rules={{ required: "Marital Status is required" }}
-                  render={({ field }) => (
-                    <SingleSelectField
-                      field={field}
-                      selectMenu={CURRENCY_LIST}
-                    />
-                  )}
-                />
-              </FormControl>
+              <SelectWithController
+                control={control}
+                name={"currency"}
+                options={CURRENCY_LIST}
+                label={"Currency"}
+              />
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <FormControl fullWidth className="queRow">
-                <FormLabel id="salary" className="formLabel">
-                  Salary
-                </FormLabel>
-                <NumberField
-                  control={control}
-                  name={"salary"}
-                  errors={errors}
-                  placeholder={"Eg. 10000"}
-                />
-              </FormControl>
+              <NumberField
+                control={control}
+                name={"salary"}
+                errors={errors}
+                placeholder={"Eg. 10000"}
+                label={"Salary"}
+              />
             </Grid>
           </Grid>
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="coHelperNumber" className="formLabel">
-              How many co helper
-            </FormLabel>
-            <NumberField
-              control={control}
-              name={"coHelperNumber"}
-              errors={errors}
-              placeholder={"Eg. 2"}
-            />
-          </FormControl>
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="isAnyLetter" className="formLabel">
-              Can you Provide Reference/Release/Recommendation Letter from
-              Employer with this working Experience?
-            </FormLabel>
-            <Controller
-              name="currency"
-              control={control}
-              defaultValue=""
-              // rules={{ required: "Marital Status is required" }}
-              render={({ field }) => (
-                <SingleSelectField field={field} selectMenu={YES_NO} />
-              )}
-            />
-          </FormControl>
-          <FormGroup className="queRow">
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={12}>
-                <Controller
-                  name={`refrence_letter`}
+          <NumberField
+            control={control}
+            name={"coHelperNumber"}
+            errors={errors}
+            placeholder={"Eg. 2"}
+            label={"How many co helper"}
+          />
+
+          <SelectWithController
+            control={control}
+            name={"experience_letter"}
+            options={YES_NO}
+            label={
+              "Can you Provide Reference/Release/Recommendation Letter from Employer with this working Experience?"
+            }
+            isRequired={true}
+            errors={errors}
+          />
+          <RadioGroupWithController
+            name={"refrence_letter"}
+            radioOptions={["Upload Letter", "Provide It Later"]}
+            control={control}
+          />
+          {watch("refrence_letter") === "Upload Letter" && (
+            <FormControl fullWidth className="UploadFileCustom queRow">
+              <div className="inputFile">
+                <FileUploaderField
+                  name={"refrence_letter_file"}
                   control={control}
-                  defaultValue=""
-                  // rules={{ required: t("gender_required") }}
-                  render={({ field }) => (
-                    <RadioGroupField
-                      radioOptions={["Upload Letter", "Provide It Later"]}
-                      field={field}
-                    />
-                  )}
+                  setFile={handleFileUpload}
                 />
-              </Grid>
-            </Grid>
-          </FormGroup>
-          <FormControl fullWidth className="UploadFileCustom queRow">
-            <div className="inputFile">
-              <FileUploaderField
-                name={"refrence_letter_file"}
-                control={control}
-                setFile={setLetterFile}
-              />
-            </div>
-          </FormControl>
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="referenceAvailability" className="formLabel">
-              Reference Check Availability? *
-            </FormLabel>
-            <Controller
-              name={`referenceAvailability`}
-              control={control}
-              defaultValue=""
-              // rules={{ required: t("gender_required") }}
-              render={({ field }) => (
-                <RadioGroupField radioOptions={["Yes", "No"]} field={field} />
-              )}
-            />
-          </FormControl>
+              </div>
+            </FormControl>
+          )}
+          <RadioGroupWithController
+            label={"Reference Check Availability"}
+            isRequired={true}
+            name={"referenceAvailability"}
+            radioOptions={["Yes", "No"]}
+            control={control}
+          />
           <FormControl fullWidth>
             <FormLabel id="duties" className="formLabel">
               Duties / other task
             </FormLabel>
             <FormGroup>
               <FormControl component="fieldset">
-                <FormGroup className="radioCheckBtn otherTasks">
+                <RadioGroup className="radioCheckBtn">
                   <FormControlLabel
                     control={
-                      <Checkbox
-                        checked={selectedDuties.includes("New Born")}
-                        onChange={handleDuties}
-                        name="New Born"
+                      <Controller
+                        name={`duties`}
+                        control={control}
+                        defaultValue={[]}
+                        // rules={{ required: "Select at least one skill" }}
+                        render={({ field }) => (
+                          <CheckBoxField
+                            field={field}
+                            checkBoxesValues={DUTIES_OTHER_TASK}
+                          />
+                        )}
                       />
                     }
-                    label="New Born"
                   />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedDuties.includes("Baby Sitting")}
-                        onChange={handleDuties}
-                        name="Baby Sitting"
-                      />
-                    }
-                    label="Baby Sitting"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedDuties.includes("Indian Cooking")}
-                        onChange={handleDuties}
-                        name="Indian Cooking"
-                      />
-                    }
-                    label="Indian Cooking"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedDuties.includes("Chinese Cooking")}
-                        onChange={handleDuties}
-                        name="Chinese Cooking"
-                      />
-                    }
-                    label="Chinese Cooking"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedDuties.includes("Gardening")}
-                        onChange={handleDuties}
-                        name="Gardening"
-                      />
-                    }
-                    label="Gardening"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedDuties.includes("Driving")}
-                        onChange={handleDuties}
-                        name="Driving"
-                      />
-                    }
-                    label="Driving"
-                  />
-                </FormGroup>
+                </RadioGroup>
               </FormControl>
             </FormGroup>
           </FormControl>
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="reasonForLeaving" className="formLabel">
-              Reason for Leaving
-            </FormLabel>
-            <Controller
-              name={`reasonForLeaving`}
-              control={control}
-              defaultValue=""
-              // rules={{ required: t("gender_required") }}
-              render={({ field }) => (
-                <SingleSelectField field={field} selectMenu={YES_NO} />
-              )}
-            />
-          </FormControl>
+          <SelectWithController
+            control={control}
+            name={"reasonForLeaving"}
+            options={YES_NO}
+            label={"Reason for Leaving"}
+          />
           <FormControl fullWidth className="queRow">
             <FormLabel id="experinceRemark" className="formLabel">
               Remark of your experience
@@ -702,35 +348,23 @@ const HelperRegistrationStep3 = ({saveStepDetails}) => {
               className="formInputFiled"
               name="experinceRemark"
               {...register("experinceRemark")}
-              // value={formData?.workExperience?.experinceRemark}
-              // onChange={handleInputChange}
               id="outlined-multiline-static"
               multiline
               rows={4}
-              defaultValue="Default Value"
-            />
-          </FormControl>
-          <FormControl fullWidth className="queRow">
-            <FormLabel id="moreWorkExperince" className="formLabel">
-              Do you have any more working experiences?
-            </FormLabel>
-            <Controller
-              name={`moreWorkExperince`}
-              control={control}
               defaultValue=""
-              // rules={{ required: t("gender_required") }}
-              render={({ field }) => (
-                <RadioGroupField radioOptions={["Yes", "No"]} field={field} />
-              )}
             />
           </FormControl>
+          <RadioGroupWithController
+            label={"Do you have any more working experiences?"}
+            name={"moreWorkingExperience"}
+            radioOptions={["Yes", "No"]}
+            control={control}
+          />
         </>
       ),
     },
     // Add more steps as needed
   ];
-
-  const StyledFormContainer = styled(Grid)({});
 
   return (
     <>
@@ -748,7 +382,8 @@ const HelperRegistrationStep3 = ({saveStepDetails}) => {
                         <Button
                           className="arrowButton"
                           variant="contained"
-                          onClick={handleNext}
+                          type="submit"
+                          // onClick={handleNext}
                           sx={{ mt: 1, mr: 1 }}
                         >
                           {index === steps.length - 1 ? "Next" : "Next"}

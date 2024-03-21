@@ -96,6 +96,7 @@
     "privacy_policy": "Privacy Policy",
     "cookie_policy": "Cookie Policy",
     "enter_your_email": "Enter your email",
+    "enter_your_name":"Enter your name",
     "close": "Close",
     "name_required": "Name is required",
     "valid_email_msg": "Please enter a valid email address",
@@ -185,7 +186,7 @@
     "chat": "Chat",
     "setting": "Setting",
     "no_job_found": "No Job Found",
-    "no_message_found":"No Message Found",
+    "no_message_found": "No Message Found",
     "start_date": "Start Date",
     "type": "Type",
     "experience": "Experience",
@@ -212,8 +213,23 @@
     "confirm_delete_notification_message": "Are you sure, you want to delete this notification?",
     "delete": "Delete",
     "cancel": "Cancel",
-    "no_notification_found": "No Notification Found"
-
-
+    "no_notification_found": "No Notification Found",
+    "step4_question_1": "Do you smoke?",
+    "step4_question_2": "Have you been vaccinated against the COVID-19 disease?",
+    "step4_question_3": "Do you have a tattoo?",
+    "step4_question_4": "Can you get along with dogs, cats, or other pets?",
+    "step4_question_5": "Are you comfortable working with co-helpers?",
+    "step4_question_6": "Are you willing to take days off that are not on Sundays sometimes?",
+    "step4_question_7": "Are you willing to accept monetary compensation to work on your holidays?",
+    "step4_question_8": "Do you accept to work in the employer's house equipped with a camera recording system (for security purposes)?",
+    "step4_question_9": "Are you willing to return home no later than the time set by your employer on your holiday?",
+    "upload_photo_label": "Upload a photo of yourself which shows your face clearly with a smile, wearing clean white shirt and with clean background. No heavy make-up, no sunglasses, no children",
+    "upload_self_intro_video": "Please input your YouTube video link for your own self-intro video. If you are uncertain the step, please contact our support for your self-intro video link",
+    "your_photo": "Your Photo",
+    "your_self_intro": "Your Self Intro Video",
+    "or_upload_letter": "or upload photo later",
+    "or_upload__video_letter": "or upload video link later",
+    "img_upload_error_msg": "Please upload vaild format image(jpg,jpeg,png)",
+    "invalid_youtube_link":"Please enter a valid youtube link"
   }
 }

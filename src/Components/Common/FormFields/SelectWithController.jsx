@@ -1,22 +1,23 @@
-import { FormControl, FormLabel, TextField } from "@mui/material";
 import React from "react";
 import { Controller } from "react-hook-form";
+import SingleSelectField from "./SingleSelectField";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { useTranslation } from "react-i18next";
+import { FormControl, FormLabel, MenuItem, Select } from "@mui/material";
 
-export default function NumberField({
+export default function SelectWithController({
   name,
-  errors,
   control,
-  placeholder,
-  label,
+  options,
+  errors,
   isRequired,
+  label,
 }) {
   const { t } = useTranslation();
   return (
     <>
       <FormControl fullWidth className="queRow">
-        <FormLabel id="salary" className="formLabel">
+        <FormLabel id="currency" className="formLabel">
           {label && (
             <FormLabel className="formLabel">
               {label}
@@ -32,18 +33,15 @@ export default function NumberField({
             required: isRequired ? t("answer_required_msg") : isRequired,
           }}
           render={({ field }) => (
-            <TextField
+            <Select
               {...field}
-              onChange={(e) => {
-                // Allow only numeric input
-                const numericValue = e.target.value.replace(/[^0-9]/g, "");
-                field.onChange(numericValue);
-              }}
               className="formInputFiled"
-              placeholder={placeholder}
-              fullWidth
-              variant="outlined"
-            />
+              placeholder="Please Select"
+            >
+              {options.map((menu) => (
+                <MenuItem value={menu.value_key}>{menu.value_key}</MenuItem>
+              ))}
+            </Select>
           )}
         />
         {errors && errors[name] && <ErrorMessage msg={errors[name].message} />}

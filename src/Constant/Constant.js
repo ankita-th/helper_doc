@@ -10,6 +10,8 @@ export const STEPPER_ROUTES = [
   "job_details",
   "q_&_a",
   "final",
+  "complete-profile",
+  "thankyou"
 ];
 
 export const successType = "success";

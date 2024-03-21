@@ -4,26 +4,24 @@ import { Controller } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { useTranslation } from "react-i18next";
 
-export default function NumberField({
+export default function TextFieldWithController({
+  label,
   name,
-  errors,
   control,
   placeholder,
-  label,
   isRequired,
+  errors,
 }) {
   const { t } = useTranslation();
   return (
     <>
-      <FormControl fullWidth className="queRow">
-        <FormLabel id="salary" className="formLabel">
-          {label && (
-            <FormLabel className="formLabel">
-              {label}
-              {isRequired && "*"}
-            </FormLabel>
-          )}
-        </FormLabel>
+      <FormControl className="queRow" fullWidth>
+        {label && (
+          <FormLabel className="formLabel">
+            {label}
+            {isRequired && "*"}
+          </FormLabel>
+        )}
         <Controller
           name={name}
           control={control}
@@ -34,11 +32,6 @@ export default function NumberField({
           render={({ field }) => (
             <TextField
               {...field}
-              onChange={(e) => {
-                // Allow only numeric input
-                const numericValue = e.target.value.replace(/[^0-9]/g, "");
-                field.onChange(numericValue);
-              }}
               className="formInputFiled"
               placeholder={placeholder}
               fullWidth

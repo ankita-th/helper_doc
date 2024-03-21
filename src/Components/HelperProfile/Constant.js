@@ -83,14 +83,14 @@ export const SKILLS = [
   {
     skill_type: "Care",
     skile_opt: [
-        { type: "New Born(0-1)" },
-        { type: "Toddler(1-3)" },
-        { type: "Child(4-12)" },
-        { type: "Teen(13-17)" },
-        { type: "Elderly (>70)" },
-        { type: "Special Care" },
-        { type: "Pet" },
-      ],
+      { type: "New Born(0-1)" },
+      { type: "Toddler(1-3)" },
+      { type: "Child(4-12)" },
+      { type: "Teen(13-17)" },
+      { type: "Elderly (>70)" },
+      { type: "Special Care" },
+      { type: "Pet" },
+    ],
     // skile_opt: [
     //   { type: "new_born(0-1)" },
     //   { type: "toddler(1-3)" },
@@ -245,5 +245,130 @@ export const YES_NO = [
   },
   {
     value_key: "NO",
+  },
+];
+
+export const UPLOADE_DOCUMENT = [
+  {
+    label: "Driving License",
+    name: "drivingLicense",
+    hasDoc: "hasDrivingLicense",
+    uploadFile: "drivingLicenseFile",
+  },
+  {
+    label: "First Aid Certification",
+    name: "firstAidCertification",
+    hasDoc: "hasFirstAidCertification",
+    uploadFile: "firstAidFile",
+  },
+  {
+    label: "Elderly Caregiving",
+    name: "elderlyCaregiving",
+    hasDoc: "hasElderlyCaregiving",
+    uploadFile: "elderlyCaregivingFile",
+  },
+];
+
+export const DUTIES_OTHER_TASK = [
+  { type: "New Born" },
+  { type: "Baby Sitting" },
+  { type: "Indian Cooking" },
+  { type: "Chinese Cooking" },
+  { type: "Driving" },
+  { type: "Gardening" },
+];
+
+export const PREFERRED_DAY_OFF = [
+  {
+    value_key: "Flexible",
+  },
+  {
+    value_key: "Sunday",
+  },
+  {
+    value_key: "Monday",
+  },
+  {
+    value_key: "Tuesday",
+  },
+  {
+    value_key: "Wednesday",
+  },
+  {
+    value_key: "Thrusday",
+  },
+  {
+    value_key: "Friday",
+  },
+  {
+    value_key: "Saturday",
+  },
+];
+
+export const SLEEPING_ARRANGEMENT = [
+  {
+    value_key: "Flexible",
+  },
+  {
+    value_key: "Alone",
+  },
+];
+export const LIVING_ARRANGEMENT = [
+  {
+    value_key: "Flexible",
+  },
+  {
+    value_key: "Live In",
+  },
+  {
+    value_key: "Live Out",
+  },
+];
+
+export const STEP5_QUESTION = [
+  {
+    question: "step4_question_1",
+    type: "radio",
+    answer_type: "smoke",
+  },
+  {
+    question: "step4_question_2",
+    type: "radio",
+    answer_type: "vaccinatedCovid19",
+  },
+  {
+    question: "step4_question_3",
+    type: "radio",
+    answer_type: "hasTattoo",
+  },
+  {
+    question: "step4_question_4",
+    type: "radio",
+    answer_type: "comfortableWithPets",
+  },
+  {
+    question: "step4_question_5",
+    type: "radio",
+    answer_type: "comfortableWithCoHelper",
+  },
+  {
+    question: "step4_question_6",
+    type: "radio",
+    answer_type: "willingToWorkOnNonSundayDayOff",
+  },
+  {
+    question: "step4_question_7",
+    type: "radio",
+    answer_type: "willingToAcceptMonetaryCompensationOnHolidays ",
+  },
+  {
+    question: "step4_question_8",
+    type: "radio",
+    answer_type: "agreeToHouseCameraSurveillance ",
+  },
+  {
+    question: "step4_question_9",
+    type: "radio",
+    answer_type: "willingToReturnHomeByEmployerSetTime",
   },
 ];

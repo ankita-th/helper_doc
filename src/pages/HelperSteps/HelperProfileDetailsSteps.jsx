@@ -16,6 +16,10 @@ import HelperRegistrationStep3 from "../../Components/HelperProfile/HelperRegist
 import HelperRegistrationStep4 from "../../Components/HelperProfile/HelperRegistrationStep4";
 import HelperRegistrationStep5 from "../../Components/HelperProfile/HelperRegistrationStep5";
 import HelperRegistrationStep6 from "../../Components/HelperProfile/HelperRegistrationStep6";
+import PageLoader from "../../Components/Common/Loader/PageLoader";
+import { toastMessage } from "../../Utils/toastMessages";
+import ThanksForRegister from "./ThanksForRegister";
+import ProfileDetailForm from "../../Components/Common/Profile/ProfileDetailForm";
 
 const TitleWrapper = styled("div")({
   textAlign: "center",
@@ -43,37 +47,47 @@ const StyledImageContainer = styled("div")({
 const HelperProfileDetailsSteps = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [stepDetails, setStepDetails] = useState({});
+  const [pageLoader, setPageLoader] = useState(false);
   const { t } = useTranslation();
   const { step } = useParams();
-  const userId = localStorage.getItem("userID");
+  const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
+  const [activePage, setActivePage] = useState({
+    page: "",
+  });
 
   useEffect(() => {
     let currentStep = 1;
-    switch (step) {
-      case "disclaimer":
-        currentStep = 1;
-        break;
-      case "applicant_info":
-        currentStep = 2;
-        break;
-      case "working_experience":
-        currentStep = 3;
-        break;
-      case "job_details":
-        currentStep = 4;
-        break;
-      case "q_&_a":
-        currentStep = 5;
-        break;
-      case "final":
-        currentStep = 6;
-        break;
-      default:
-        currentStep = 1;
+    if (step === "thankyou" || step === "complete-profile") {
+      setActivePage({
+        page: step,
+      });
+    } else {
+      setActivePage({ page: "" });
+      switch (step) {
+        case "disclaimer":
+          currentStep = 1;
+          break;
+        case "applicant_info":
+          currentStep = 2;
+          break;
+        case "working_experience":
+          currentStep = 3;
+          break;
+        case "job_details":
+          currentStep = 4;
+          break;
+        case "q_&_a":
+          currentStep = 5;
+          break;
+        case "final":
+          currentStep = 6;
+          break;
+        default:
+          currentStep = 1;
+      }
+      setActiveStep(currentStep);
     }
-
-    setActiveStep(currentStep);
   }, [step]);
 
   useEffect(() => {
@@ -91,20 +105,28 @@ const HelperProfileDetailsSteps = () => {
   const saveStepDetails = (answer, nextStep) => {
     const payload = {
       userId: userId,
-      ...answer
+      ...answer,
     };
+    setPageLoader(true);
     addStepperData(activeStep, payload, userId)
       .then((res) => {
         navigate(`/register/helper/profile-steps/${nextStep}`, {
           state: { prevRoute: "/register/helper" },
         });
         console.log(res, "ressss");
+        setPageLoader(false);
       })
-      .catch((err) => {
+      .catch((error) => {
         navigate(`/register/helper/profile-steps/${nextStep}`, {
           state: { prevRoute: "/register/helper" },
         });
-        console.log(err);
+        if (error?.response?.data?.message) {
+          toastMessage(error.response.data.message);
+        } else {
+          toastMessage(t("failure_message"));
+        }
+        setPageLoader(false);
+        console.log(error);
       });
   };
   return (
@@ -116,59 +138,71 @@ const HelperProfileDetailsSteps = () => {
           </Typography>
         </TitleWrapper>
       </HeaderBar>
-      <Container maxWidth="xl" className="stepsContainer">
-        <Grid container spacing={3} className="stepsRow">
-          <HelperProfileStepSection activeStep={activeStep} />
-          {activeStep === 1 && <ProfileDiscrimination />}
-          <Grid container spacing={3} className="shadow-box stepsFormRow">
-            {activeStep === 1 && (
-              <HelperRegistrationStep1
-                saveStepDetails={saveStepDetails}
-                stepDetails={stepDetails}
-              />
-            )}
-            {activeStep === 2 && (
-              <HelperRegistrationStep2
-                saveStepDetails={saveStepDetails}
-                stepDetails={stepDetails}
-              />
-            )}
-            {activeStep === 3 && (
-              <HelperRegistrationStep3
-                saveStepDetails={saveStepDetails}
-                stepDetails={stepDetails}
-              />
-            )}
-            {activeStep === 4 && (
-              <HelperRegistrationStep4
-                saveStepDetails={saveStepDetails}
-                stepDetails={stepDetails}
-              />
-            )}
-            {activeStep === 5 && (
-              <HelperRegistrationStep5
-                saveStepDetails={saveStepDetails}
-                stepDetails={stepDetails}
-              />
-            )}
-            {activeStep === 6 && (
-              <HelperRegistrationStep6
-                saveStepDetails={saveStepDetails}
-                stepDetails={stepDetails}
-              />
-            )}
-            <Grid
-              item
-              xs={12}
-              md={6}
-              component={StyledImageContainer}
-              className="stepsSidebarImg"
-            >
-              <StyledImage src="/registration-step.svg" alt="Helper Image" />
+      {activePage.page === "thankyou" ? (
+        <ThanksForRegister />
+      ) : activePage.page === "complete-profile" ? (
+        <ProfileDetailForm />
+      ) : (
+        <Container maxWidth="xl" className="stepsContainer">
+          <Grid container spacing={3} className="stepsRow">
+            <HelperProfileStepSection activeStep={activeStep} />
+            {activeStep === 1 && <ProfileDiscrimination />}
+            <Grid container spacing={3} className="shadow-box stepsFormRow">
+              {pageLoader && <PageLoader />}
+              {activeStep === 1 && (
+                <HelperRegistrationStep1
+                  saveStepDetails={saveStepDetails}
+                  stepDetails={stepDetails}
+                  setPageLoader={setPageLoader}
+                />
+              )}
+              {activeStep === 2 && (
+                <HelperRegistrationStep2
+                  saveStepDetails={saveStepDetails}
+                  stepDetails={stepDetails}
+                  setPageLoader={setPageLoader}
+                />
+              )}
+              {activeStep === 3 && (
+                <HelperRegistrationStep3
+                  saveStepDetails={saveStepDetails}
+                  stepDetails={stepDetails}
+                  setPageLoader={setPageLoader}
+                />
+              )}
+              {activeStep === 4 && (
+                <HelperRegistrationStep4
+                  saveStepDetails={saveStepDetails}
+                  stepDetails={stepDetails}
+                  setPageLoader={setPageLoader}
+                />
+              )}
+              {activeStep === 5 && (
+                <HelperRegistrationStep5
+                  saveStepDetails={saveStepDetails}
+                  stepDetails={stepDetails}
+                />
+              )}
+              {activeStep === 6 && (
+                <HelperRegistrationStep6
+                  saveStepDetails={saveStepDetails}
+                  stepDetails={stepDetails}
+                  setPageLoader={setPageLoader}
+                />
+              )}
+              <Grid
+                item
+                xs={12}
+                md={6}
+                component={StyledImageContainer}
+                className="stepsSidebarImg"
+              >
+                <StyledImage src="/registration-step.svg" alt="Helper Image" />
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      )}
     </>
   );
 };

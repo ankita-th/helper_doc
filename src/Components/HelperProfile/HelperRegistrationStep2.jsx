@@ -1,43 +1,24 @@
-// components/Signup/HelperRegistrationSteps/HelperRegistrationStep2.tsx
-import React, { FC, useState, ChangeEvent, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import {
   Grid,
-  Paper,
-  Typography,
   Button,
   TextField,
-  Radio,
-  RadioGroup,
   FormControlLabel,
-  Select,
-  MenuItem,
   FormControl,
-  InputLabel,
   FormLabel,
   Checkbox,
-  Input,
   FormGroup,
   Switch,
 } from "@mui/material";
-import { Container, styled } from "@mui/system";
-import HelperStepNavigation from "../Signup/HelperRegistrationSteps/HelperStepNavigation";
-// import { MultiSelect } from "react-multi-select-component";
 import { PhoneInput } from "react-international-phone";
-// import { FormControl as MuiFormControl } from "@mui/material";
 import LocationAutocomplete from "../Common/LocationAutocomplete";
 import DatePicker from "react-datepicker";
-import { PhoneNumberUtil } from "google-libphonenumber";
 
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import StepContent from "@mui/material/StepContent";
-import OtherLanguagesOptions from "../Common/OtherLanguageOptions";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-// import LocationSvg from "../../../../public/locationstepper.svg";
-
 import "react-international-phone/style.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslation } from "react-i18next";
@@ -54,44 +35,21 @@ import {
   RELIGION,
   SKILLS,
   SPOKEN_LANGUAGE,
+  UPLOADE_DOCUMENT,
 } from "./Constant";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import DocumnetIcon from "../../Assets/SVGIcons/DocumentIcon";
 import FileUploaderField from "../Common/FormFields/FileUploaderField";
 import { isPhoneValid } from "../../Utils/MobileNumberValidation";
-import { uploadFileInS3Bucket } from "../../Services/FileUploadService/FileUploadService";
-const StyledImage = styled("img")({
-  maxWidth: "100%",
-  maxHeight: "100%",
-});
+import { handleFileUploadToS3Bucket } from "../../Utils/CommonAPIs";
+import RadioGroupWithController from "../Common/FormFields/RadioGroupWithController";
+import TextFieldWithController from "../Common/FormFields/TextFieldWithController";
+import SelectWithController from "../Common/FormFields/SelectWithController";
+import DatePickerWIthController from "../Common/FormFields/DatePickerWIthController";
+import NumberField from "../Common/FormFields/NumberField";
 
-const StyledImageContainer = styled("div")({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-});
-
-const TitleWrapper = styled("div")({
-  textAlign: "center",
-  marginTop: " 0, 20px,", // Remove margin from the top
-  color: "white", // Change color to white
-});
-
-const HeaderBar = styled("div")({
-  backgroundColor: "#0a6259", // Background color
-  padding: "10px 0", // Padding top and bottom
-  marginBottom: "20px", // Margin bottom
-});
-
-const HelperRegistrationStep2 = ({
-  formData,
-  setFormData,
-  saveStepDetails,
-}) => {
-  const location = useLocation();
-
+const HelperRegistrationStep2 = ({ saveStepDetails, setPageLoader }) => {
   const [showOtherLanguage, setOtherLanguage] = useState(false);
 
   const { t } = useTranslation();
@@ -103,90 +61,20 @@ const HelperRegistrationStep2 = ({
     setValue,
     formState: { errors },
   } = useForm();
-
-  const [activeStep, setActiveStep] = useState(1);
   const [stepperActiveStep, setStepperActiveStep] = useState(0); // For the stepper
-  const [gender, setGender] = useState("");
-  const [passportNumber, setPassportNumber] = useState("");
-  const [maritalStatus, setMaritalStatus] = useState("");
-  const [religion, setReligion] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState({
     error: false,
     msg: "",
     number: "",
   });
-  const [isWhatsappNumberVisible, setIsWhatsappNumberVisible] = useState(false);
-  const [dob, setDob] = useState("");
-  const [height, setHeight] = useState("");
-  const [weight, setWeight] = useState("");
   const [currentLocation, setCurrentLocation] = useState("");
-  const [skills, setSkills] = useState([]);
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const [hasDrivingLicense, setHasDrivingLicense] = useState(false);
-  const [drivingLicenseFile, setDrivingLicenseFile] = useState(null);
-  const [hasFirstAidCertification, setHasFirstAidCertification] =
-    useState(false);
-  const [firstAidFile, setFirstAidFile] = useState(null);
-  const [hasElderlyCaregiving, setHasElderlyCaregiving] = useState(false);
-  const [elderlyCaregivingFile, setElderlyCaregivingFile] = useState(null);
-  const [otherLanguages, setOtherLanguages] = useState([]);
-  const [hasNewBornCaregiving, setHasNewBornCaregiving] = useState(false);
-  const [newBornCaregivingFile, setNewBornCaregivingFile] = useState(null);
-  const [hasAppliedCountryLicense, setHasAppliedCountryLicense] =
-    useState(false);
-  const [appliedCountryLicenseFile, setAppliedCountryLicenseFile] =
-    useState(null);
-  // State for "About Your Family" form data
-  const [familyData, setFamilyData] = useState({
-    spouseAge: "",
-    spouseOccupation: "",
-    numberOfBrothers: "",
-    numberOfSisters: "",
-    familyOrder: "",
-    ageOfSons: "",
-    ageOfDaughters: "",
+
+  const [uploadFilesDetails, setUploadFilesDetails] = useState({
+    drivingLicense: {
+      haveTheDoc: false,
+      docFile: "",
+    },
   });
-
-  // State for "Education" form data
-  const [educationData, setEducationData] = useState({
-    educationLevel: "",
-    studyMajor: "",
-    nativeLanguage: "",
-    otherKnownLanguages: [],
-    otherLanguages: [],
-
-    // Add other fields as needed
-  });
-  // useEffect for handling side effects
-  useEffect(() => {
-    // Retrieve data from the previous step
-    const prevStepData = location.state.formData;
-
-    // Log the data
-    console.log("Data from previous step:", prevStepData);
-  }, [location.state.formData]);
-
-  const handleSkillsChange = (event) => {
-    const skill = event.target.name;
-    if (event.target.checked) {
-      setSelectedSkills((prevSelectedSkills) => [...prevSelectedSkills, skill]);
-    } else {
-      setSelectedSkills((prevSelectedSkills) =>
-        prevSelectedSkills.filter((s) => s !== skill)
-      );
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
-  };
 
   const handleSelectLocation = (location) => {
     setCurrentLocation(location);
@@ -231,16 +119,29 @@ const HelperRegistrationStep2 = ({
     handleSubmit(handleNext)();
   };
 
-  const uploadFileINS3 = async (file) => {
-    const res = await uploadFileInS3Bucket();
-    console.log(res);
-  };
-
   // Function to handle next button click
-  const handleNext = (data) => {
+  const handleNext = async (data) => {
     if (stepperActiveStep < steps.length - 1) {
       setStepperActiveStep((prevActiveStep) => prevActiveStep + 1);
     } else {
+      setPageLoader(true);
+      let filePayload = {};
+      for (let key in uploadFilesDetails) {
+        if (
+          uploadFilesDetails[key]?.haveTheDoc &&
+          uploadFilesDetails[key]?.docFile?.name
+        ) {
+          const fileUpload = await handleFileUploadToS3Bucket(
+            uploadFilesDetails[key].docFile
+          );
+          if (!fileUpload.error) {
+            filePayload[key] = fileUpload.uploadedUrl;
+          } else {
+            setPageLoader(false);
+            return;
+          }
+        }
+      }
       const payload = {
         aboutYou: {
           fullName: data.fullName,
@@ -282,56 +183,11 @@ const HelperRegistrationStep2 = ({
             language: data.otherLanguages,
             level: data.otherLanguageLevel,
           },
-          licensesAndCertificates: {
-            drivingLicenseFile: drivingLicenseFile,
-            firstAidCertificateFile: firstAidFile,
-            elderlyCaregivingCertificateFile: elderlyCaregivingFile,
-            babyCaregivingCertificateFile: newBornCaregivingFile,
-            appliedCountryLicenseFile: appliedCountryLicenseFile,
-          },
+          licensesAndCertificates: filePayload,
         },
       };
       saveStepDetails(payload, "working_experience");
     }
-
-    // If the user is on the last step, navigate to Step 3 with the form data
-    // if (stepperActiveStep === steps.length - 1) {
-    // const formDataForStep3 = {
-    //   fullName: formData.fullName,
-    //   phoneNumber: formData.phoneNumber,
-    //   whatsappNumber: whatsappNumber,
-    //   email: formData.email,
-    //   password: formData.password,
-    //   passwordConfirmation: formData.passwordConfirmation,
-    //   termsAndConditions: formData.termsAndConditions,
-    //   role: formData.role,
-    //   gender: gender,
-    //   passportNumber: passportNumber,
-    //   maritalStatus: maritalStatus,
-    //   religion: religion,
-    //   dob: dob,
-    //   height: height,
-    //   weight: weight,
-    //   currentLocation: currentLocation,
-    //   selectedSkills: selectedSkills,
-    //   familyData: familyData,
-    //   educationData: {
-    //     ...educationData,
-    //     // Include otherLanguages in educationData
-    //     otherLanguages: educationData.otherLanguages.map((language) => ({
-    //       name: language.name,
-    //       proficiency: language.proficiency,
-    //     })),
-    //   },
-    // };
-    // Navigate to Step 3 and pass the data in the location state
-    // navigate("/registration_steps/step3", {
-    //   state: { formData: formDataForStep3, otherLanguages: otherLanguages },
-    // });
-    // } else {
-    // If the user is not on the last step, proceed to the next step
-    //   setStepperActiveStep((prevActiveStep) => prevActiveStep + 1);
-    // }
   };
 
   const handleDeleteOtherLanguage = () => {
@@ -348,116 +204,79 @@ const HelperRegistrationStep2 = ({
   };
 
   // Event handlers for file uploads
-  const handleCheckboxChange = (setState, e) => {
-    setState(e.target.checked);
+  const handleCheckboxChange = (checkedFile, e) => {
+    setUploadFilesDetails({
+      ...uploadFilesDetails,
+      [checkedFile]: {
+        ...uploadFilesDetails[checkedFile],
+        haveTheDoc: e.target.checked,
+      },
+    });
+    // setState(e.target.checked);
   };
 
-  const handleFileUpload = (setState, files) => {
-    if (files && files.length > 0) {
-      setState(files[0]);
-    }
+  const handleFileUpload = (uploadFile, file) => {
+    setUploadFilesDetails({
+      ...uploadFilesDetails,
+      [uploadFile]: {
+        ...uploadFilesDetails[uploadFile],
+        docFile: file,
+      },
+    });
   };
-
-  const StyledFormContainer = styled(Grid)({});
 
   const steps = [
     {
       label: "About You",
       content: (
         <>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="fullName">
-              {t("full_name")} *
-            </FormLabel>
-            <TextField
-              className="formInputFiled"
-              name="fullName"
-              placeholder="John Smith"
-              {...register("fullName", {
-                required: t("name_required"),
-              })}
-            />
-            {errors.fullName && <ErrorMessage msg={errors.fullName?.message} />}
-          </FormControl>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="gender">
-              {t("gender")} *
-            </FormLabel>
-            <Controller
-              name="gender"
-              control={control}
-              defaultValue=""
-              rules={{ required: t("gender_required") }}
-              render={({ field }) => (
-                <RadioGroupField
-                  radioOptions={["Female", "Male"]}
-                  field={field}
-                />
-              )}
-            />
-            {errors.gender && <ErrorMessage msg={errors.gender?.message} />}
-          </FormControl>
+          <TextFieldWithController
+            isRequired={true}
+            label={t("full_name")}
+            name={"fullName"}
+            errors={errors}
+            control={control}
+            placeholder={t("enter_your_name")}
+          />
+          <RadioGroupWithController
+            label={t("gender")}
+            isRequired={true}
+            name={"gender"}
+            radioOptions={["Female", "Male"]}
+            control={control}
+            errors={errors}
+          />
           {/* Passport Number / HKID */}
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="passportNumber">
-              Passport Number / HKID *
-            </FormLabel>
-            <TextField
-              className="formInputFiled"
-              fullWidth
-              placeholder="e.g. X123456(A)"
-              variant="outlined"
-              {...register("passportOrHKID", {
-                required: t("passport_hkid_required"),
-              })}
-            />
-            {errors.passportOrHKID && (
-              <ErrorMessage msg={errors.passportOrHKID?.message} />
-            )}
-          </FormControl>
+          <TextFieldWithController
+            isRequired={true}
+            label={t("pasport_or_HKID")}
+            name={"passportOrHKID"}
+            errors={errors}
+            control={control}
+            placeholder={"e.g. X123456(A)"}
+          />
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               {/* Marital Status */}
-              <FormControl className="queRow" fullWidth>
-                <FormLabel className="formLabel" id="marital_status">
-                  Marital Status *
-                </FormLabel>
-                <Controller
-                  name="maritalStatus"
-                  control={control}
-                  defaultValue=""
-                  rules={{ required: "Marital Status is required" }}
-                  render={({ field }) => (
-                    <SingleSelectField
-                      field={field}
-                      selectMenu={MARITAL_STATUS}
-                    />
-                  )}
-                />
-                {errors.maritalStatus && (
-                  <ErrorMessage msg={errors.maritalStatus?.message} />
-                )}
-              </FormControl>
+              <SelectWithController
+                control={control}
+                name={"maritalStatus"}
+                options={MARITAL_STATUS}
+                label={"Marital Status"}
+                isRequired={true}
+                errors={errors}
+              />
             </Grid>
             <Grid item xs={12} md={6}>
               {/* Religion */}
-              <FormControl className="queRow" fullWidth>
-                <FormLabel className="formLabel" id="religion">
-                  Religion *
-                </FormLabel>
-                <Controller
-                  name="religion"
-                  control={control}
-                  defaultValue=""
-                  rules={{ required: t("religion_required") }}
-                  render={({ field }) => (
-                    <SingleSelectField field={field} selectMenu={RELIGION} />
-                  )}
-                />
-                {errors.religion && (
-                  <ErrorMessage msg={errors.religion?.message} />
-                )}
-              </FormControl>
+              <SelectWithController
+                control={control}
+                name={"religion"}
+                options={RELIGION}
+                label={"Religion"}
+                isRequired={true}
+                errors={errors}
+              />
             </Grid>
           </Grid>
 
@@ -478,7 +297,6 @@ const HelperRegistrationStep2 = ({
               inputStyle={{ width: "100%" }}
             />
             {whatsappNumber.error && <ErrorMessage msg={whatsappNumber.msg} />}
-            {/* {errors.whatsapp && <ErrorMessage msg={errors.whatsapp?.message} />} */}
           </FormControl>
           <FormGroup>
             <Controller
@@ -495,99 +313,34 @@ const HelperRegistrationStep2 = ({
             />
           </FormGroup>
           {/* Date of Birth */}
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="dob">
-              Date of Birth{" "}
-            </FormLabel>
-
-            <Controller
-              name="dob"
-              defaultValue=""
-              control={control}
-              rules={{ required: t("dob_required") }}
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <DatePicker
-                    onChange={(date) =>
-                      onChange(moment(date).format("YYYY-MM-DD"))
-                    }
-                    selected={value}
-                    showIcon
-                    peekNextMonth
-                    showMonthDropdown
-                    showYearDropdown
-                    dropdownMode="select"
-                    // isClearable
-                    placeholderText="Select Date of Birth"
-                    className="formInputFiled full-width-datepicker"
-                  />
-                );
-              }}
-            />
-            {errors.dob && <ErrorMessage msg={errors.dob?.message} />}
-          </FormControl>
-
+          <DatePickerWIthController
+            name={"dob"}
+            maxDate={new Date().toISOString()}
+            label={"Date of Birth"}
+            isRequired={true}
+            control={control}
+            errors={errors}
+            placeholder={"Select Date of Birth"}
+          />
           {/* Height (CM) and Weight (KG) */}
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-              <FormControl className="queRow" fullWidth>
-                <FormLabel className="formLabel" id="height">
-                  Height (CM){" "}
-                </FormLabel>
-                <Controller
-                  name="height"
-                  control={control}
-                  defaultValue=""
-                  // rules={{ required: "Height is required" }}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      onChange={(e) => {
-                        // Allow only numeric input
-                        const numericValue = e.target.value.replace(
-                          /[^0-9]/g,
-                          ""
-                        );
-                        field.onChange(numericValue);
-                      }}
-                      className="formInputFiled"
-                      placeholder="170"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </FormControl>
+              <NumberField
+                control={control}
+                name={"height"}
+                errors={errors}
+                placeholder={"170"}
+                label={"Height (CM)"}
+              />
             </Grid>
             <Grid item xs={12} md={6}>
-              <FormControl className="queRow" fullWidth>
-                <FormLabel className="formLabel" id="weight">
-                  Weight (KG){" "}
-                </FormLabel>
-                <Controller
-                  name="weight"
-                  control={control}
-                  defaultValue=""
-                  // rules={{ required: "Whatsapp Number is required" }}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      onChange={(e) => {
-                        // Allow only numeric input
-                        const numericValue = e.target.value.replace(
-                          /[^0-9]/g,
-                          ""
-                        );
-                        field.onChange(numericValue);
-                      }}
-                      className="formInputFiled"
-                      placeholder="65"
-                      fullWidth
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </FormControl>
+              <NumberField
+                control={control}
+                name={"weight"}
+                errors={errors}
+                placeholder={"170"}
+                label={" Weight (KG)"}
+              />
             </Grid>
           </Grid>
           {/* Current Location */}
@@ -651,182 +404,48 @@ const HelperRegistrationStep2 = ({
       label: "About Your Family",
       content: (
         <>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="spouseAge">
-              Spouse Age(If Any)
-            </FormLabel>
-            <Controller
-              name="age"
-              control={control}
-              defaultValue=""
-              // rules={{ required: t("age_required") }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  onChange={(e) => {
-                    // Allow only numeric input
-                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
-                    field.onChange(numericValue);
-                  }}
-                  className="formInputFiled"
-                  placeholder="e.g 25"
-                  variant="outlined"
-                  fullWidth
-                />
-              )}
-            />
-          </FormControl>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="spouseOccupation">
-              Spouse Occupation (If any)
-            </FormLabel>
-            <Controller
-              name="occupation"
-              control={control}
-              defaultValue=""
-              // rules={{ required: t("age_required") }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  className="formInputFiled"
-                  placeholder="e.g 25"
-                  variant="outlined"
-                  fullWidth
-                  onChange={(e) => {
-                    // Allow only numeric input
-                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
-                    field.onChange(numericValue);
-                  }}
-                />
-              )}
-            />
-          </FormControl>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="numberOfBrothers">
-              Number of Brother(s)
-            </FormLabel>
-            <Controller
-              name="brothers"
-              control={control}
-              defaultValue=""
-              // rules={{ required: t("age_required") }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  className="formInputFiled"
-                  placeholder="e.g 2"
-                  variant="outlined"
-                  fullWidth
-                  onChange={(e) => {
-                    // Allow only numeric input
-                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
-                    field.onChange(numericValue);
-                  }}
-                />
-              )}
-            />
-          </FormControl>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="numberOfSisters">
-              Number of Sister(s)
-            </FormLabel>
-            <Controller
-              name="sisters"
-              control={control}
-              defaultValue=""
-              // rules={{ required: t("age_required") }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  className="formInputFiled"
-                  placeholder="e.g 2"
-                  label=""
-                  variant="outlined"
-                  fullWidth
-                  onChange={(e) => {
-                    // Allow only numeric input
-                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
-                    field.onChange(numericValue);
-                  }}
-                />
-              )}
-            />
-          </FormControl>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="familyOrder">
-              Order in your family (1st 2nd 3rd)
-            </FormLabel>
-            <Controller
-              name="familyOrder"
-              control={control}
-              defaultValue=""
-              // rules={{ required: t("age_required") }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  className="formInputFiled"
-                  placeholder="2"
-                  variant="outlined"
-                  fullWidth
-                  onChange={(e) => {
-                    // Allow only numeric input
-                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
-                    field.onChange(numericValue);
-                  }}
-                />
-              )}
-            />
-          </FormControl>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="ageOfSons">
-              Children age son(s)
-            </FormLabel>
-            <Controller
-              name="ageOfSons"
-              control={control}
-              defaultValue={[]}
-              // rules={{ required: t("age_required") }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  className="formInputFiled"
-                  placeholder="13"
-                  variant="outlined"
-                  fullWidth
-                  onChange={(e) => {
-                    // Allow only numeric input
-                    const numericValue = e.target.value.replace(/[^0-9,]/g, "");
-                    field.onChange(numericValue);
-                  }}
-                />
-              )}
-            />
-          </FormControl>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="ageOfDaughters">
-              Children age daughter(s)
-            </FormLabel>
-            <Controller
-              name="daughtersAge"
-              control={control}
-              defaultValue={[]}
-              // rules={{ required: t("age_required") }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  className="formInputFiled"
-                  placeholder="11"
-                  variant="outlined"
-                  fullWidth
-                  onChange={(e) => {
-                    // Allow only numeric input
-                    const numericValue = e.target.value.replace(/[^0-9,]/g, "");
-                    field.onChange(numericValue);
-                  }}
-                />
-              )}
-            />
-          </FormControl>
+          <NumberField
+            control={control}
+            name={"age"}
+            placeholder={"e.g 25"}
+            label={"Spouse Age(If Any)"}
+          />
+          <TextFieldWithController
+            label={"Spouse Occupation (If any)"}
+            name={"occupation"}
+            control={control}
+            placeholder={""}
+          />
+          <NumberField
+            control={control}
+            name={"brothers"}
+            placeholder={"e.g 2"}
+            label={"Number of Brother(s)"}
+          />
+          <NumberField
+            control={control}
+            name={"sisters"}
+            placeholder={"e.g 2"}
+            label={"Number of Sister(s)"}
+          />
+          <NumberField
+            control={control}
+            name={"familyOrder"}
+            placeholder={"e.g 2"}
+            label={"Order in your family (1st 2nd 3rd)"}
+          />
+          <NumberField
+            control={control}
+            name={"ageOfSons"}
+            placeholder={"e.g 12"}
+            label={"Children age son(s)"}
+          />
+          <NumberField
+            control={control}
+            name={"daughtersAge"}
+            placeholder={"e.g 11"}
+            label={"Children age daughter(s)"}
+          />
         </>
       ),
     },
@@ -834,54 +453,30 @@ const HelperRegistrationStep2 = ({
       label: "Education",
       content: (
         <>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="educationLevel">
-              Education Level *
-            </FormLabel>
-            <Controller
-              name="level"
-              control={control}
-              defaultValue=""
-              rules={{ required: "Education level is required" }}
-              render={({ field }) => (
-                <SingleSelectField field={field} selectMenu={EDUCATION_LEVEL} />
-              )}
-            />
-            {errors.level && <ErrorMessage msg={errors.level?.message} />}
-          </FormControl>
-
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="studyMajor">
-              What is your study major *
-            </FormLabel>
-            <Controller
-              name="major"
-              control={control}
-              defaultValue=""
-              rules={{ required: "Major study is required" }}
-              render={({ field }) => (
-                <SingleSelectField field={field} selectMenu={MAJOR_STUDY} />
-              )}
-            />
-            {errors.major && <ErrorMessage msg={errors.major.message} />}
-          </FormControl>
-          <FormControl className="queRow" fullWidth>
-            <FormLabel className="formLabel" id="nativeLanguage">
-              Native Language *
-            </FormLabel>
-            <Controller
-              name="languages"
-              control={control}
-              defaultValue=""
-              rules={{ required: "Native language is required" }}
-              render={({ field }) => (
-                <SingleSelectField field={field} selectMenu={SPOKEN_LANGUAGE} />
-              )}
-            />
-            {errors.languages && (
-              <ErrorMessage msg={errors.languages.message} />
-            )}
-          </FormControl>
+          <SelectWithController
+            control={control}
+            name={"level"}
+            options={EDUCATION_LEVEL}
+            label={"Education Level"}
+            isRequired={true}
+            errors={errors}
+          />
+          <SelectWithController
+            control={control}
+            name={"major"}
+            options={MAJOR_STUDY}
+            label={"What is your study major"}
+            isRequired={true}
+            errors={errors}
+          />
+          <SelectWithController
+            control={control}
+            name={"languages"}
+            options={SPOKEN_LANGUAGE}
+            label={"Native Language"}
+            isRequired={true}
+            errors={errors}
+          />
           <FormControl>
             <FormLabel className="formLabel" id="religion">
               Other Spoken Languages
@@ -896,38 +491,22 @@ const HelperRegistrationStep2 = ({
           </FormControl>
           {showOtherLanguage && (
             <>
-              <FormControl className="queRow" fullWidth>
-                <FormLabel className="formLabel" id="nativeLanguage">
-                  Other Spoken Language
-                </FormLabel>
-                <Controller
-                  name="otherLanguage"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <SingleSelectField
-                      field={field}
-                      selectMenu={SPOKEN_LANGUAGE}
-                    />
-                  )}
-                />
-              </FormControl>
-
-              <FormControl sx={{ minWidth: 120, mr: 2 }} className="queRow">
-                <FormLabel className="formLabel">Level</FormLabel>
-                <Controller
-                  name="otherLanguageLevel"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <SingleSelectField
-                      field={field}
-                      selectMenu={LANGUAGE_LEVEL}
-                      errors={errors}
-                    />
-                  )}
-                />
-              </FormControl>
+              <SelectWithController
+                control={control}
+                name={"otherLanguage"}
+                options={SPOKEN_LANGUAGE}
+                label={"Other Spoken Language"}
+                isRequired={true}
+                errors={errors}
+              />
+              <SelectWithController
+                control={control}
+                name={"otherLanguageLevel"}
+                options={LANGUAGE_LEVEL}
+                label={"Level"}
+                isRequired={true}
+                errors={errors}
+              />
               <Button
                 variant="contained"
                 className="delBtn"
@@ -939,160 +518,40 @@ const HelperRegistrationStep2 = ({
             </>
           )}
 
-          <Grid container className="queRow certificate UploadFileCustom">
-            <Grid className="certificateCheck">
-              <div className="FileUploadtion">
-                <FormGroup className="radioCheckBtn">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={hasDrivingLicense}
-                        onChange={(e) =>
-                          handleCheckboxChange(setHasDrivingLicense, e)
-                        }
-                      />
-                    }
-                    label="Driving License"
-                  />
-                </FormGroup>
-                <div className="inputFile">
-                  <FileUploaderField
-                    name={"drivingLicenseFile"}
-                    control={control}
-                    setFile={setDrivingLicenseFile}
-                    disable={hasDrivingLicense}
-                  />
+          {UPLOADE_DOCUMENT.map((doc) => (
+            <Grid container className="queRow certificate UploadFileCustom">
+              <Grid className="certificateCheck">
+                <div className="FileUploadtion">
+                  <FormGroup className="radioCheckBtn">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={uploadFilesDetails[doc.name]?.haveTheDoc}
+                          onChange={(e) => handleCheckboxChange(doc.name, e)}
+                        />
+                      }
+                      label={doc.label}
+                    />
+                  </FormGroup>
+                  <div className="inputFile">
+                    <FileUploaderField
+                      name={doc.name}
+                      control={control}
+                      setFile={handleFileUpload}
+                      disable={!uploadFilesDetails[doc.name]?.haveTheDoc}
+                    />
+                  </div>
                 </div>
-              </div>
-              {drivingLicenseFile?.name && <p>{drivingLicenseFile.name}</p>}
+                {uploadFilesDetails[doc.name]?.docFile && (
+                  <p>{uploadFilesDetails[doc.name]?.docFile?.name}</p>
+                )}
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid container className="queRow certificate UploadFileCustom">
-            <Grid className="certificateCheck">
-              <div className="FileUploadtion">
-                <FormGroup className="radioCheckBtn">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={hasFirstAidCertification}
-                        onChange={(e) =>
-                          handleCheckboxChange(setHasFirstAidCertification, e)
-                        }
-                      />
-                    }
-                    label="First Aid Certification"
-                  />
-                </FormGroup>
-                <div className="inputFile">
-                  <FileUploaderField
-                    control={control}
-                    setFile={setFirstAidFile}
-                    disable={hasFirstAidCertification}
-                  />
-                </div>
-              </div>
-              {firstAidFile?.name && <p>{firstAidFile.name}</p>}
-            </Grid>
-          </Grid>
-          <Grid container className="queRow certificate UploadFileCustom">
-            <Grid className="certificateCheck">
-              <div className="FileUploadtion">
-                <FormGroup className="radioCheckBtn">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={hasElderlyCaregiving}
-                        onChange={(e) =>
-                          handleCheckboxChange(setHasElderlyCaregiving, e)
-                        }
-                      />
-                    }
-                    label="Elderly Caregiving"
-                  />
-                </FormGroup>
-                <div className="inputFile">
-                  <FileUploaderField
-                    control={control}
-                    setFile={setElderlyCaregivingFile}
-                    disable={hasElderlyCaregiving}
-                  />
-                </div>
-              </div>
-              {elderlyCaregivingFile?.name && (
-                <p>{elderlyCaregivingFile.name}</p>
-              )}
-            </Grid>
-          </Grid>
-          <Grid container className="queRow certificate UploadFileCustom">
-            <Grid className="certificateCheck">
-              <div className="FileUploadtion">
-                <FormGroup className="radioCheckBtn">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={hasNewBornCaregiving}
-                        onChange={(e) =>
-                          handleCheckboxChange(setHasNewBornCaregiving, e)
-                        }
-                      />
-                    }
-                    label="New Born Caregiving"
-                  />
-                </FormGroup>
-                <div className="inputFile">
-                  <FileUploaderField
-                    control={control}
-                    setFile={setNewBornCaregivingFile}
-                    disable={hasNewBornCaregiving}
-                  />
-                </div>
-              </div>
-              {newBornCaregivingFile?.name && (
-                <p>{newBornCaregivingFile.name}</p>
-              )}
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            className="queRow certificate lastChild UploadFileCustom"
-          >
-            <Grid className="certificateCheck">
-              <div className="FileUploadtion d-block">
-                <FormGroup className="radioCheckBtn">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={hasAppliedCountryLicense}
-                        onChange={(e) =>
-                          handleCheckboxChange(setHasAppliedCountryLicense, e)
-                        }
-                      />
-                    }
-                    label="Valid Driving License in the country you want to work"
-                  />
-                </FormGroup>
-                <div className="inputFile">
-                  <FileUploaderField
-                    name={"drivingLicenseFile"}
-                    control={control}
-                    setFile={setAppliedCountryLicenseFile}
-                    disable={hasAppliedCountryLicense}
-                  />
-                </div>
-              </div>
-              {appliedCountryLicenseFile?.name && (
-                <p>{appliedCountryLicenseFile.name}</p>
-              )}
-            </Grid>
-          </Grid>
+          ))}
         </>
       ),
     },
   ];
-
-  const handleNextStep = (data) => {
-    console.log(data, "dataa");
-  };
 
   return (
     <Grid item xs={12} md={6} className="stepsForm">
@@ -1112,7 +571,6 @@ const HelperRegistrationStep2 = ({
                         className="arrowButton"
                         variant="contained"
                         type="submit"
-                        // onClick={handleNext}
                         sx={{ mt: 1, mr: 1 }}
                       >
                         Next

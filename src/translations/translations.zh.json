@@ -96,6 +96,7 @@
     "privacy_policy": "隐私政策",
     "cookie_policy": "Cookie政策",
     "enter_your_email": "输入你的电子邮件",
+    "enter_your_name": "输入您的姓名",
     "close": "关闭",
     "name_required": "必须提供姓名",
     "valid_email_msg": "请输入有效的电子邮件地址",
@@ -209,6 +210,23 @@
     "confirm_delete_notification_message": "您确定要删除此通知吗？",
     "delete": "删除",
     "cancel": "取消",
-    "no_notification_found": "未找到通知"
+    "no_notification_found": "未找到通知",
+    "step4_question_1": "您是否吸烟？",
+    "step4_question_2": "您是否接种了 COVID-19 疫苗？",
+    "step4_question_3": "您有纹身吗？",
+    "step4_question_4": "您能与狗、猫或其他宠物相处吗？",
+    "step4_question_5": "您能够与其他协助者共同工作吗？",
+    "step4_question_6": "您是否愿意在有时不在周日休息？",
+    "step4_question_7": "您是否愿意在您的假期工作并获得金钱补偿？",
+    "step4_question_8": "您是否接受在雇主家配备摄像头录像系统（出于安全目的）工作？",
+    "step4_question_9": "您是否愿意在您的假期按照雇主设定的时间回家？",
+    "upload_photo_label": "上传一张您自己的照片，清晰显示您的笑脸，穿着干净的白衬衫，背景整洁。请勿化浓妆、戴太阳镜或有儿童出现在照片中。",
+    "upload_self_intro_video": "请填写您的YouTube视频链接，用于您的自我介绍视频。如果您对此步骤不确定，请联系我们的客服获取自我介绍视频链接。",
+    "your_photo": "您的照片",
+    "your_self_intro": "您的自我介绍视频",
+    "or_upload_letter": "或稍后上传照片",
+    "or_upload__video_letter": "或稍后上传视频链接",
+    "img_upload_error_msg": "请上传有效格式的图片（jpg、jpeg、png）",
+    "invalid_youtube_link": "请输入有效的 YouTube 链接"
   }
 }

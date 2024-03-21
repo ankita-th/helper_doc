@@ -13,7 +13,7 @@ const HelperProfileStepSection = ({ activeStep, steps, titles, stepIcons }) => {
             <div className="step-wrapper">
               <div
                 className={`${
-                  index+1 === activeStep ? "active-step" : "step-icon"
+                  index+1 <= activeStep ? "active-step" : "step-icon"
                 }`}
               >
                 <img src={step.img} alt={`Step ${index + 1}`} />
