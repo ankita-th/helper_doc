@@ -3,10 +3,16 @@ import { FadeLoader } from "react-spinners";
 
 const PageLoader = () => {
   return (
-    <FadeLoader />
-    // <div class="spinner-border" role="status">
-    //   <span class="visually-hidden">Loading...</span>
-    // </div>
+    <>
+    <div className="LoaderMain">
+        <div className="loaderCustom">
+          <span className="circle"></span>
+          <span className="circle"></span>
+          <span className="circle"></span>
+          <span className="circle"></span>
+        </div>
+    </div>
+    </>
   );
 };
 
