@@ -22,7 +22,7 @@ const MyApplication = () => {
   const [activeTab, setActiveTab] = useState(JOB_STATUS.APPLIED);
   const [jobDetails, setJobDetails] = useState([]);
   const [currentPage, setCurrentPage] = useState({ page: 1 });
-  const [totalPage, setTotalPage] = useState(10);
+  const [totalPage, setTotalPage] = useState(0);
   const [loader, setLoader] = useState(true);
   const [filters, setFilters] = useState({
     location: "",
@@ -92,14 +92,14 @@ const MyApplication = () => {
           <NoDataFound title={t("no_job_found")} />
         )}
       </Box>
-      <div className="d-flex justify-content-center">
+      {totalPage > 0 && <div className="d-flex justify-content-center">
         <Pagination
           count={totalPage}
           variant="outlined"
           shape="rounded"
           onChange={handleChangePagination}
         />
-      </div>
+      </div>}
     </>
   );
 };

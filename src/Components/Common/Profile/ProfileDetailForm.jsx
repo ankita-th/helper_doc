@@ -66,7 +66,9 @@ import {
   getProfileData,
 } from "../../../Services/ProfileServices/ProfileService";
 import ThankyouModal from "../Modal/ThankyouModal";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import "react-international-phone/style.css";
+import { successType } from "../../../Constant/Constant";
 
 export default function ProfileDetailForm() {
   const [profilePic, setProfilePic] = useState(null);
@@ -94,6 +96,7 @@ export default function ProfileDetailForm() {
   const [showThankyouModal, setShowThankyouModal] = useState(false);
   const navigate = useNavigate();
   const inputRef = useRef(null);
+  const { pathname } = useLocation();
 
   const { t } = useTranslation();
   const {
@@ -488,7 +491,11 @@ export default function ProfileDetailForm() {
     completeProfileData(userId, payload)
       .then((res) => {
         setShowThankyouModal(true);
-        setThankyouModalDetails(res.data);
+        if(pathname === '/helper/my-profile') {
+          toastMessage("Profile Update successfully", successType)
+        } else {
+          setThankyouModalDetails(res.data);
+        }
         setPageLoader(false);
       })
       .catch((error) => {
