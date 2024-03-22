@@ -66,6 +66,7 @@ import {
   getProfileData,
 } from "../../../Services/ProfileServices/ProfileService";
 import ThankyouModal from "../Modal/ThankyouModal";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileDetailForm() {
   const [profilePic, setProfilePic] = useState(null);
@@ -91,6 +92,7 @@ export default function ProfileDetailForm() {
   const [avatar, setAvatar] = useState("default-avatar.jpg");
   const [thankoyuPageDetails, setThankyouModalDetails] = useState({});
   const [showThankyouModal, setShowThankyouModal] = useState(false);
+  const navigate = useNavigate();
   const inputRef = useRef(null);
 
   const { t } = useTranslation();
@@ -687,7 +689,12 @@ export default function ProfileDetailForm() {
             </Typography>
           </Box>
         </Box>
-        <Button className="arrowButton" variant="contained" color="primary">
+        <Button
+          className="arrowButton"
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/helper/profile-preview")}
+        >
           View Profile
         </Button>
       </Box>

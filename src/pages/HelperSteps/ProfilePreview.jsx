@@ -1,10 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { getHelperPublicProfile } from "../../Services/ProfileServices/ProfileService";
 import PageLoader from "../../Components/Common/Loader/PageLoader";
+import { Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { Container, styled } from "@mui/system";
+
+const TitleWrapper = styled("div")({
+  textAlign: "center",
+  marginTop: " 0, 20px,", // Remove margin from the top
+  color: "white", // Change color to white
+});
+
+const HeaderBar = styled("div")({
+  backgroundColor: "#0a6259", // Background color
+  padding: "10px 0", // Padding top and bottom
+  marginBottom: "20px", // Margin bottom
+});
+
+const StyledImage = styled("img")({
+  maxWidth: "100%",
+  maxHeight: "100%",
+});
+
+const StyledImageContainer = styled("div")({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
 
 export default function ProfilePreview() {
   const [profileDetails, setProfileDetails] = useState();
   const [pageLoader, setPageLoader] = useState(true);
+  const { t } = useTranslation();
   useEffect(() => {
     getHelperPublicProfile()
       .then((res) => {
@@ -20,16 +47,33 @@ export default function ProfilePreview() {
   return (
     <>
       {pageLoader && <PageLoader />}
+      <HeaderBar className="heroBanner">
+        <TitleWrapper>
+          <Typography variant="h4" className="pageTitle">
+            {t("domestic_helper_form")}
+          </Typography>
+        </TitleWrapper>
+      </HeaderBar>
       <section className="profilePreview">
         <div className="container">
           <div className="topImg d-flex align-items-center">
             <div className="imgWrapper">
-              <img src="./applicantImg.jpg" alt="avatar" />
+              <img
+                src={
+                  profileDetails?.profilePicURL
+                    ? profileDetails.profilePicURL
+                    : "./applicantImg.jpg"
+                }
+                alt="avatar"
+              />
             </div>
             <div className="profileName">
-              <h2>Hiroshi Nomura</h2>
+              <h2>{profileDetails?.fullName}</h2>
               <p>
-                Housekeeper <span className="highlightedText">Full Time</span>
+                Housekeeper{" "}
+                <span className="highlightedText">
+                  {profileDetails?.jobType}
+                </span>
               </p>
             </div>
           </div>

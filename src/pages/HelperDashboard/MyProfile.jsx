@@ -27,6 +27,7 @@ import HelperUserDetails from "../../Components/Signup/HelperRegistrationSteps/H
 import HelperDashboardSubHeader from "../../Components/Common/Headers/HelperDashboardSubHeader";
 import { useTranslation } from "react-i18next";
 import { getProfileData } from "../../Services/ProfileServices/ProfileService";
+import ProfileDetailForm from "../../Components/Common/Profile/ProfileDetailForm";
 
 const MyProfile = ({ formData, setFormData }) => {
   const navigate = useNavigate();
@@ -92,103 +93,7 @@ const MyProfile = ({ formData, setFormData }) => {
           title={t("profile")}
           description={t("manage_or_update_profile")}
         />
-        <Box
-          className="profileCardBox"
-          border={1}
-          borderRadius={8}
-          borderColor="#DDDDDD"
-          py={6}
-          px={10}
-          mb={2}
-          mt={2}
-        >
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            mb={2}
-          >
-            <Box display="flex" alignItems="center">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleProfilePicUpload}
-                style={{ display: "none" }}
-                id="profile-pic-upload"
-              />
-              <label htmlFor="profile-pic-upload" className="profileUpload">
-                <Box position="relative">
-                  <IconButton component="span">
-                    {profilePic ? (
-                      <img
-                        src={URL.createObjectURL(profilePic)}
-                        alt="Profile"
-                        style={{
-                          borderRadius: "50%",
-                          maxWidth: "130px",
-                          maxHeight: "130px",
-                        }}
-                      />
-                    ) : (
-                      <Avatar sx={{ width: 130, height: 130 }}>
-                        <AccountCircleIcon />
-                      </Avatar>
-                    )}
-                  </IconButton>
-                  <IconButton
-                    style={{ position: "absolute", bottom: 0, right: 0 }}
-                    onClick={() => {
-                      const fileInput =
-                        document.getElementById("profile-pic-upload");
-                      if (fileInput) {
-                        fileInput.click();
-                      }
-                    }}
-                  >
-                    <CameraAltIcon />
-                  </IconButton>
-                </Box>
-              </label>
-              <Box ml={2} className="TopDesc">
-                <Typography variant="h5">
-                  <strong>John Smith</strong>
-                </Typography>
-                <Box display="flex" alignItems="center">
-                  <Box
-                    width={8}
-                    height={8}
-                    borderRadius="50%"
-                    bgcolor="success.main"
-                    mr={1}
-                  />
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    style={{ marginBottom: 0 }}
-                  >
-                    Available
-                  </Typography>
-                </Box>
-                <Typography variant="body2" color="textSecondary">
-                  <strong>Status:</strong>{" "}
-                  <span className="dangerText">Weak</span>
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Recently Updated on <span>19/01/2024</span>
-                </Typography>
-              </Box>
-            </Box>
-            <Button
-              className="arrowButton"
-              variant="contained"
-              color="primary"
-              onClick={handleViewPublicProfile}
-            >
-              View Profile
-            </Button>
-          </Box>
-          <HelperUserDetails />
-        </Box>
+        <ProfileDetailForm />
         <BookmarkedJobs
           jobs={recommendedJobsSaved}
           handleBookmarkToggle={handleBookmarkToggle}
