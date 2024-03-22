@@ -69,14 +69,14 @@ const ThankyouModal = ({
           <Box style={{ display: "flex" }}>
             <Button
               variant="contained"
-              className="errorButton"
+              className="errorButton customPRofilebtn"
               color="error"
               onClick={() => navigate(`/helper/job-dashboard`)}
             >
               Back to Dashboard
             </Button>
             <Button
-              className="arrowButton"
+              className="arrowButton customPRofilebtn"
               variant="contained"
               color="primary"
               onClick={() => navigate("/helper/profile-preview")}
