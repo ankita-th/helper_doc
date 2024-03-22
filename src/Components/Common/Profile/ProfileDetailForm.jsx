@@ -80,7 +80,7 @@ export default function ProfileDetailForm() {
   const [currentLocation, setCurrentLocation] = useState("");
   const [workLocation, setWorkLocation] = useState("");
   const [showOtherLanguage, setOtherLanguage] = useState(false);
-  const [pageLoader, setPageLoader] = useState(false);
+  const [pageLoader, setPageLoader] = useState(true);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [imageUrl, setImageUrl] = useState("");

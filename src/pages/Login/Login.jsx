@@ -32,6 +32,7 @@ import { googleCaptchaID } from "../../Config/authConfig";
 import { loginUser } from "../../Services/AuthServices/AuthService";
 import { useSnackBar } from "../../Utils/CustomHooks/useSnackBarMessages";
 import SubmitButton from "../../Components/Common/CommonButtons/SubmitButton";
+import { toastMessage } from "../../Utils/toastMessages";
 
 const StyledImage = styled("img")({
   maxWidth: "100%",
@@ -100,9 +101,11 @@ const Login = () => {
       .catch((err) => {
         if (err?.response?.status === 400) {
           setShowErrorMsg({ show: true, msg: err.response.data?.message });
-          showErrorSnackBar(err.response.data?.message);
+          toastMessage(err.response.data?.message);
+        } else if (err.response.data?.message) {
+          toastMessage(err.response.data?.message);
         } else {
-          showErrorSnackBar(t("failure_message"));
+          toastMessage(t("failure_message"));
         }
         setButtonLoader(false);
         // dispatch(setPageLoader(false));

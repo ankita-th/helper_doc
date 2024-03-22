@@ -3313,6 +3313,9 @@ input.formInputFiled {
 .profilePreview .imgWrapper img {
     border: 4px solid #0a6259;
     border-radius: 50%;
+    height: 130px;
+    width: 130px;
+    object-fit: cover;
 }
 
 .profileName {
