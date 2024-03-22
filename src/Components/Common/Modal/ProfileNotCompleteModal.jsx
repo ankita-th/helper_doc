@@ -19,7 +19,7 @@ export default function ProfileNotCompleteModal({ open }) {
           <Typography variant="body1">Your profile is not completed</Typography>
           <Typography variant="h4">Please complete your profile</Typography>
           <DialogActions style={{ justifyContent: "center" }}>
-            <Link to={"/"} className="green-btn small">
+            <Link to={"/helper/my-profile"} className="green-btn small">
               Complete Profile
             </Link>
           </DialogActions>
