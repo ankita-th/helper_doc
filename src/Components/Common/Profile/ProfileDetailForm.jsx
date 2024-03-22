@@ -651,6 +651,10 @@ export default function ProfileDetailForm() {
                       borderRadius: "50%",
                       maxWidth: "130px",
                       maxHeight: "130px",
+                      minWidth: "130px",
+                      minHeight: "130px",
+                      border: "5px solid #0A6259",
+                      objectFit: "cover"
                     }}
                   />
                 ) : (
