@@ -3263,7 +3263,7 @@ input.formInputFiled {
     margin: 0 auto;
 }
 
-.thankYou a.buttonThanks {
+.buttonThanks {
     background: #0a6259;
     padding: 9px 25px !important;
     background-repeat: no-repeat;

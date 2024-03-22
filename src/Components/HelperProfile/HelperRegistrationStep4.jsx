@@ -26,6 +26,7 @@ import {
   SLEEPING_ARRANGEMENT,
 } from "./Constant";
 import CountryDropdown from "../Common/FormFields/CountryDropdown";
+import RadioGroupWithController from "../Common/FormFields/RadioGroupWithController";
 
 const HelperRegistrationStep4 = ({ saveStepDetails }) => {
   const [stepperActiveStep, setStepperActiveStep] = useState(0);
@@ -39,7 +40,7 @@ const HelperRegistrationStep4 = ({ saveStepDetails }) => {
 
   const handleNext = (data) => {
     if (stepperActiveStep === steps.length - 1) {
-      saveStepDetails(data, "q_&_a");
+      saveStepDetails({jobPreferences: data}, "q_&_a");
     } else {
       setStepperActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
@@ -55,26 +56,14 @@ const HelperRegistrationStep4 = ({ saveStepDetails }) => {
     {
       label: "Contract",
       content: (
-        <>
-          <FormControl fullWidth className="queRow">
-            <FormLabel className="formLabel" id="jobType">
-              Choose the type of employment *
-            </FormLabel>
-            <Controller
-              name="jobType"
-              control={control}
-              defaultValue=""
-              rules={{ required: t("answer_required_msg") }}
-              render={({ field }) => (
-                <RadioGroupField
-                  radioOptions={["Full Time", "Part Time"]}
-                  field={field}
-                />
-              )}
-            />
-            {errors.jobType && <ErrorMessage msg={errors.jobType?.message} />}
-          </FormControl>
-        </>
+        <RadioGroupWithController
+          label={"Choose the type of employment"}
+          name={"jobType"}
+          radioOptions={["Full Time", "Part Time"]}
+          control={control}
+          isRequired={true}
+          errors={errors}
+        />
       ),
     },
     {
@@ -86,7 +75,7 @@ const HelperRegistrationStep4 = ({ saveStepDetails }) => {
               <Grid item xs={12} md={6}>
                 <NumberField
                   control={control}
-                  name={"salary"}
+                  name={"expectedSalary"}
                   errors={errors}
                   placeholder={"Eg. 10000"}
                   label={"Salary"}
@@ -141,22 +130,6 @@ const HelperRegistrationStep4 = ({ saveStepDetails }) => {
             isRequired={true}
             errors={errors}
           />
-          {/* <FormControl fullWidth className="queRow">
-            <FormLabel id="preferredLocation" className="formLabel">
-              Preferred working Location *
-            </FormLabel>
-            <Controller
-              name="preferredLocation"
-              control={control}
-              type="text"
-              rules={{ required: t("answer_required_msg") }}
-              defaultValue={""}
-              render={({ field }) => <CountryDropdown field={field} />}
-            />
-            {errors && errors.preferredLocation && (
-              <ErrorMessage msg={errors.preferredLocation.message} />
-            )}
-          </FormControl> */}
         </>
       ),
     },

@@ -30,7 +30,7 @@ const HelperRegistrationStep5 = ({ saveStepDetails }) => {
     for (let key in data) {
       payload[key] = data[key] === "Yes" ? true : false;
     }
-    saveStepDetails(payload, "final");
+    saveStepDetails({qna: payload}, "final");
   };
 
   const steps = [
@@ -53,6 +53,8 @@ const HelperRegistrationStep5 = ({ saveStepDetails }) => {
                   control={control}
                   name={question.answer_type}
                   options={["Yes", "No"]}
+                  isRequired={true}
+                  errors={errors}
                 />
               </FormControl>
             ))}

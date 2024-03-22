@@ -14,10 +14,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import TextFieldWithController from "../FormFields/TextFieldWithController";
 import { useTranslation } from "react-i18next";
 import {
@@ -26,13 +25,17 @@ import {
   EDUCATION_LEVEL,
   EXPERIENCE_LIST,
   LANGUAGE_LEVEL,
+  LIVING_ARRANGEMENT,
   MAJOR_STUDY,
   MARITAL_STATUS,
+  PREFERRED_DAY_OFF,
   RELIGION,
   SKILLS,
+  SLEEPING_ARRANGEMENT,
   SPECIAL_HELP_REQUIREMENT,
   SPOKEN_LANGUAGE,
   STEP1_QUESTIONS,
+  STEP5_QUESTION,
   UPLOADE_DOCUMENT,
   YES_NO,
 } from "../../HelperProfile/Constant";
@@ -54,6 +57,15 @@ import PageLoader from "../Loader/PageLoader";
 import FileUploaderField from "../FormFields/FileUploaderField";
 import CheckBoxFieldWithController from "../FormFields/CheckBoxFieldWithController";
 import moment from "moment";
+import RadioButtonsWithController from "../FormFields/RadioButtonsWithController";
+import { toastMessage } from "../../../Utils/toastMessages";
+import ImageLogoIcon from "../../../Assets/SVGIcons/ImageLogoIcon";
+import { YOUTUBE_LINK_REGEX } from "../../../Utils/Regex";
+import {
+  completeProfileData,
+  getProfileData,
+} from "../../../Services/ProfileServices/ProfileService";
+import ThankyouModal from "../Modal/ThankyouModal";
 
 export default function ProfileDetailForm() {
   const [profilePic, setProfilePic] = useState(null);
@@ -63,14 +75,23 @@ export default function ProfileDetailForm() {
     number: "",
   });
   const [currentLocation, setCurrentLocation] = useState("");
+  const [workLocation, setWorkLocation] = useState("");
   const [showOtherLanguage, setOtherLanguage] = useState(false);
-  const [PageLoader, setPageLoader] = useState(false);
+  const [pageLoader, setPageLoader] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [letterFile, setLetterFile] = useState(null);
   const [uploadFilesDetails, setUploadFilesDetails] = useState({
     drivingLicense: {
       haveTheDoc: false,
       docFile: "",
     },
   });
+  const [avatar, setAvatar] = useState("default-avatar.jpg");
+  const [thankoyuPageDetails, setThankyouModalDetails] = useState({});
+  const [showThankyouModal, setShowThankyouModal] = useState(false);
+  const inputRef = useRef(null);
 
   const { t } = useTranslation();
   const {
@@ -81,10 +102,154 @@ export default function ProfileDetailForm() {
     setValue,
     formState: { errors },
   } = useForm();
-  const handleProfileSubmit = async (data) => {
-    console.log(data);
 
+  const userId = localStorage.getItem("userId");
+  useEffect(() => {
+    getProfileDetails();
+  }, []);
+
+  const getProfileDetails = () => {
+    setPageLoader(true);
+    getProfileData(userId)
+      .then((res) => {
+        setPageLoader(false);
+        // if(Object.keys(res.data.registrationStep1Data) > 0) {
+        //   for(let key in res.data.registrationStep1Data) {
+
+        //   }
+        // }
+        setValue(
+          "introVideoLink",
+          res.data.registrationStep6Data.introVideoLink
+        );
+        setAvatar(res.data.registrationStep6Data.profilePicURL);
+        setProfilePhoto(res.data.registrationStep6Data.profilePicURL);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        setPageLoader(false);
+        console.log(err);
+      });
+  };
+
+  const handleProfileSubmit = async (data) => {
+    setPageLoader(true);
     let filePayload = {};
+    const payload = {};
+    const answerArray = [];
+    const aboutYou = {};
+    const aboutYourFamily = {};
+    const education = {};
+    const step3Data = {};
+    const step4Data = {};
+    const step5Data = {};
+    const step6Data = {};
+    for (let key in data) {
+      if (key.includes("step1_")) {
+        let newId = key.replace("step1_", "");
+        answerArray.push({
+          questionId: newId,
+          answer: data[key],
+          subAnswer: data[`step1_sub_que_${key}`] || "",
+        });
+      } else if (key.includes("step2_")) {
+        if (key.includes("step2_about_")) {
+          const aboutKey = key.replace("step2_about_", "");
+          if (aboutKey === "height" || aboutKey === "weight") {
+            aboutYou["physicalAttributes"] = {
+              ...aboutYou["physicalAttributes"],
+              [aboutKey]: data[key],
+            };
+          } else {
+            aboutYou[aboutKey] = data[key];
+          }
+        } else if (key.includes("step2_family_")) {
+          const familyKey = key.replace("step2_family_", "");
+          if (familyKey === "ageOfSons") {
+            aboutYourFamily["sonsAge"] =
+              data[key].length > 0 ? data[key].split(",") : [];
+          } else if (familyKey === "daughtersAge") {
+            aboutYourFamily["daughtersAge"] =
+              data[key].length > 0 ? data[key].split(",") : [];
+          } else {
+            aboutYourFamily[familyKey] = data[key];
+          }
+        } else if (key.includes("step2_education_")) {
+          const educationKey = key.replace("step2_education_", "");
+          if (educationKey === "languages") {
+            education["languages"] = {
+              native: data[key],
+            };
+          } else if (
+            educationKey === "otherLanguageLevel" ||
+            educationKey === "otherLanguage"
+          ) {
+            education["otherLanguages"] = {
+              ...aboutYou["otherLanguages"],
+              [educationKey === "otherLanguageLevel" ? "language" : "level"]:
+                data[key],
+            };
+          } else {
+            education[educationKey] = data[key];
+          }
+        }
+      } else if (key.includes("step_3")) {
+        let fileUrl = "";
+        let newId = key.replace("step_3", "");
+        if (key === "step_3_familySize" && data.step_3_familySize > 0) {
+          let familMemberDetail = [];
+          for (let i = 0; i < data.step_3_familySize; i++) {
+            const familyDetail = {
+              age: data[`step_3_familyMembers${i}_age`],
+              gender: data[`familyMembers${i}_gender`],
+              specialNeeds: data[`familyMembers${i}_requireSpecialHelp`],
+            };
+            familMemberDetail.push(familyDetail);
+          }
+          step3Data["familyMembers"] = familMemberDetail;
+        } else if (
+          key === "step_3_releasedDate" ||
+          key === "step_3_startedDate"
+        ) {
+          step3Data["period"] = {
+            ...step3Data["period"],
+            [key === "step_3_releasedDate" ? "start" : "end"]: data[key],
+          };
+        } else if (key.includes("step_3_refrence_")) {
+          if (letterFile?.name) {
+            const fileUpload = await handleFileUploadToS3Bucket(letterFile);
+            if (!fileUpload.error) {
+              fileUrl = fileUpload.uploadedUrl;
+            } else {
+              setPageLoader(false);
+              return;
+            }
+          }
+          step3Data["references"] = {
+            letter: data[key] === "Upload Letter",
+            available: data.step_3_referenceAvailability,
+            fileUrl: fileUrl,
+          };
+        } else {
+          step3Data[newId] = data[key];
+        }
+      } else if (key.includes("step4_")) {
+        const jobPrefrence = key.replace("step4_", "");
+        step4Data[jobPrefrence] = data[key];
+      } else if (key.includes("step5_")) {
+        const QAKeys = key.replace("step5_", "");
+        step5Data[QAKeys] = data[key] === "Yes" ? true : false;
+      }
+
+      aboutYou["whatsapp"] = {
+        number: whatsappNumber.number,
+        isVisible: data.isWhatsappNumberVisible,
+      };
+      aboutYou["location"] = currentLocation;
+
+      delete aboutYou.isVisible;
+    }
+
     for (let key in uploadFilesDetails) {
       if (
         uploadFilesDetails[key]?.haveTheDoc &&
@@ -101,11 +266,76 @@ export default function ProfileDetailForm() {
         }
       }
     }
+    if (profilePhoto) {
+      const fileUpload = await handleFileUploadToS3Bucket(profilePhoto);
+      if (!fileUpload.error) {
+        step6Data["profilePicURL"] = fileUpload.uploadedUrl;
+      } else {
+        setPageLoader(false);
+        return;
+      }
+    }
+    payload["step1Data"] = {
+      userId: userId,
+      answers: answerArray,
+    };
+    payload["step2Data"] = {
+      userId: userId,
+      aboutYou: {
+        ...aboutYou,
+      },
+      aboutYourFamily: {
+        ...aboutYourFamily,
+      },
+      education: {
+        ...education,
+        licensesAndCertificates: filePayload,
+      },
+    };
+    payload["step3Data"] = {
+      ...step3Data,
+    };
+    payload["step4Data"] = {
+      userId: userId,
+      jobPreferences: step3Data,
+    };
+    payload["step5Data"] = {
+      userId: userId,
+      qna: step3Data,
+    };
+    payload["step6Data"] = {
+      userId: userId,
+      introVideoLink: data.introVideoLink,
+      ...step6Data,
+    };
+    console.log(payload, "payload");
+    completeProfileData(userId, payload)
+      .then((res) => {
+        setShowThankyouModal(true);
+        setThankyouModalDetails(res.data);
+        setPageLoader(false);
+      })
+      .catch((error) => {
+        setPageLoader(false);
+        if (error?.response?.data?.message) {
+          toastMessage(error.response.data.message);
+        } else {
+          toastMessage(t("failure_message"));
+        }
+        console.log(error);
+      });
+    // payload;
   };
 
   const handleProfilePicUpload = (event) => {
     if (event.target.files && event.target.files.length > 0) {
       setProfilePic(event.target.files[0]);
+    }
+  };
+
+  const handleBoxClick = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
     }
   };
 
@@ -132,6 +362,9 @@ export default function ProfileDetailForm() {
 
   const handleSelectLocation = (location) => {
     setCurrentLocation(location);
+  };
+  const handleStep3SelectLocation = (location) => {
+    setWorkLocation(location);
   };
 
   const handleDeleteOtherLanguage = () => {
@@ -179,6 +412,40 @@ export default function ProfileDetailForm() {
     });
   };
 
+  const handleReferenceFileUpload = (uploadFile, file) => {
+    setLetterFile(file);
+  };
+
+  // const handleProfilePhotoChange = (name, file) => {
+  //   // if (!file?.name?.match(/\.(jpg|jpeg|png)$/)) {
+  //   //   toastMessage(t("img_upload_error_msg"));
+  //   // } else {
+  //     if (file) {
+  //       setProfilePhoto(file);
+  //       const reader = new FileReader();
+  //       reader.onload = (e) => {
+  //         setAvatar(e.target.result);
+  //       };
+  //       reader.readAsDataURL(file);
+  //     }
+  //   // }
+  // };
+
+  const handleProfilePhotoChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      setProfilePhoto(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setAvatar(reader.result);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <Box
       className="profileCardBox"
@@ -197,19 +464,12 @@ export default function ProfileDetailForm() {
         mb={2}
       >
         <Box display="flex" alignItems="center">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleProfilePicUpload}
-            style={{ display: "none" }}
-            id="profile-pic-upload"
-          />
           <label htmlFor="profile-pic-upload" className="profileUpload">
             <Box position="relative">
               <IconButton component="span">
-                {profilePic ? (
+                {avatar && avatar !== "default-avatar.jpg" ? (
                   <img
-                    src={URL.createObjectURL(profilePic)}
+                    src={avatar}
                     alt="Profile"
                     style={{
                       borderRadius: "50%",
@@ -222,18 +482,6 @@ export default function ProfileDetailForm() {
                     <AccountCircleIcon />
                   </Avatar>
                 )}
-              </IconButton>
-              <IconButton
-                style={{ position: "absolute", bottom: 0, right: 0 }}
-                onClick={() => {
-                  const fileInput =
-                    document.getElementById("profile-pic-upload");
-                  if (fileInput) {
-                    fileInput.click();
-                  }
-                }}
-              >
-                <CameraAltIcon />
               </IconButton>
             </Box>
           </label>
@@ -269,13 +517,9 @@ export default function ProfileDetailForm() {
           View Profile
         </Button>
       </Box>
+      {pageLoader && <PageLoader />}
       <form onSubmit={handleBeforeSubmit}>
-        <Grid
-          container
-          spacing={3}
-          alignItems="center"
-          className="formDataInfo"
-        >
+        <Grid container spacing={5} alignItems="start" className="formDataInfo">
           <Grid item xs={12} md={6}>
             {STEP1_QUESTIONS.map((ques, index) => (
               <div key={ques.id} className="queRow">
@@ -284,7 +528,7 @@ export default function ProfileDetailForm() {
                 </Typography>
                 {ques.type === "radio" && (
                   <Controller
-                    name={ques.id}
+                    name={`step1_${ques.id}`}
                     control={control}
                     defaultValue=""
                     rules={{ required: t("answer_required_msg") }}
@@ -298,7 +542,7 @@ export default function ProfileDetailForm() {
                 )}
                 {ques.type === "text" && (
                   <Controller
-                    name={ques.id}
+                    name={`step1_${ques.id}`}
                     control={control}
                     defaultValue=""
                     rules={{ required: t("answer_required_msg") }}
@@ -315,7 +559,7 @@ export default function ProfileDetailForm() {
                     )}
                   />
                 )}
-                {ques.subQuestion && watch(ques.id) === "Yes" && (
+                {ques.subQuestion && watch(`step1_${ques.id}`) === "Yes" && (
                   <div>
                     <Typography variant="body1">
                       {t(ques.subQuestion)}*
@@ -324,7 +568,7 @@ export default function ProfileDetailForm() {
                       <>
                         <CountryDropdown
                           control={control}
-                          name={`sub_que_${ques.id}`}
+                          name={`step1_sub_que_${ques.id}`}
                           isRequired={true}
                           errors={errors}
                         />
@@ -332,7 +576,7 @@ export default function ProfileDetailForm() {
                     ) : (
                       <>
                         <Controller
-                          name={`sub_que_${ques.id}`}
+                          name={`step1_sub_que_${ques.id}`}
                           control={control}
                           defaultValue=""
                           rules={{ required: t("answer_required_msg") }}
@@ -362,9 +606,7 @@ export default function ProfileDetailForm() {
                 )}
               </div>
             ))}
-
             {/* ==========================step3 ===========================================*/}
-
             <>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
@@ -374,6 +616,8 @@ export default function ProfileDetailForm() {
                     name={"step_3_experience"}
                     options={EXPERIENCE_LIST}
                     label={"Experiences as Domestic Helper"}
+                    isRequired={true}
+                    errors={errors}
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -394,7 +638,7 @@ export default function ProfileDetailForm() {
                       // rules={{ required: t("location_required") }}
                       render={({ field }) => (
                         <LocationAutocomplete
-                          onSelect={handleSelectLocation}
+                          onSelect={handleStep3SelectLocation}
                           field={field}
                         />
                       )}
@@ -416,37 +660,40 @@ export default function ProfileDetailForm() {
                 placeholder={"1"}
                 label={"Number of Family Members"}
               />
-              {Array.from({ length: watch("familySize") }, (_, index) => (
-                <div key={index}>
-                  <Box className="customAgeBox">
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} md={4}>
-                        <NumberField
-                          control={control}
-                          name={`step_3_familyMembers${index}_age`}
-                          errors={errors}
-                          placeholder={"40"}
-                          label={"Age"}
-                        />
+              {Array.from(
+                { length: watch("step_3_familySize") },
+                (_, index) => (
+                  <div key={index}>
+                    <Box className="customAgeBox">
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} md={4}>
+                          <NumberField
+                            control={control}
+                            name={`step_3_familyMembers${index}_age`}
+                            errors={errors}
+                            placeholder={"40"}
+                            label={"Age"}
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={8}>
+                          <RadioGroupWithController
+                            label={t("gender")}
+                            name={`step_3_familyMembers${index}_gender`}
+                            radioOptions={["Female", "Male"]}
+                            control={control}
+                          />
+                        </Grid>
                       </Grid>
-                      <Grid item xs={12} md={8}>
-                        <RadioGroupWithController
-                          label={t("gender")}
-                          name={`step_3_familyMembers${index}_gender`}
-                          radioOptions={["Female", "Male"]}
-                          control={control}
-                        />
-                      </Grid>
-                    </Grid>
-                    <CheckBoxFieldWithController
-                      label={"Require Special Care"}
-                      name={`step_3_familyMembers${index}_requireSpecialHelp`}
-                      checkBoxesOptions={SPECIAL_HELP_REQUIREMENT}
-                      control={control}
-                    />
-                  </Box>
-                </div>
-              ))}
+                      <CheckBoxFieldWithController
+                        label={"Require Special Care"}
+                        name={`step_3_familyMembers${index}_requireSpecialHelp`}
+                        checkBoxesOptions={SPECIAL_HELP_REQUIREMENT}
+                        control={control}
+                      />
+                    </Box>
+                  </div>
+                )
+              )}
               <NumberField
                 control={control}
                 name={"step_3_houseArea"}
@@ -466,9 +713,9 @@ export default function ProfileDetailForm() {
                 <Grid item xs={12} md={6}>
                   <DatePickerWIthController
                     name={"step_3_releasedDate"}
-                    maxDate={
-                      watch("startedDate")
-                        ? moment(watch("startedDate")).toISOString()
+                    minDate={
+                      watch("step_3_startedDate")
+                        ? moment(watch("step_3_startedDate")).toISOString()
                         : moment().toISOString()
                     }
                     label={"Date released"}
@@ -534,20 +781,19 @@ export default function ProfileDetailForm() {
                 radioOptions={["Upload Letter", "Provide It Later"]}
                 control={control}
               />
-              {watch("refrence_letter") === "Upload Letter" && (
+              {watch("step_3_refrence_letter") === "Upload Letter" && (
                 <FormControl fullWidth className="UploadFileCustom queRow">
                   <div className="inputFile">
                     <FileUploaderField
                       name={"step_3_refrence_letter_file"}
                       control={control}
-                      setFile={handleFileUpload}
+                      setFile={handleReferenceFileUpload}
                     />
                   </div>
                 </FormControl>
               )}
               <RadioGroupWithController
                 label={"Reference Check Availability"}
-                isRequired={true}
                 name={"step_3_referenceAvailability"}
                 radioOptions={["Yes", "No"]}
                 control={control}
@@ -606,14 +852,105 @@ export default function ProfileDetailForm() {
                 control={control}
               />
             </>
-
             {/* ==========================step3 ===========================================*/}
+            {/* ==========================step 4 start ===========================================*/}
+            <RadioGroupWithController
+              label={"Choose the type of employment"}
+              name={"step4_jobType"}
+              radioOptions={["Full Time", "Part Time"]}
+              control={control}
+              isRequired={true}
+              errors={errors}
+            />
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <NumberField
+                  control={control}
+                  name={"step4_salary"}
+                  errors={errors}
+                  placeholder={"Eg. 10000"}
+                  label={"Salary"}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <SelectWithController
+                  control={control}
+                  name={"step4_currency"}
+                  options={CURRENCY_LIST}
+                  label={"Currency"}
+                />
+              </Grid>
+            </Grid>
+            <SelectWithController
+              control={control}
+              name={"step4_preferredDayOff"}
+              options={PREFERRED_DAY_OFF}
+              errors={errors}
+              isRequired={true}
+              label={"Preferred Day Off"}
+            />
+
+            <SelectWithController
+              control={control}
+              name={"step4_sleepingArrangement"}
+              options={SLEEPING_ARRANGEMENT}
+              errors={errors}
+              isRequired={true}
+              label={"Sleeping Arrangement"}
+            />
+            <SelectWithController
+              control={control}
+              name={"step4_shareWork"}
+              options={SLEEPING_ARRANGEMENT}
+              errors={errors}
+              isRequired={true}
+              label={"Share work with co-worker"}
+            />
+            <SelectWithController
+              control={control}
+              name={"step4_livingArrangement"}
+              options={LIVING_ARRANGEMENT}
+              errors={errors}
+              isRequired={true}
+              label={"Living arrangement"}
+            />
+            <CountryDropdown
+              control={control}
+              name={"step4_preferredLocation"}
+              label={"Preferred working Location"}
+              isRequired={true}
+              errors={errors}
+            />
+            {/* ==========================step 4 end ===========================================*/}
+
+            {/* ==========================step 5 start ===========================================*/}
+            {STEP5_QUESTION.map((question, index) => (
+              <FormControl
+                key={index}
+                component="fieldset"
+                sx={{ mb: 2 }}
+                className="queRow"
+              >
+                <FormLabel className="formLabel">
+                  {t(question.question)}
+                </FormLabel>
+                <RadioButtonsWithController
+                  control={control}
+                  name={`step5_${question.answer_type}`}
+                  options={["Yes", "No"]}
+                  isRequired={true}
+                  errors={errors}
+                />
+              </FormControl>
+            ))}
+
+            {/* ==========================step 5 end ===========================================*/}
           </Grid>
           <Grid item xs={12} md={6}>
             <TextFieldWithController
               isRequired={true}
               label={"Name"}
-              name={"step2_fullName"}
+              name={"step2_about_fullName"}
               errors={errors}
               control={control}
               placeholder={t("enter_your_name")}
@@ -621,7 +958,7 @@ export default function ProfileDetailForm() {
             <RadioGroupWithController
               label={t("gender")}
               isRequired={true}
-              name={"step2_gender"}
+              name={"step2_about_gender"}
               radioOptions={["Female", "Male"]}
               control={control}
               errors={errors}
@@ -629,7 +966,7 @@ export default function ProfileDetailForm() {
             <TextFieldWithController
               isRequired={true}
               label={t("pasport_or_HKID")}
-              name={"step2_passportOrHKID"}
+              name={"step2_about_passportOrHKID"}
               errors={errors}
               control={control}
               placeholder={"e.g. X123456(A)"}
@@ -639,7 +976,7 @@ export default function ProfileDetailForm() {
                 {/* Marital Status */}
                 <SelectWithController
                   control={control}
-                  name={"step2_maritalStatus"}
+                  name={"step2_about_maritalStatus"}
                   options={MARITAL_STATUS}
                   label={"Marital Status"}
                   isRequired={true}
@@ -650,7 +987,7 @@ export default function ProfileDetailForm() {
                 {/* Religion */}
                 <SelectWithController
                   control={control}
-                  name={"step2_religion"}
+                  name={"step2_about_religion"}
                   options={RELIGION}
                   label={"Religion"}
                   isRequired={true}
@@ -692,7 +1029,7 @@ export default function ProfileDetailForm() {
               />
             </FormGroup>
             <DatePickerWIthController
-              name={"step2_dob"}
+              name={"step2_about_dob"}
               maxDate={new Date().toISOString()}
               label={"Date of Birth"}
               isRequired={true}
@@ -751,7 +1088,7 @@ export default function ProfileDetailForm() {
                 <FormControl component="fieldset">
                   <FormGroup className="skillsCol">
                     <Controller
-                      name="skills"
+                      name="step2_about_skills"
                       control={control}
                       defaultValue={[]}
                       rules={{ required: "Select at least one skill" }}
@@ -783,7 +1120,7 @@ export default function ProfileDetailForm() {
             </FormControl>
             <NumberField
               control={control}
-              name={"step_2_family_age"}
+              name={"step2_family_age"}
               errors={errors}
               placeholder={"e.g 25"}
               label={"Spouse Age(If Any)"}
@@ -867,7 +1204,7 @@ export default function ProfileDetailForm() {
               <>
                 <SelectWithController
                   control={control}
-                  name={"otherLanguage"}
+                  name={"step2_education_otherLanguage"}
                   options={SPOKEN_LANGUAGE}
                   label={"Other Spoken Language"}
                   isRequired={true}
@@ -875,7 +1212,7 @@ export default function ProfileDetailForm() {
                 />
                 <SelectWithController
                   control={control}
-                  name={"otherLanguageLevel"}
+                  name={"step2_education_otherLanguageLevel"}
                   options={LANGUAGE_LEVEL}
                   label={"Level"}
                   isRequired={true}
@@ -923,6 +1260,60 @@ export default function ProfileDetailForm() {
               </Grid>
             ))}
           </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <FormLabel className="formLabel">
+                {t("upload_photo_label")}
+              </FormLabel>
+              <div className="profile-section">
+                <div className="avatar-section">
+                  <Avatar sx={{ width: 160, height: 160 }}>
+                    <img
+                      id="avatar"
+                      src={avatar ? avatar : `/default.png`}
+                      alt="Avatar"
+                    />
+                  </Avatar>
+                </div>
+                <div className="file-input" onClick={handleBoxClick}>
+                  <label htmlFor="avatar-upload" className="file-upload-label">
+                    <ImageLogoIcon />
+                    <span>Please upload image here 10 MB maximum</span>
+                  </label>
+                  <input
+                    ref={inputRef}
+                    type="file"
+                    id="avatar-upload"
+                    accept="image/*"
+                    onChange={handleProfilePhotoChange}
+                  />
+                </div>
+                <div className="profile-info"></div>
+              </div>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl fullWidth className="queRow">
+              <FormLabel className="formLabel">
+                {t("upload_self_intro_video")}
+              </FormLabel>
+              <TextField
+                {...register("introVideoLink", {
+                  required: t("video_link_required"),
+                  pattern: {
+                    value: YOUTUBE_LINK_REGEX,
+                    message: t("invalid_youtube_link"),
+                  },
+                })}
+                className="formInputFiled"
+                placeholder="https://youtu.be/introvideohere"
+                variant="outlined"
+              />
+              {errors.introVideoLink && (
+                <ErrorMessage msg={errors.introVideoLink?.message} />
+              )}
+            </FormControl>
+          </Grid>
           <Grid container justifyContent="center" spacing={2}>
             <Grid item>
               <Button
@@ -937,6 +1328,12 @@ export default function ProfileDetailForm() {
           </Grid>
         </Grid>
       </form>
+      {showThankyouModal && (
+        <ThankyouModal
+          showModal={showThankyouModal}
+          modalDetail={thankoyuPageDetails}
+        />
+      )}
     </Box>
   );
 }

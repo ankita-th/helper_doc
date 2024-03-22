@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Button,
@@ -41,7 +41,11 @@ import RadioGroupWithController from "../Common/FormFields/RadioGroupWithControl
 import CheckBoxFieldWithController from "../Common/FormFields/CheckBoxFieldWithController";
 import DatePickerWIthController from "../Common/FormFields/DatePickerWIthController";
 
-const HelperRegistrationStep3 = ({ saveStepDetails, setPageLoader }) => {
+const HelperRegistrationStep3 = ({
+  saveStepDetails,
+  setPageLoader,
+  stepDetails,
+}) => {
   const [stepperActiveStep, setStepperActiveStep] = useState(0);
   const [currentLocation, setCurrentLocation] = useState("");
 
@@ -56,6 +60,51 @@ const HelperRegistrationStep3 = ({ saveStepDetails, setPageLoader }) => {
     setValue,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    console.log(stepDetails, "34//stepDetails");
+    if (stepDetails && stepDetails.workExperience?.length > 0) {
+      for (let key in stepDetails?.workExperience[0]) {
+        if (key !== "userId") {
+          if (
+            key === "familyMembers" &&
+            stepDetails.workExperience[0][key].length > 0
+          ) {
+            stepDetails.workExperience[0][key].forEach((element, i) => {
+              setValue(`familyMembers${i}_age`, element.age);
+              setValue(`familyMembers${i}_gender`, element.gender);
+              setValue(
+                `familyMembers${i}_requireSpecialHelp`,
+                element.specialNeeds
+              );
+            });
+          }
+          if (key === "compensation") {
+            setValue("currency", stepDetails.workExperience[0][key].currency);
+            setValue("salary", stepDetails.workExperience[0][key].salary);
+          }
+          if (key === "period") {
+            setValue("startedDate", stepDetails.workExperience[0][key].start);
+            setValue("releasedDate", stepDetails.workExperience[0][key].end);
+          }
+          if (key === "references") {
+            setValue(
+              "referenceAvailability",
+              stepDetails.workExperience[0][key].available
+            );
+            setValue(
+              "refrence_letter",
+              stepDetails.workExperience[0][key].letter
+                ? "Upload Letter"
+                : "Provide It Later"
+            );
+          } else {
+            setValue(key, stepDetails.workExperience[0][key]);
+          }
+        }
+      }
+    }
+  }, [stepDetails]);
 
   const handleSelectLocation = (location) => {
     setCurrentLocation(location);
@@ -302,7 +351,6 @@ const HelperRegistrationStep3 = ({ saveStepDetails, setPageLoader }) => {
           )}
           <RadioGroupWithController
             label={"Reference Check Availability"}
-            isRequired={true}
             name={"referenceAvailability"}
             radioOptions={["Yes", "No"]}
             control={control}

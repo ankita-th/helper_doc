@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Button,
@@ -48,8 +48,13 @@ import TextFieldWithController from "../Common/FormFields/TextFieldWithControlle
 import SelectWithController from "../Common/FormFields/SelectWithController";
 import DatePickerWIthController from "../Common/FormFields/DatePickerWIthController";
 import NumberField from "../Common/FormFields/NumberField";
+import { height } from "@mui/system";
 
-const HelperRegistrationStep2 = ({ saveStepDetails, setPageLoader }) => {
+const HelperRegistrationStep2 = ({
+  saveStepDetails,
+  setPageLoader,
+  stepDetails,
+}) => {
   const [showOtherLanguage, setOtherLanguage] = useState(false);
 
   const { t } = useTranslation();
@@ -75,6 +80,69 @@ const HelperRegistrationStep2 = ({ saveStepDetails, setPageLoader }) => {
       docFile: "",
     },
   });
+
+  useEffect(() => {
+    if (
+      stepDetails?.aboutYou &&
+      Object.keys(stepDetails?.aboutYou).length > 0
+    ) {
+      for (let key in stepDetails?.aboutYou) {
+        if (key === "physicalAttributes") {
+          setValue("height", stepDetails.aboutYou[key].height);
+          setValue("weight", stepDetails.aboutYou[key].weight);
+        } else if (key === "whatsapp") {
+          setWhatsappNumber({
+            ...whatsappNumber,
+            number: stepDetails.aboutYou[key].number,
+          });
+          setValue(
+            "isWhatsappNumberVisible",
+            stepDetails.aboutYou[key].isVisible
+          );
+        } else {
+          setValue(key, stepDetails.aboutYou[key]);
+        }
+      }
+    }
+    if (
+      stepDetails?.aboutYourFamily &&
+      Object.keys(stepDetails?.aboutYourFamily).length > 0
+    ) {
+      for (let key in stepDetails?.aboutYourFamily) {
+        setValue(key, stepDetails.aboutYourFamily[key]);
+      }
+    }
+    if (
+      stepDetails?.education &&
+      Object.keys(stepDetails?.education).length > 0
+    ) {
+      for (let key in stepDetails?.education) {
+        if (key === "languages") {
+          setValue("languages", stepDetails.education[key].native);
+        } else if (key === "otherLanguages") {
+          if (Object.keys(stepDetails.education[key]).length > 0) {
+            setOtherLanguage(true);
+            setValue(
+              "otherLanguage",
+              stepDetails.education[key].language
+            );
+            setValue(
+              "otherLanguageLevel",
+              stepDetails.education[key].level
+            );
+          }
+        } else {
+          setValue(key, stepDetails.education[key]);
+        }
+      }
+    }
+    // if (stepDetails && stepDetails.answers) {
+    //   stepDetails.answers.forEach((ans) => {
+    //     setValue(ans.questionId, ans.answer);
+    //     setValue(`sub_que_${ans.questionId}`, ans.subAnswer);
+    //   });
+    // }
+  }, [stepDetails]);
 
   const handleSelectLocation = (location) => {
     setCurrentLocation(location);
@@ -180,7 +248,7 @@ const HelperRegistrationStep2 = ({ saveStepDetails, setPageLoader }) => {
             native: data.languages,
           },
           otherLanguages: {
-            language: data.otherLanguages,
+            language: data.otherLanguage,
             level: data.otherLanguageLevel,
           },
           licensesAndCertificates: filePayload,

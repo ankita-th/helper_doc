@@ -45,6 +45,7 @@ export default function CheckBoxFieldWithController({
                         control={
                           <Checkbox
                             {...field}
+                            checked={field.value.includes(opt.type)}
                             onChange={(e) => {
                               const isChecked = e.target.checked;
                               field.onChange(

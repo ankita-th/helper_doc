@@ -91,7 +91,7 @@ const HelperRegistrationStep6 = ({ saveStepDetails, setPageLoader }) => {
         profilePicURL: imageUrl,
         introVideoLink: data.introVideoLink,
       };
-      saveStepDetails(payload, "complete-profile");
+      saveStepDetails(payload, "thankyou");
       //   setSubmitted(true);
       //   //   submitFormData();
       //   // navigate("/thankyou", { state: location.state });
