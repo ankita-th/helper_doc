@@ -3543,3 +3543,68 @@ p.description {
     align-items: center;
     flex-direction: column;
 }
+
+.loaderCustom {
+    height: 15px;
+    width: 105px;
+    display: flex;
+    position: relative;
+}
+.loaderCustom .circle {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background-color: #fff;
+      animation: move 500ms linear 0ms infinite;
+      margin-right: 30px;
+}
+  
+.loaderCustom .circle:first-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: grow 500ms linear 0ms infinite;
+}
+  
+.loaderCustom .circle:last-child {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: 0;
+    animation: grow 500ms linear 0s infinite reverse;
+}
+.LoaderMain {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(9px);
+    z-index: 9;
+    background: #0000006b;
+}
+  
+  @keyframes grow {
+    from {
+      transform: scale(0, 0);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes move {
+    from {
+      transform: translateX(0px);
+    }
+    to {
+      transform: translateX(45px);
+    }
+  }
+  

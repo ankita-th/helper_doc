@@ -1,0 +1,32 @@
+.profilePopup .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded {
+    background: transparent;
+    box-shadow: none;
+}
+
+.profilePopup .popupInner {
+    border-radius: 20px;
+    padding: 70px !important;
+    width: 510px;
+}
+
+.profilePopup .popupInner img {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.profilePopup .popupInner p {
+    font-size: 14px !important;
+    color: #000000;
+    margin: 0;
+}
+
+.profilePopup .popupInner h4 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.profilePopup .popupInner a.green-btn.small {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 18px !important;
+}

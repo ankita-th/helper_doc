@@ -4,6 +4,7 @@ import ProfileCompletionProgressBar from "../Profile/ProfileCompletionProgressBa
 import { getProfilePercentage } from "../../../Services/JobsServices/JobServices";
 import { useDispatch } from "react-redux";
 import { setProfilePercentage } from "../../../Redux/CommonSlice";
+import './HeaderStyle.css'
 
 export default function HelperDashboardSubHeader({
   title,
@@ -28,15 +29,19 @@ export default function HelperDashboardSubHeader({
   }, [userId]);
   return (
     <>
-      <Typography variant="h2" className="commonTitle">
-        {title}
-      </Typography>
-      <Typography variant="body1" className="commonDesc">
-        {description}
-      </Typography>
-      {progessBar && (
-        <ProfileCompletionProgressBar profilePercentage={percentage} />
-      )}
+    <div className="d-flex align-items-top justify-content-between">
+      <div className="d-flex flex-column">
+        <Typography variant="h2" className="commonTitle">
+          {title}
+        </Typography>
+        <Typography variant="body1" className="commonDesc">
+          {description}
+        </Typography>
+      </div>
+        {progessBar && (
+          <ProfileCompletionProgressBar profilePercentage={percentage} />
+        )}
+    </div>
        {
         isChat && (  <FormControl
           variant="outlined"
