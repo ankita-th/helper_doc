@@ -75,7 +75,12 @@ const ThankyouModal = ({
             >
               Back to Dashboard
             </Button>
-            <Button className="arrowButton" variant="contained" color="primary">
+            <Button
+              className="arrowButton"
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/helper/profile-preview")}
+            >
               Preview Profile
             </Button>
           </Box>

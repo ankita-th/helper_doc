@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Paper,
@@ -28,19 +28,28 @@ import {
 import CountryDropdown from "../Common/FormFields/CountryDropdown";
 import RadioGroupWithController from "../Common/FormFields/RadioGroupWithController";
 
-const HelperRegistrationStep4 = ({ saveStepDetails }) => {
+const HelperRegistrationStep4 = ({ saveStepDetails, stepDetails }) => {
   const [stepperActiveStep, setStepperActiveStep] = useState(0);
   const { t } = useTranslation();
 
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    if (stepDetails.jobPreferences && Object.keys(stepDetails.jobPreferences).length > 0) {
+      for (let key in stepDetails.jobPreferences) {
+        setValue(key, stepDetails.jobPreferences[key]);
+      }
+    }
+  }, [stepDetails]);
+
   const handleNext = (data) => {
     if (stepperActiveStep === steps.length - 1) {
-      saveStepDetails({jobPreferences: data}, "q_&_a");
+      saveStepDetails({ jobPreferences: data }, "q_&_a");
     } else {
       setStepperActiveStep((prevActiveStep) => prevActiveStep + 1);
     }

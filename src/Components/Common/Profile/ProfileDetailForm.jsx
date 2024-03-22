@@ -112,19 +112,189 @@ export default function ProfileDetailForm() {
     setPageLoader(true);
     getProfileData(userId)
       .then((res) => {
+        console.log(res.data, "profile data");
         setPageLoader(false);
-        // if(Object.keys(res.data.registrationStep1Data) > 0) {
-        //   for(let key in res.data.registrationStep1Data) {
-
-        //   }
-        // }
+        const response = res?.data;
+        if (
+          response?.registrationStep1Data?.answers &&
+          response.registrationStep1Data?.answers.length > 0
+        ) {
+          response.registrationStep1Data.answers.forEach((ques) => {
+            setValue(`step1_${ques.questionId}`, ques.answer);
+            setValue(`step1_sub_que_${ques.questionId}`, ques.subAnswer);
+          });
+        }
+        if (
+          response?.registrationStep2Data &&
+          Object.keys(response.registrationStep2Data).length > 0
+        ) {
+          for (let key in response?.registrationStep2Data) {
+            if (key === "aboutYou") {
+              for (let subKey in response?.registrationStep2Data.aboutYou) {
+                if (subKey === "physicalAttributes") {
+                  setValue(
+                    "step2_height",
+                    response?.registrationStep2Data.aboutYou[subKey].height
+                  );
+                  setValue(
+                    "step2_weight",
+                    response?.registrationStep2Data.aboutYou[subKey].weight
+                  );
+                } else if (subKey === "whatsapp") {
+                  setWhatsappNumber({
+                    ...whatsappNumber,
+                    number:
+                      response?.registrationStep2Data.aboutYou[subKey].number,
+                  });
+                  setValue(
+                    "isWhatsappNumberVisible",
+                    response?.registrationStep2Data.aboutYou[subKey].isVisible
+                  );
+                } else {
+                  setValue(
+                    `step2_about_${subKey}`,
+                    response?.registrationStep2Data.aboutYou[subKey]
+                  );
+                }
+              }
+            }
+            if (key === "aboutYourFamily") {
+              for (let subKey in response?.registrationStep2Data
+                ?.aboutYourFamily) {
+                if (subKey === "daughtersAge" || subKey === "sonsAge") {
+                  setValue(
+                    `step2_family_${subKey}`,
+                    response?.registrationStep2Data?.aboutYourFamily[
+                      subKey
+                    ].join(",")
+                  );
+                } else {
+                  setValue(
+                    `step2_family_${subKey}`,
+                    response?.registrationStep2Data?.aboutYourFamily[subKey]
+                  );
+                }
+              }
+            }
+            if (key === "education") {
+              for (let subKey in response?.registrationStep2Data?.education) {
+                if (subKey === "languages") {
+                  setValue(
+                    `step2_education_${subKey}`,
+                    response?.registrationStep2Data?.education[subKey].native
+                  );
+                } else if (subKey === "otherLanguages") {
+                  if (
+                    Object.keys(
+                      response?.registrationStep2Data?.education[subKey]
+                    ).length > 0
+                  ) {
+                    setOtherLanguage(true);
+                    setValue(
+                      `step2_education_otherLanguage`,
+                      response?.registrationStep2Data?.education[subKey]
+                        .language
+                    );
+                    setValue(
+                      "step2_education_otherLanguageLevel",
+                      response?.registrationStep2Data?.education[subKey].level
+                    );
+                  }
+                } else {
+                  setValue(
+                    `step2_education_${subKey}`,
+                    response?.registrationStep2Data?.education[subKey]
+                  );
+                }
+              }
+            }
+          }
+        }
+        if (
+          response?.registrationStep3Data?.workExperience &&
+          response?.registrationStep3Data?.workExperience.length > 0
+        ) {
+          for (let key in response?.registrationStep3Data?.workExperience[0]) {
+            if (
+              key === "familyMembers" &&
+              response.registrationStep3Data.workExperience[0][key].length > 0
+            ) {
+              response.registrationStep3Data.workExperience[0][key].forEach(
+                (element, i) => {
+                  setValue(`step_3_familyMembers${i}_age`, element.age);
+                  setValue(`step_3_familyMembers${i}_gender`, element.gender);
+                  setValue(
+                    `step_3_familyMembers${i}_requireSpecialHelp`,
+                    element.specialNeeds
+                  );
+                }
+              );
+            } else if (key === "compensation") {
+              setValue(
+                "step_3_currency",
+                response.registrationStep3Data.workExperience[0][key].currency
+              );
+              setValue(
+                "step_3_salary",
+                response.registrationStep3Data.workExperience[0][key].salary
+              );
+            } else if (key === "period") {
+              setValue(
+                "step_3_startedDate",
+                response.registrationStep3Data.workExperience[0][key].start
+              );
+              setValue(
+                "step_3_releasedDate",
+                response.registrationStep3Data.workExperience[0][key].end
+              );
+            } else if (key === "references") {
+              setValue(
+                "step_3_referenceAvailability",
+                response.registrationStep3Data.workExperience[0][key].available
+              );
+              setValue(
+                "step_3_refrence_letter",
+                response.registrationStep3Data.workExperience[0][key].letter
+                  ? "Upload Letter"
+                  : "Provide It Later"
+              );
+            } else {
+              setValue(
+                `step_3_${key}`,
+                response.registrationStep3Data.workExperience[0][key]
+              );
+            }
+          }
+        }
+        if (
+          response?.registrationStep4Data?.jobPreferences &&
+          Object.keys(response.registrationStep4Data.jobPreferences).length > 0
+        ) {
+          for (let key in response.registrationStep4Data.jobPreferences) {
+            setValue(
+              `step4_${key}`,
+              response.registrationStep4Data.jobPreferences[key]
+            );
+          }
+        }
+        if (
+          response?.registrationStep5Data?.qna &&
+          Object.keys(response?.registrationStep5Data?.qna).length > 0
+        ) {
+          for (let key in response?.registrationStep5Data?.qna) {
+            setValue(
+              `step5_${key}`,
+              response?.registrationStep5Data?.qna[key] ? "Yes" : "No"
+            );
+          }
+        }
         setValue(
           "introVideoLink",
-          res.data.registrationStep6Data.introVideoLink
+          response.registrationStep6Data.introVideoLink
         );
-        setAvatar(res.data.registrationStep6Data.profilePicURL);
-        setProfilePhoto(res.data.registrationStep6Data.profilePicURL);
-        console.log(res.data);
+        setAvatar(response.registrationStep6Data.profilePicURL);
+        setProfilePhoto(response.registrationStep6Data.profilePicURL);
+        console.log(response);
       })
       .catch((err) => {
         setPageLoader(false);
@@ -201,8 +371,8 @@ export default function ProfileDetailForm() {
           for (let i = 0; i < data.step_3_familySize; i++) {
             const familyDetail = {
               age: data[`step_3_familyMembers${i}_age`],
-              gender: data[`familyMembers${i}_gender`],
-              specialNeeds: data[`familyMembers${i}_requireSpecialHelp`],
+              gender: data[`step_3_familyMembers${i}_gender`],
+              specialNeeds: data[`step_3_familyMembers${i}_requireSpecialHelp`],
             };
             familMemberDetail.push(familyDetail);
           }
@@ -267,12 +437,16 @@ export default function ProfileDetailForm() {
       }
     }
     if (profilePhoto) {
-      const fileUpload = await handleFileUploadToS3Bucket(profilePhoto);
-      if (!fileUpload.error) {
-        step6Data["profilePicURL"] = fileUpload.uploadedUrl;
+      if (profilePhoto.name) {
+        const fileUpload = await handleFileUploadToS3Bucket(profilePhoto);
+        if (!fileUpload.error) {
+          step6Data["profilePicURL"] = fileUpload.uploadedUrl;
+        } else {
+          setPageLoader(false);
+          return;
+        }
       } else {
-        setPageLoader(false);
-        return;
+        step6Data["profilePicURL"] = profilePhoto;
       }
     }
     payload["step1Data"] = {
@@ -838,7 +1012,7 @@ export default function ProfileDetailForm() {
                 <TextField
                   className="formInputFiled"
                   name="step_3_experinceRemark"
-                  {...register("experinceRemark")}
+                  {...register("step_3_experinceRemark")}
                   id="outlined-multiline-static"
                   multiline
                   rows={4}
@@ -866,7 +1040,7 @@ export default function ProfileDetailForm() {
               <Grid item xs={12} md={6}>
                 <NumberField
                   control={control}
-                  name={"step4_salary"}
+                  name={"step4_expectedSalary"}
                   errors={errors}
                   placeholder={"Eg. 10000"}
                   label={"Salary"}
