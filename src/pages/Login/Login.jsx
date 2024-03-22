@@ -209,9 +209,10 @@ const Login = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6} className="forgotPassword">
-                    <MuiLink variant="body2" component={Link} to="/">
+                    {/* <MuiLink variant="body2" component={Link} to="/">
                       {t("forgot_password")}
-                    </MuiLink>
+                    </MuiLink> */}
+                    <Link to="/forgot-password"> {t("forgot_password")}</Link>
                   </Grid>
                 </Grid>
 

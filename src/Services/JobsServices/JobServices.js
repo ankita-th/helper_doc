@@ -27,7 +27,18 @@ export const getProfilePercentage = (userId) =>
   APIAxios.get(GET_PROFILE_PERCENTAGE(userId));
 
 // Get jobs by status
-export const getJobsByStatus = (userId, param) => APIAxios.get(`${GET_JOBS_BY_STATUS(userId)}${param}`);
+export const getJobsByStatus = (userId, param) =>
+  APIAxios.get(`${GET_JOBS_BY_STATUS(userId)}${param}`);
 //get all messages
-export const getAllMessages = (userId,param) => APIAxios.get(`/messages/${userId}${param}`);
+export const getAllMessages = (userId, param) =>
+  APIAxios.get(`/messages/${userId}${param}`);
 // export const getAllMessages = (userId) => APIAxios.get(`${GET_ALL_MESSAGES(userId)}`);
+
+//delete account
+export const deleteAccount = (userId) =>
+  APIAxios.put(`/users/delete-account/${userId}`);
+//update notiications
+export const updateNotifications = (userId, payload) =>
+  APIAxios.put(`/users/update-notifications/${userId}`, payload);
+export const updatePassword = (userId, payload) =>
+  APIAxios.put(`/users/update-password/${userId}`, payload);

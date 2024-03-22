@@ -10,16 +10,12 @@ import {
   Container,
 } from "@mui/material";
 
-const SuccessModal = ({
-  open,
-  handleClose,
-  handleContinue,
-  text = "Your changes have been saved successfully!"
-}) => {
+const DeleteModal = ({ showModal, toggleModal, handleDelete }) => {
   return (
     <Container maxWidth="xl">
-      <Dialog open={open} onClose={handleClose} className="customModal">
-        <Box className="innerModal"
+      <Dialog open={showModal} onClose={toggleModal} className="customModal">
+        <Box
+          className="innerModal"
           sx={{
             textAlign: "center",
             mt: 8,
@@ -27,7 +23,7 @@ const SuccessModal = ({
             maxWidth: 600,
             padding: 3,
             borderRadius: 8,
-            boxShadow: 2,
+            boxShadow: 2,   
             backgroundColor: "#fff",
             pb: 8,
             display: "flex",
@@ -35,30 +31,33 @@ const SuccessModal = ({
             alignItems: "center",
           }}
         >
-          <Box sx={{ mb: 3 }}>
+          {/* <Box sx={{ mb: 3 }}>
             <img
               src="/success.svg"
               alt="Success Image"
               style={{ maxWidth: "100%", marginBottom: "20px" }}
             />
-          </Box>
-          <Typography variant="h4">Success!</Typography>
+          </Box> */}
           <Typography variant="body1" sx={{ mt: 2, mb: 2 }}>
-            {text}
+            Are you sure you want to delete your account!
           </Typography>
-          <DialogActions style={{ justifyContent: "center" }}>
-            <Button
-              onClick={handleContinue}
-              color="primary"
-              variant="contained"
-            >
-              Continue
-            </Button>
-          </DialogActions>
+          <Box style={{ display: "flex" }}>
+              <Button
+                onClick={handleDelete}
+                variant="contained" 
+                className="errorButton"
+                color="error"
+              >
+                Confirm
+              </Button>
+              <Button onClick={toggleModal} color="primary" variant="contained">
+                Cancel
+              </Button>
+          </Box>
         </Box>
       </Dialog>
     </Container>
   );
 };
 
-export default SuccessModal;
+export default DeleteModal;

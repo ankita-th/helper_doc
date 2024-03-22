@@ -1,6 +1,9 @@
 export const SIGNUP = "users/signup";
 export const LOGIN = "users/login";
 export const SOCIAL_LOGIN = "users/social-login";
+export const FORGOT_PASSWORD = "/users/forgot-password";
+export const VERIFY_OTP = "/users/verify-otp";
+export const RESET_OTP = "/users/reset-password";
 
 // Stepper API URLS
 export const GET_ADD_STEP = "registration-step";

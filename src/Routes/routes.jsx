@@ -2,6 +2,7 @@ import { lazy } from "react";
 import ThanksForRegister from "../pages/HelperSteps/ThanksForRegister";
 import ProfilePreview from "../pages/HelperSteps/ProfilePreview";
 import Setting from "../Components/Common/Setting/Settings";
+const  ForgotPassword = lazy(()=>import( "../pages/ForgotPassword/ForgotPassword"));
 const Chat  = lazy(()=>import("../pages/HelperDashboard/Chat"));
 const LandingPage = lazy(() => import("../pages/LandingPage/LandingPage"));
 const Login = lazy(() => import("../pages/Login/Login"));
@@ -42,6 +43,11 @@ export const route = [
   {
     path: "/register",
     element: <SelectRole />,
+    public: true,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
     public: true,
   },
   {
