@@ -117,9 +117,6 @@ const HelperProfileDetailsSteps = () => {
         setPageLoader(false);
       })
       .catch((error) => {
-        navigate(`/register/helper/profile-steps/${nextStep}`, {
-          state: { prevRoute: "/register/helper" },
-        });
         if (error?.response?.data?.message) {
           toastMessage(error.response.data.message);
         } else {

@@ -55,7 +55,11 @@ const HeaderBar = styled("div")({
   marginBottom: "20px", // Margin bottom
 });
 
-const HelperRegistrationStep6 = ({ saveStepDetails, setPageLoader }) => {
+const HelperRegistrationStep6 = ({
+  saveStepDetails,
+  setPageLoader,
+  stepDetails,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -74,8 +78,17 @@ const HelperRegistrationStep6 = ({ saveStepDetails, setPageLoader }) => {
     handleSubmit,
     control,
     register,
+    setValue,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    if (stepDetails) {
+      setImageUrl(stepDetails.profilePicURL)
+      setImagePreview(stepDetails.profilePicURL);
+      setValue("introVideoLink", stepDetails.introVideoLink);
+    }
+  }, [stepDetails]);
 
   const handleNext = async (data) => {
     console.log(data);
@@ -135,11 +148,6 @@ const HelperRegistrationStep6 = ({ saveStepDetails, setPageLoader }) => {
   const handleBack = () => {
     setStepperActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  useEffect(() => {
-    const formDataFromStep5 = location.state.formData;
-    console.log("Data from Step 5:", formDataFromStep5);
-  }, [location.state.formData]);
 
   const handleProfilePhotoChange = (name, file) => {
     if (!file.name.match(/\.(jpg|jpeg|png)$/)) {

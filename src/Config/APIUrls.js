@@ -10,6 +10,7 @@ export const GET_ADD_STEP = "registration-step";
 
 // Get Profile Data
 export const GET_PROFILE_DETAILS = (userID) => `/complete-profile/${userID}`
+export const GET_PUBLIC_PROFILE = (userID) => `/public-profiles/${userID}`
 
 // Get All Job List
 export const GET_ALL_JOBS = "job-postings";

@@ -34,11 +34,21 @@ export default function ThanksForRegister() {
             <p>
               Or Send us code at <span>+91 789-456-1230</span>
             </p>
+            <div className="d-flex successBtns align-items-center justify-content-center">
+              <a href="" className="green-btn small me-2">
+                {" "}
+                Back to Dashboard
+              </a>
+              <a href="" className="buttonThanks">
+                {" "}
+                Preview Profile
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="thankYou">
+      {/* <section className="thankYou">
         <div className="container">
           <div className="card text-center">
             <div className="imgWrap">
@@ -62,7 +72,7 @@ export default function ThanksForRegister() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

@@ -2,9 +2,18 @@ import { Step, Stepper } from "@mui/material";
 import React from "react";
 import { HELPER_STEP_DETAILS } from "./Constant";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const HelperProfileStepSection = ({ activeStep, steps, titles, stepIcons }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate()
+  const handleClickOnTabs = (index, url) =>{
+    if(index+1 <= activeStep) {
+      navigate(`/register/helper/profile-steps/${url}`, {
+        state: { prevRoute: "/register/helper" },
+      });
+    }
+  }
   return (
     <div className="stepperNavigation">
       <Stepper activeStep={activeStep} alternativeLabel>
@@ -15,6 +24,7 @@ const HelperProfileStepSection = ({ activeStep, steps, titles, stepIcons }) => {
                 className={`${
                   index+1 <= activeStep ? "active-step" : "step-icon"
                 }`}
+                onClick={()=>handleClickOnTabs(index, step.url)}
               >
                 <img src={step.img} alt={`Step ${index + 1}`} />
               </div>

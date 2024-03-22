@@ -215,14 +215,15 @@
     "cancel": "Cancel",
     "no_notification_found": "No Notification Found",
     "step4_question_1": "Do you smoke?",
-    "step4_question_2": "Have you been vaccinated against the COVID-19 disease?",
-    "step4_question_3": "Do you have a tattoo?",
-    "step4_question_4": "Can you get along with dogs, cats, or other pets?",
-    "step4_question_5": "Are you comfortable working with co-helpers?",
-    "step4_question_6": "Are you willing to take days off that are not on Sundays sometimes?",
-    "step4_question_7": "Are you willing to accept monetary compensation to work on your holidays?",
-    "step4_question_8": "Do you accept to work in the employer's house equipped with a camera recording system (for security purposes)?",
-    "step4_question_9": "Are you willing to return home no later than the time set by your employer on your holiday?",
+    "step4_question_2": "Do you drink alcohol?",
+    "step4_question_3": "Have you been vaccinated against the COVID-19 disease?",
+    "step4_question_4": "Do you have a tattoo?",
+    "step4_question_5": "Can you get along with dogs, cats, or other pets?",
+    "step4_question_6": "Are you comfortable working with co-helpers?",
+    "step4_question_7": "Are you willing to take days off that are not on Sundays sometimes?",
+    "step4_question_8": "Are you willing to accept monetary compensation to work on your holidays?",
+    "step4_question_9": "Do you accept to work in the employer's house equipped with a camera recording system (for security purposes)?",
+    "step4_question_10": "Are you willing to return home no later than the time set by your employer on your holiday?",
     "upload_photo_label": "Upload a photo of yourself which shows your face clearly with a smile, wearing clean white shirt and with clean background. No heavy make-up, no sunglasses, no children",
     "upload_self_intro_video": "Please input your YouTube video link for your own self-intro video. If you are uncertain the step, please contact our support for your self-intro video link",
     "your_photo": "Your Photo",
@@ -230,6 +231,7 @@
     "or_upload_letter": "or upload photo later",
     "or_upload__video_letter": "or upload video link later",
     "img_upload_error_msg": "Please upload vaild format image(jpg,jpeg,png)",
-    "invalid_youtube_link":"Please enter a valid youtube link"
+    "invalid_youtube_link":"Please enter a valid youtube link",
+    "video_link_required":"Video link is required"
   }
 }

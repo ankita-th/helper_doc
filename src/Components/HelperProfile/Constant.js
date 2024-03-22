@@ -5,26 +5,31 @@ export const HELPER_STEP_DETAILS = [
     step_key: "step_1",
     step_title_key: "step1_title",
     img: "/images/registration-steps/step1.svg",
+    url:"disclaimer"
   },
   {
     step_key: "step_2",
     step_title_key: "step2_title",
     img: "/images/registration-steps/step2.svg",
+    url:"applicant_info"
   },
   {
     step_key: "step_3",
     step_title_key: "step3_title",
     img: "/images/registration-steps/step3.svg",
+    url:"working_experience"
   },
   {
     step_key: "step_4",
     step_title_key: "step4_title",
     img: "/images/registration-steps/step4.svg",
+    url:"job_details"
   },
   {
     step_key: "step_5",
     step_title_key: "step5_title",
     img: "/images/registration-steps/step5.svg",
+    url:"q_&_a"
   },
   {
     step_key: "step_6",
@@ -334,40 +339,45 @@ export const STEP5_QUESTION = [
   {
     question: "step4_question_2",
     type: "radio",
-    answer_type: "vaccinatedCovid19",
+    answer_type: "drinkAlcohol",
   },
   {
     question: "step4_question_3",
     type: "radio",
-    answer_type: "hasTattoo",
+    answer_type: "vaccinatedCovid19",
   },
   {
     question: "step4_question_4",
     type: "radio",
-    answer_type: "comfortableWithPets",
+    answer_type: "hasTattoo",
   },
   {
     question: "step4_question_5",
     type: "radio",
-    answer_type: "comfortableWithCoHelper",
+    answer_type: "comfortableWithPets",
   },
   {
     question: "step4_question_6",
     type: "radio",
-    answer_type: "willingToWorkOnNonSundayDayOff",
+    answer_type: "comfortableWithCoHelper",
   },
   {
     question: "step4_question_7",
     type: "radio",
-    answer_type: "willingToAcceptMonetaryCompensationOnHolidays ",
+    answer_type: "willingToWorkOnNonSundayDayOff",
   },
   {
     question: "step4_question_8",
     type: "radio",
-    answer_type: "agreeToHouseCameraSurveillance ",
+    answer_type: "willingToAcceptMonetaryCompensationOnHolidays",
   },
   {
     question: "step4_question_9",
+    type: "radio",
+    answer_type: "agreeToHouseCameraSurveillance",
+  },
+  {
+    question: "step4_question_10",
     type: "radio",
     answer_type: "willingToReturnHomeByEmployerSetTime",
   },

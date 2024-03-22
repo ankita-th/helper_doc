@@ -20,8 +20,18 @@ const HelperRegistrationStep1 = ({ saveStepDetails, stepDetails }) => {
     handleSubmit,
     control,
     watch,
+    setValue,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    if (stepDetails && stepDetails.answers) {
+      stepDetails.answers.forEach((ans) => {
+        setValue(ans.questionId, ans.answer);
+        setValue(`sub_que_${ans.questionId}`, ans.subAnswer);
+      });
+    }
+  }, [stepDetails]);
 
   const handleNextStep = (questAnswer) => {
     const answerArray = [];

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Button,
@@ -16,21 +16,31 @@ import RadioButtonsWithController from "../Common/FormFields/RadioButtonsWithCon
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const HelperRegistrationStep5 = ({ saveStepDetails }) => {
+const HelperRegistrationStep5 = ({ saveStepDetails, stepDetails }) => {
   const [stepperActiveStep, setStepperActiveStep] = useState(0);
   const { t } = useTranslation();
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    if (stepDetails?.qna && Object.keys(stepDetails.qna).length > 0) {
+      for (let key in stepDetails.qna) {
+        if(key !== '_id')
+        setValue(key, stepDetails.qna[key] ? "Yes" : "No");
+      }
+    }
+  }, [stepDetails]);
 
   const handleNext = (data) => {
     const payload = {};
     for (let key in data) {
       payload[key] = data[key] === "Yes" ? true : false;
     }
-    saveStepDetails(payload, "final");
+    saveStepDetails({ qna: payload }, "final");
   };
 
   const steps = [
@@ -53,6 +63,8 @@ const HelperRegistrationStep5 = ({ saveStepDetails }) => {
                   control={control}
                   name={question.answer_type}
                   options={["Yes", "No"]}
+                  isRequired={true}
+                  errors={errors}
                 />
               </FormControl>
             ))}

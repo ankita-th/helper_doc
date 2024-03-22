@@ -15,7 +15,8 @@ export default function DatePickerWIthController({
   isRequired,
   label,
   placeholder,
-  maxDate
+  maxDate,
+  minDate
 }) {
   const { t } = useTranslation();
   return (
@@ -38,6 +39,7 @@ export default function DatePickerWIthController({
             <DatePicker
               onChange={(date) => onChange(moment(date).format("YYYY-MM-DD"))}
               maxDate={maxDate}
+              minDate={minDate}
               selected={value}
               showIcon
               peekNextMonth
