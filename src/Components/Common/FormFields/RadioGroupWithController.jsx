@@ -35,9 +35,9 @@ export default function RadioGroupWithController({
             <RadioGroup className="radioCheckBtn" {...field}>
               {radioOptions.map((radio) => (
                 <FormControlLabel
-                  value={t(radio)}
+                  value={radio.name}
                   control={<Radio checkedIcon={<CheckCircleRoundedIcon />} />}
-                  label={t(radio)}
+                  label={radio.name}
                 />
               ))}
             </RadioGroup>

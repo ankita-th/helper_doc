@@ -103,7 +103,7 @@ export default function JobCard({
                 {jobDetails?.basicInfo?.jobStartDate}
               </ListItem>
               <ListItem>
-                <strong>{t("type")}:</strong>Full Time
+                <strong>{t("type")}:</strong>{jobDetails?.basicInfo?.jobType}
               </ListItem>
               <ListItem>
                 <strong>{t("experience")}:</strong> Expert

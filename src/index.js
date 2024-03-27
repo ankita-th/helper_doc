@@ -8,7 +8,7 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import "bootstrap/dist/css/bootstrap.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import  store  from "./Redux/Store";
+import { store } from "./Redux/Store";
 import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

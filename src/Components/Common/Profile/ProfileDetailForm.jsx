@@ -9,7 +9,6 @@ import {
   FormLabel,
   Grid,
   IconButton,
-  RadioGroup,
   Switch,
   TextField,
   Typography,
@@ -20,28 +19,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import TextFieldWithController from "../FormFields/TextFieldWithController";
 import { useTranslation } from "react-i18next";
 import {
-  CURRENCY_LIST,
-  DUTIES_OTHER_TASK,
-  EDUCATION_LEVEL,
-  EXPERIENCE_LIST,
-  LANGUAGE_LEVEL,
-  LIVING_ARRANGEMENT,
   MAJOR_STUDY,
-  MARITAL_STATUS,
-  PREFERRED_DAY_OFF,
-  RELIGION,
-  SKILLS,
-  SLEEPING_ARRANGEMENT,
-  SPECIAL_HELP_REQUIREMENT,
-  SPOKEN_LANGUAGE,
-  STEP1_QUESTIONS,
+  REFRENCE_LETTER,
   STEP5_QUESTION,
-  UPLOADE_DOCUMENT,
   YES_NO,
 } from "../../HelperProfile/Constant";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import CountryDropdown from "../FormFields/CountryDropdown";
-import RadioGroupField from "../FormFields/RadioGroupField";
 import RadioGroupWithController from "../FormFields/RadioGroupWithController";
 import SelectWithController from "../FormFields/SelectWithController";
 import { isPhoneValid } from "../../../Utils/MobileNumberValidation";
@@ -69,6 +53,8 @@ import ThankyouModal from "../Modal/ThankyouModal";
 import { useLocation, useNavigate } from "react-router-dom";
 import "react-international-phone/style.css";
 import { successType } from "../../../Constant/Constant";
+import { useSelector } from "react-redux";
+import Step1Form from "../../HelperProfile/StepperForms/Step1Form";
 
 export default function ProfileDetailForm() {
   const [profilePic, setProfilePic] = useState(null);
@@ -97,6 +83,24 @@ export default function ProfileDetailForm() {
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const { pathname } = useLocation();
+  const {
+    yourExperince,
+    genders,
+    requiredSpecialCare,
+    currency,
+    dutiesTasksList,
+    maritalStatus,
+    religion,
+    skillsList,
+    educationLevel,
+    nativeLanguages,
+    languageLevel,
+    certificates,
+    daysOff,
+    livingArrangement,
+    jobTypes,
+    shareRoomCoWorker,
+  } = useSelector((state) => state.common);
 
   const { t } = useTranslation();
   const {
@@ -491,8 +495,8 @@ export default function ProfileDetailForm() {
     completeProfileData(userId, payload)
       .then((res) => {
         setShowThankyouModal(true);
-        if(pathname === '/helper/my-profile') {
-          toastMessage("Profile Update successfully", successType)
+        if (pathname === "/helper/my-profile") {
+          toastMessage("Profile Update successfully", successType);
         } else {
           setThankyouModalDetails(res.data);
         }
@@ -614,6 +618,15 @@ export default function ProfileDetailForm() {
   //   // }
   // };
 
+  const getCertificateListing = () => {
+    const tempCertificates = [...certificates];
+    tempCertificates.forEach((item) => {
+      const label = item.name.replace(/\s+/g, ""); // Remove spaces from name
+      item.label = label.charAt(0).toLowerCase() + label.slice(1); // Make first letter lowercase
+    });
+    return tempCertificates;
+  };
+
   const handleProfilePhotoChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -661,7 +674,7 @@ export default function ProfileDetailForm() {
                       minWidth: "130px",
                       minHeight: "130px",
                       border: "5px solid #0A6259",
-                      objectFit: "cover"
+                      objectFit: "cover",
                     }}
                   />
                 ) : (
@@ -713,91 +726,9 @@ export default function ProfileDetailForm() {
       <form onSubmit={handleBeforeSubmit}>
         <Grid container spacing={5} alignItems="start" className="formDataInfo">
           <Grid item xs={12} md={6}>
-            {STEP1_QUESTIONS.map((ques, index) => (
-              <div key={ques.id} className="queRow">
-                <Typography variant="body1" className="queTitle">
-                  {t(ques.question)}*
-                </Typography>
-                {ques.type === "radio" && (
-                  <Controller
-                    name={`step1_${ques.id}`}
-                    control={control}
-                    defaultValue=""
-                    rules={{ required: t("answer_required_msg") }}
-                    render={({ field }) => (
-                      <RadioGroupField
-                        radioOptions={ques.radioOption}
-                        field={field}
-                      />
-                    )}
-                  />
-                )}
-                {ques.type === "text" && (
-                  <Controller
-                    name={`step1_${ques.id}`}
-                    control={control}
-                    defaultValue=""
-                    rules={{ required: t("answer_required_msg") }}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        multiline
-                        fullWidth
-                        rows={4}
-                        className="formInputFiled"
-                        variant="outlined"
-                        placeholder="Your answer..."
-                      />
-                    )}
-                  />
-                )}
-                {ques.subQuestion && watch(`step1_${ques.id}`) === "Yes" && (
-                  <div>
-                    <Typography variant="body1">
-                      {t(ques.subQuestion)}*
-                    </Typography>
-                    {ques.subQuestionType === "country_dropdown" ? (
-                      <>
-                        <CountryDropdown
-                          control={control}
-                          name={`step1_sub_que_${ques.id}`}
-                          isRequired={true}
-                          errors={errors}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <Controller
-                          name={`step1_sub_que_${ques.id}`}
-                          control={control}
-                          defaultValue=""
-                          rules={{ required: t("answer_required_msg") }}
-                          render={({ field }) => (
-                            <TextField
-                              {...field}
-                              className="formInputFiled"
-                              multiline
-                              fullWidth
-                              rows={4}
-                              variant="outlined"
-                              label="Your answer..."
-                            />
-                          )}
-                        />
-                        {errors[`sub_que_${ques.id}`] && (
-                          <ErrorMessage
-                            msg={errors[`sub_que_${ques.id}`]?.message}
-                          />
-                        )}
-                      </>
-                    )}
-                  </div>
-                )}
-                {errors[ques.id] && (
-                  <ErrorMessage msg={errors[ques.id]?.message} />
-                )}
-              </div>
-            ))}
+             {/* ==========================step1 start ===========================================*/}
+            <Step1Form control={control} errors={errors} watch={watch} profile={true} />
+             {/* ==========================step1 end ===========================================*/}
             {/* ==========================step3 ===========================================*/}
             <>
               <Grid container spacing={2}>
@@ -806,7 +737,7 @@ export default function ProfileDetailForm() {
                   <SelectWithController
                     control={control}
                     name={"step_3_experience"}
-                    options={EXPERIENCE_LIST}
+                    options={yourExperince}
                     label={"Experiences as Domestic Helper"}
                     isRequired={true}
                     errors={errors}
@@ -871,7 +802,7 @@ export default function ProfileDetailForm() {
                           <RadioGroupWithController
                             label={t("gender")}
                             name={`step_3_familyMembers${index}_gender`}
-                            radioOptions={["Female", "Male"]}
+                            radioOptions={genders}
                             control={control}
                           />
                         </Grid>
@@ -879,7 +810,7 @@ export default function ProfileDetailForm() {
                       <CheckBoxFieldWithController
                         label={"Require Special Care"}
                         name={`step_3_familyMembers${index}_requireSpecialHelp`}
-                        checkBoxesOptions={SPECIAL_HELP_REQUIREMENT}
+                        checkBoxesOptions={requiredSpecialCare}
                         control={control}
                       />
                     </Box>
@@ -935,7 +866,7 @@ export default function ProfileDetailForm() {
                   <SelectWithController
                     control={control}
                     name={"step_3_currency"}
-                    options={CURRENCY_LIST}
+                    options={currency}
                     label={"Currency"}
                   />
                 </Grid>
@@ -970,7 +901,7 @@ export default function ProfileDetailForm() {
               />
               <RadioGroupWithController
                 name={"step_3_refrence_letter"}
-                radioOptions={["Upload Letter", "Provide It Later"]}
+                radioOptions={REFRENCE_LETTER}
                 control={control}
               />
               {watch("step_3_refrence_letter") === "Upload Letter" && (
@@ -987,7 +918,7 @@ export default function ProfileDetailForm() {
               <RadioGroupWithController
                 label={"Reference Check Availability"}
                 name={"step_3_referenceAvailability"}
-                radioOptions={["Yes", "No"]}
+                radioOptions={YES_NO}
                 control={control}
               />
               <FormControl fullWidth>
@@ -996,24 +927,12 @@ export default function ProfileDetailForm() {
                 </FormLabel>
                 <FormGroup>
                   <FormControl component="fieldset">
-                    <RadioGroup className="radioCheckBtn">
-                      <FormControlLabel
-                        control={
-                          <Controller
-                            name={`step_3_duties`}
-                            control={control}
-                            defaultValue={[]}
-                            // rules={{ required: "Select at least one skill" }}
-                            render={({ field }) => (
-                              <CheckBoxField
-                                field={field}
-                                checkBoxesValues={DUTIES_OTHER_TASK}
-                              />
-                            )}
-                          />
-                        }
-                      />
-                    </RadioGroup>
+                    <CheckBoxFieldWithController
+                      label={"Duties / other task"}
+                      name={`step_3_duties`}
+                      checkBoxesOptions={dutiesTasksList}
+                      control={control}
+                    />
                   </FormControl>
                 </FormGroup>
               </FormControl>
@@ -1040,7 +959,7 @@ export default function ProfileDetailForm() {
               <RadioGroupWithController
                 label={"Do you have any more working experiences?"}
                 name={"step_3_moreWorkingExperience"}
-                radioOptions={["Yes", "No"]}
+                radioOptions={YES_NO}
                 control={control}
               />
             </>
@@ -1049,7 +968,7 @@ export default function ProfileDetailForm() {
             <RadioGroupWithController
               label={"Choose the type of employment"}
               name={"step4_jobType"}
-              radioOptions={["Full Time", "Part Time"]}
+              radioOptions={jobTypes}
               control={control}
               isRequired={true}
               errors={errors}
@@ -1068,7 +987,7 @@ export default function ProfileDetailForm() {
                 <SelectWithController
                   control={control}
                   name={"step4_currency"}
-                  options={CURRENCY_LIST}
+                  options={currency}
                   label={"Currency"}
                 />
               </Grid>
@@ -1076,7 +995,9 @@ export default function ProfileDetailForm() {
             <SelectWithController
               control={control}
               name={"step4_preferredDayOff"}
-              options={PREFERRED_DAY_OFF}
+              options={daysOff.map((dy) => {
+                return { name: dy.day };
+              })}
               errors={errors}
               isRequired={true}
               label={"Preferred Day Off"}
@@ -1085,7 +1006,7 @@ export default function ProfileDetailForm() {
             <SelectWithController
               control={control}
               name={"step4_sleepingArrangement"}
-              options={SLEEPING_ARRANGEMENT}
+              options={shareRoomCoWorker}
               errors={errors}
               isRequired={true}
               label={"Sleeping Arrangement"}
@@ -1093,7 +1014,7 @@ export default function ProfileDetailForm() {
             <SelectWithController
               control={control}
               name={"step4_shareWork"}
-              options={SLEEPING_ARRANGEMENT}
+              options={shareRoomCoWorker}
               errors={errors}
               isRequired={true}
               label={"Share work with co-worker"}
@@ -1101,7 +1022,7 @@ export default function ProfileDetailForm() {
             <SelectWithController
               control={control}
               name={"step4_livingArrangement"}
-              options={LIVING_ARRANGEMENT}
+              options={livingArrangement}
               errors={errors}
               isRequired={true}
               label={"Living arrangement"}
@@ -1151,7 +1072,7 @@ export default function ProfileDetailForm() {
               label={t("gender")}
               isRequired={true}
               name={"step2_about_gender"}
-              radioOptions={["Female", "Male"]}
+              radioOptions={genders}
               control={control}
               errors={errors}
             />
@@ -1169,7 +1090,7 @@ export default function ProfileDetailForm() {
                 <SelectWithController
                   control={control}
                   name={"step2_about_maritalStatus"}
-                  options={MARITAL_STATUS}
+                  options={maritalStatus}
                   label={"Marital Status"}
                   isRequired={true}
                   errors={errors}
@@ -1180,7 +1101,7 @@ export default function ProfileDetailForm() {
                 <SelectWithController
                   control={control}
                   name={"step2_about_religion"}
-                  options={RELIGION}
+                  options={religion}
                   label={"Religion"}
                   isRequired={true}
                   errors={errors}
@@ -1286,17 +1207,17 @@ export default function ProfileDetailForm() {
                       rules={{ required: "Select at least one skill" }}
                       render={({ field }) => (
                         <>
-                          {SKILLS.map((skill) => (
+                          {skillsList.map((skill) => (
                             <>
                               <FormLabel
                                 className="formLabel"
                                 component="legend"
                               >
-                                {skill.skill_type}
+                                {skill.name}
                               </FormLabel>
                               <CheckBoxField
                                 field={field}
-                                checkBoxesValues={skill.skile_opt}
+                                checkBoxesValues={skill.skills}
                               />
                             </>
                           ))}
@@ -1359,7 +1280,7 @@ export default function ProfileDetailForm() {
             <SelectWithController
               control={control}
               name={"step2_education_level"}
-              options={EDUCATION_LEVEL}
+              options={educationLevel}
               label={"Education Level"}
               isRequired={true}
               errors={errors}
@@ -1375,7 +1296,7 @@ export default function ProfileDetailForm() {
             <SelectWithController
               control={control}
               name={"step2_education_languages"}
-              options={SPOKEN_LANGUAGE}
+              options={nativeLanguages}
               label={"Native Language"}
               isRequired={true}
               errors={errors}
@@ -1397,7 +1318,7 @@ export default function ProfileDetailForm() {
                 <SelectWithController
                   control={control}
                   name={"step2_education_otherLanguage"}
-                  options={SPOKEN_LANGUAGE}
+                  options={nativeLanguages}
                   label={"Other Spoken Language"}
                   isRequired={true}
                   errors={errors}
@@ -1405,7 +1326,7 @@ export default function ProfileDetailForm() {
                 <SelectWithController
                   control={control}
                   name={"step2_education_otherLanguageLevel"}
-                  options={LANGUAGE_LEVEL}
+                  options={languageLevel}
                   label={"Level"}
                   isRequired={true}
                   errors={errors}
@@ -1421,7 +1342,7 @@ export default function ProfileDetailForm() {
               </>
             )}
 
-            {UPLOADE_DOCUMENT.map((doc) => (
+            {getCertificateListing().map((doc) => (
               <Grid container className="queRow certificate UploadFileCustom">
                 <Grid className="certificateCheck">
                   <div className="FileUploadtion">
@@ -1429,24 +1350,24 @@ export default function ProfileDetailForm() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={uploadFilesDetails[doc.name]?.haveTheDoc}
-                            onChange={(e) => handleCheckboxChange(doc.name, e)}
+                            checked={uploadFilesDetails[doc.label]?.haveTheDoc}
+                            onChange={(e) => handleCheckboxChange(doc.label, e)}
                           />
                         }
-                        label={doc.label}
+                        label={doc.name}
                       />
                     </FormGroup>
                     <div className="inputFile">
                       <FileUploaderField
-                        name={doc.name}
+                        name={doc.label}
                         control={control}
                         setFile={handleFileUpload}
-                        disable={!uploadFilesDetails[doc.name]?.haveTheDoc}
+                        disable={!uploadFilesDetails[doc.label]?.haveTheDoc}
                       />
                     </div>
                   </div>
-                  {uploadFilesDetails[doc.name]?.docFile && (
-                    <p>{uploadFilesDetails[doc.name]?.docFile?.name}</p>
+                  {uploadFilesDetails[doc.label]?.docFile && (
+                    <p>{uploadFilesDetails[doc.label]?.docFile?.name}</p>
                   )}
                 </Grid>
               </Grid>

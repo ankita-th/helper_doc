@@ -185,6 +185,11 @@
     "notification": "Notification",
     "chat": "Chat",
     "setting": "Setting",
+    "dashboard":"Dashboard",
+    "post_a_job":"Post A Job",
+    "my_posting":"My Posting",
+    "find_applicant":"Find Applicants",
+    
     "no_job_found": "No Job Found",
     "no_message_found": "No Message Found",
     "start_date": "Start Date",

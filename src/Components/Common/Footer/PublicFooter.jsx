@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Grid, Link, Typography } from "@mui/material";
+import { Box, Container, FormControl, Grid, Link, MenuItem, Select, Typography } from "@mui/material";
 import {
   FacebookIcon,
   TwitterIcon,
@@ -120,6 +120,23 @@ const PublicFooter = () => {
             <Grid item xs={12} md={6}>
               <Typography variant="body2">{t("copy_right")}</Typography>
             </Grid>
+            {/* <Grid item xs={12} md={2}>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={10}
+                    label="Age"
+                    // onChange={handleChange}
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Grid> */}
 
             <Grid item xs={12} md={6}>
               <div className="footerLinks">

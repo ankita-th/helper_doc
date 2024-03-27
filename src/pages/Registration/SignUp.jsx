@@ -21,11 +21,13 @@ import ErrorMessage from "../../Components/Common/ErrorMessage/ErrorMessage";
 import CustomTextField from "../../Components/Common/InputFields/CustomTextField";
 import SocialLogin from "../../Components/Common/SocialAuth/SocialLogin";
 import { registerUser } from "../../Services/AuthServices/AuthService";
-import { useSnackBar } from "../../Utils/CustomHooks/useSnackBarMessages";
 import { googleCaptchaID } from "../../Config/authConfig";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "../../Utils/Regex";
 import { useTranslation } from "react-i18next";
 import SubmitButton from "../../Components/Common/CommonButtons/SubmitButton";
+import { toastMessage } from "../../Utils/toastMessages";
+import { getAllSeadersData } from "../../Redux/CommonSlice";
+import { useDispatch } from "react-redux";
 
 const StyledImageContainer = styled("div")({
   display: "flex",
@@ -50,9 +52,9 @@ const SignUp = () => {
     show: false,
     msg: "",
   });
+  const dispatch = useDispatch();
   const captchaRef = useRef();
   const { t } = useTranslation();
-  const { showSuccessSnackBar, showErrorSnackBar } = useSnackBar();
 
   const validationSchema = yup.object().shape({
     fullName: yup.string().required(t("name_required")),
@@ -110,18 +112,20 @@ const SignUp = () => {
     // dispatch(setPageLoader(true));
     setButtonLoader(true);
     registerUser(payload)
-      .then((res) => {
+      .then(async (res) => {
         // dispatch(setPageLoader(false));
         setButtonLoader(false);
-        // showSuccessSnackBar(t("successfully_register"));
         localStorage.setItem("token", res.data.user.accessToken);
         localStorage.setItem("refresh_token", res.data.user.refreshToken);
         localStorage.setItem("selectedRole", res.data.user.user.role);
         localStorage.setItem("userId", res.data.user.user.id);
+        await dispatch(getAllSeadersData());
         if (role === "helper") {
           navigate("/register/helper/profile-steps/disclaimer", {
             state: { prevRoute: "/register/helper" },
           });
+        } else if (role === "helper") {
+          navigate("/employer/dashboard");
         }
       })
       .catch((err) => {
@@ -129,9 +133,9 @@ const SignUp = () => {
           setShowErrorMsg({ show: true, msg: err.response.data?.message });
         }
         if (err?.response?.data?.message) {
-          showErrorSnackBar(err.response.data?.message);
+          toastMessage(err.response.data?.message);
         } else {
-          showErrorSnackBar(t("failure_message"));
+          toastMessage(t("failure_message"));
         }
         setButtonLoader(false);
       });

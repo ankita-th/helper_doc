@@ -45,22 +45,22 @@ export default function CheckBoxFieldWithController({
                         control={
                           <Checkbox
                             {...field}
-                            checked={field.value.includes(opt.type)}
+                            checked={field.value.includes(opt.name)}
                             onChange={(e) => {
                               const isChecked = e.target.checked;
                               field.onChange(
                                 isChecked
-                                  ? [...field.value, opt.type]
+                                  ? [...field.value, opt.name]
                                   : field.value.filter(
-                                      (value) => value !== opt.type
+                                      (value) => value !== opt.name
                                     )
                               );
                             }}
-                            name={opt.type}
-                            value={opt.type}
+                            name={opt.name}
+                            value={opt.name}
                           />
                         }
-                        label={opt.type}
+                        label={opt.name}
                       />
                     ))}
                   </FormGroup>

@@ -27,12 +27,12 @@ import CustomTextField from "../../Components/Common/InputFields/CustomTextField
 import SocialLogin from "../../Components/Common/SocialAuth/SocialLogin";
 import { EMAIL_REGEX } from "../../Utils/Regex";
 import { googleCaptchaID } from "../../Config/authConfig";
-// import { useDispatch } from "react-redux";
-// import { setPageLoader } from "../../Redux/CommonSlice";
 import { loginUser } from "../../Services/AuthServices/AuthService";
-import { useSnackBar } from "../../Utils/CustomHooks/useSnackBarMessages";
 import SubmitButton from "../../Components/Common/CommonButtons/SubmitButton";
 import { toastMessage } from "../../Utils/toastMessages";
+import { successType } from "../../Constant/Constant";
+import { getAllSeadersData } from "../../Redux/CommonSlice";
+import { useDispatch } from "react-redux";
 
 const StyledImage = styled("img")({
   maxWidth: "100%",
@@ -49,8 +49,7 @@ const Login = () => {
     show: false,
     msg: "",
   });
-  // const dispatch = useDispatch();
-  const { showSuccessSnackBar, showErrorSnackBar } = useSnackBar();
+  const dispatch = useDispatch();
 
   const validationSchema = yup.object().shape({
     email: yup
@@ -81,19 +80,20 @@ const Login = () => {
     if (showErrorMsg.show) {
       return;
     }
-    // dispatch(setPageLoader(true));
     setButtonLoader(true);
     loginUser(data)
-      .then((res) => {
-        // dispatch(setPageLoader(false));
+      .then(async (res) => {
         setButtonLoader(false);
-        showSuccessSnackBar(t("login_successfully"));
+        toastMessage(t("login_successfully"), successType);
         localStorage.setItem("token", res.data.accessToken);
         localStorage.setItem("refresh_token", res.data.refreshToken);
         localStorage.setItem("selectedRole", res.data.role);
         localStorage.setItem("userId", res.data.userId);
+        await dispatch(getAllSeadersData());
         if (res.data.role === "helper") {
           navigate("/helper/job-dashboard");
+        } else if (res.data.role === "helper") {
+          navigate("/employer/dashboard");
         } else {
           navigate("/dashboard");
         }
@@ -108,7 +108,6 @@ const Login = () => {
           toastMessage(t("failure_message"));
         }
         setButtonLoader(false);
-        // dispatch(setPageLoader(false));
         console.log(err, "/////");
       });
   };

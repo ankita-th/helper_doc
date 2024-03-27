@@ -1,22 +1,19 @@
 import {
   FormControl,
   FormLabel,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
 } from "@mui/material";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import React from "react";
-import * as isoCountries from "i18n-iso-countries";
 import { useTranslation } from "react-i18next";
 import { Controller } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-
-isoCountries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+import { useSelector } from "react-redux";
 
 const CountryDropdown = ({ label, name, control, isRequired, errors }) => {
   const { t } = useTranslation();
+  const { countriesList } = useSelector((state) => state.common);
   return (
     <>
       <FormControl fullWidth className="queRow">
@@ -40,15 +37,14 @@ const CountryDropdown = ({ label, name, control, isRequired, errors }) => {
               <Select
                 {...field}
                 defaultValue={[]}
-                renderValue={(selected) =>
-                  selected && isoCountries.getName(selected, "en")
-                }
+                renderValue={(selected) => selected}
               >
-                {Object.keys(isoCountries.getNames("en")).map((countryCode) => (
-                  <MenuItem key={countryCode} value={countryCode}>
-                    {isoCountries.getName(countryCode, "en")}
-                  </MenuItem>
-                ))}
+                {countriesList?.length > 0 &&
+                  countriesList.map((country) => (
+                    <MenuItem key={country.name} value={country.name}>
+                      {country.name}
+                    </MenuItem>
+                  ))}
               </Select>
             </FormControl>
           )}

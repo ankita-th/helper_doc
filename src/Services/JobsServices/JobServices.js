@@ -8,8 +8,14 @@ import {
   SAVE_JOB,
 } from "../../Config/APIUrls";
 
+// Get the UserId
+function getUserId() {
+  return localStorage.getItem("userId");
+}
+
 // Get All Jobs List
-export const getJobsList = (param) => APIAxios.get(`${GET_ALL_JOBS}${param}`);
+export const getJobsList = (param) =>
+  APIAxios.get(`${GET_JOBS_BY_STATUS(getUserId())}${param}`);
 
 // Get Single Job Details
 export const getJobDetails = (id) => APIAxios.get(`${GET_ALL_JOBS}/${id}`);

@@ -5,31 +5,31 @@ export const HELPER_STEP_DETAILS = [
     step_key: "step_1",
     step_title_key: "step1_title",
     img: "/images/registration-steps/step1.svg",
-    url:"disclaimer"
+    url: "disclaimer",
   },
   {
     step_key: "step_2",
     step_title_key: "step2_title",
     img: "/images/registration-steps/step2.svg",
-    url:"applicant_info"
+    url: "applicant_info",
   },
   {
     step_key: "step_3",
     step_title_key: "step3_title",
     img: "/images/registration-steps/step3.svg",
-    url:"working_experience"
+    url: "working_experience",
   },
   {
     step_key: "step_4",
     step_title_key: "step4_title",
     img: "/images/registration-steps/step4.svg",
-    url:"job_details"
+    url: "job_details",
   },
   {
     step_key: "step_5",
     step_title_key: "step5_title",
     img: "/images/registration-steps/step5.svg",
-    url:"q_&_a"
+    url: "q_&_a",
   },
   {
     step_key: "step_6",
@@ -160,22 +160,22 @@ export const EDUCATION_LEVEL = [
 
 export const MAJOR_STUDY = [
   {
-    value_key: "Elementary",
+    name: "Elementary",
   },
   {
-    value_key: "Junior High School<",
+    name: "Junior High School<",
   },
   {
-    value_key: "Senior High School",
+    name: "Senior High School",
   },
   {
-    value_key: "College",
+    name: "College",
   },
   {
-    value_key: "Undergraduate",
+    name: "Undergraduate",
   },
   {
-    value_key: "Graduate",
+    name: "Graduate",
   },
 ];
 
@@ -216,12 +216,12 @@ export const LANGUAGE_LEVEL = [
 ];
 
 export const EXPERIENCE_LIST = [
-  { value_key: "No prior experience" },
-  { value_key: "Less then 1 year of experience" },
-  { value_key: "1 year of experience" },
-  { value_key: "2 year of experience" },
-  { value_key: "3 year of experience" },
-  { value_key: "4 year of experience" },
+  { name: "No prior experience" },
+  { name: "Less then 1 year of experience" },
+  { name: "1 year of experience" },
+  { name: "2 year of experience" },
+  { name: "3 year of experience" },
+  { name: "4 year of experience" },
 ];
 
 export const SPECIAL_HELP_REQUIREMENT = [
@@ -246,13 +246,21 @@ export const CURRENCY_LIST = [
 ];
 export const YES_NO = [
   {
-    value_key: "YES",
+    name: "YES",
   },
   {
-    value_key: "NO",
+    name: "NO",
   },
 ];
 
+export const REFRENCE_LETTER = [
+  {
+    name: "Upload Letter",
+  },
+  {
+    name: "Provide It Later",
+  },
+];
 export const UPLOADE_DOCUMENT = [
   {
     label: "Driving License",
@@ -312,10 +320,10 @@ export const PREFERRED_DAY_OFF = [
 
 export const SLEEPING_ARRANGEMENT = [
   {
-    value_key: "Flexible",
+    name: "Flexible",
   },
   {
-    value_key: "Alone",
+    name: "Alone",
   },
 ];
 export const LIVING_ARRANGEMENT = [

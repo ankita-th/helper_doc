@@ -39,7 +39,7 @@ export default function SelectWithController({
               placeholder="Please Select"
             >
               {options.map((menu) => (
-                <MenuItem value={menu.value_key}>{menu.value_key}</MenuItem>
+                <MenuItem value={menu.name}>{menu.name}</MenuItem>
               ))}
             </Select>
           )}

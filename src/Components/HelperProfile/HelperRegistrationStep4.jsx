@@ -10,27 +10,24 @@ import {
   StepLabel,
   StepContent,
   FormGroup,
-  FormLabel,
-  FormControl,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import RadioGroupField from "../Common/FormFields/RadioGroupField";
-import ErrorMessage from "../Common/ErrorMessage/ErrorMessage";
+import { useForm } from "react-hook-form";
 import NumberField from "../Common/FormFields/NumberField";
 import SelectWithController from "../Common/FormFields/SelectWithController";
-import {
-  CURRENCY_LIST,
-  LIVING_ARRANGEMENT,
-  PREFERRED_DAY_OFF,
-  SLEEPING_ARRANGEMENT,
-} from "./Constant";
 import CountryDropdown from "../Common/FormFields/CountryDropdown";
 import RadioGroupWithController from "../Common/FormFields/RadioGroupWithController";
+import { useSelector } from "react-redux";
 
 const HelperRegistrationStep4 = ({ saveStepDetails, stepDetails }) => {
   const [stepperActiveStep, setStepperActiveStep] = useState(0);
-  const { t } = useTranslation();
+  const {
+    livingArrangement,
+    daysOff,
+    currency,
+    jobTypes,
+    shareRoomCoWorker
+  } = useSelector((state) => state.common);
+
 
   const {
     handleSubmit,
@@ -68,7 +65,7 @@ const HelperRegistrationStep4 = ({ saveStepDetails, stepDetails }) => {
         <RadioGroupWithController
           label={"Choose the type of employment"}
           name={"jobType"}
-          radioOptions={["Full Time", "Part Time"]}
+          radioOptions={jobTypes}
           control={control}
           isRequired={true}
           errors={errors}
@@ -94,7 +91,7 @@ const HelperRegistrationStep4 = ({ saveStepDetails, stepDetails }) => {
                 <SelectWithController
                   control={control}
                   name={"currency"}
-                  options={CURRENCY_LIST}
+                  options={currency}
                   label={"Currency"}
                 />
               </Grid>
@@ -103,7 +100,7 @@ const HelperRegistrationStep4 = ({ saveStepDetails, stepDetails }) => {
           <SelectWithController
             control={control}
             name={"preferredDayOff"}
-            options={PREFERRED_DAY_OFF}
+            options={daysOff.map((dy)=> {return { name: dy.day}})}
             errors={errors}
             isRequired={true}
             label={"Preferred Day Off"}
@@ -111,7 +108,7 @@ const HelperRegistrationStep4 = ({ saveStepDetails, stepDetails }) => {
           <SelectWithController
             control={control}
             name={"sleepingArrangement"}
-            options={SLEEPING_ARRANGEMENT}
+            options={shareRoomCoWorker}
             errors={errors}
             isRequired={true}
             label={"Sleeping Arrangement"}
@@ -119,7 +116,7 @@ const HelperRegistrationStep4 = ({ saveStepDetails, stepDetails }) => {
           <SelectWithController
             control={control}
             name={"shareWork"}
-            options={SLEEPING_ARRANGEMENT}
+            options={shareRoomCoWorker}
             errors={errors}
             isRequired={true}
             label={"Share work with co-worker"}
@@ -127,7 +124,7 @@ const HelperRegistrationStep4 = ({ saveStepDetails, stepDetails }) => {
           <SelectWithController
             control={control}
             name={"livingArrangement"}
-            options={LIVING_ARRANGEMENT}
+            options={livingArrangement}
             errors={errors}
             isRequired={true}
             label={"Living arrangement"}

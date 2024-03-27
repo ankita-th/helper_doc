@@ -67,6 +67,10 @@ function App() {
                   <Route key={index} element={<HelperLayout />}>
                     <Route path={item.path} element={item.element} />
                   </Route>
+                ) : item.employer ? (
+                  <Route key={index} element={<ApplicantLayout />}>
+                    <Route path={item.path} element={item.element} />
+                  </Route>
                 ) : (
                   <Route key={index} element={<ApplicantLayout />}>
                     <Route path={item.path} element={item.element} />

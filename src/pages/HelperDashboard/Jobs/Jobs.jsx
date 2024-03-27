@@ -25,7 +25,7 @@ const Jobs = () => {
   const [openModal, setOpenModal] = useState();
 
   useEffect(() => {
-    const param = `?page=${currentPage.page}&limit=10&location=${filters.location}&empType=${filters.empType}&sortBy=${filters.sortBy}`;
+    const param = `?page=${currentPage.page}&limit=10&location=${filters.location}&jobType=${filters.empType}&sortBy=${filters.sortBy}`;
     getJobsList(param)
       .then((res) => {
         setLoader(false);

@@ -6,7 +6,6 @@ import {
   FormLabel,
   TextField,
   FormControlLabel,
-  RadioGroup,
   FormGroup,
   Switch,
 } from "@mui/material";
@@ -16,30 +15,23 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import StepContent from "@mui/material/StepContent";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
-  CURRENCY_LIST,
-  DUTIES_OTHER_TASK,
-  EXPERIENCE_LIST,
-  SPECIAL_HELP_REQUIREMENT,
+  REFRENCE_LETTER,
   YES_NO,
 } from "./Constant";
-import SingleSelectField from "../Common/FormFields/SingleSelectField";
 import CountryDropdown from "../Common/FormFields/CountryDropdown";
-import RadioGroupField from "../Common/FormFields/RadioGroupField";
-import CheckBoxField from "../Common/FormFields/CheckBoxField";
 import moment from "moment";
 import NumberField from "../Common/FormFields/NumberField";
 import FileUploaderField from "../Common/FormFields/FileUploaderField";
-import ErrorMessage from "../Common/ErrorMessage/ErrorMessage";
 import { handleFileUploadToS3Bucket } from "../../Utils/CommonAPIs";
 import SelectWithController from "../Common/FormFields/SelectWithController";
 import RadioGroupWithController from "../Common/FormFields/RadioGroupWithController";
 import CheckBoxFieldWithController from "../Common/FormFields/CheckBoxFieldWithController";
 import DatePickerWIthController from "../Common/FormFields/DatePickerWIthController";
+import { useSelector } from "react-redux";
 
 const HelperRegistrationStep3 = ({
   saveStepDetails,
@@ -60,9 +52,15 @@ const HelperRegistrationStep3 = ({
     setValue,
     formState: { errors },
   } = useForm();
+  const {
+    yourExperince,
+    genders,
+    requiredSpecialCare,
+    currency,
+    dutiesTasksList,
+  } = useSelector((state) => state.common);
 
   useEffect(() => {
-    console.log(stepDetails, "34//stepDetails");
     if (stepDetails && stepDetails.workExperience?.length > 0) {
       for (let key in stepDetails?.workExperience[0]) {
         if (key !== "userId") {
@@ -178,7 +176,7 @@ const HelperRegistrationStep3 = ({
               <SelectWithController
                 control={control}
                 name={"experience"}
-                options={EXPERIENCE_LIST}
+                options={yourExperince}
                 label={"Experiences as Domestic Helper"}
               />
             </Grid>
@@ -236,7 +234,7 @@ const HelperRegistrationStep3 = ({
                     <RadioGroupWithController
                       label={t("gender")}
                       name={`familyMembers${index}_gender`}
-                      radioOptions={["Female", "Male"]}
+                      radioOptions={genders}
                       control={control}
                     />
                   </Grid>
@@ -244,7 +242,7 @@ const HelperRegistrationStep3 = ({
                 <CheckBoxFieldWithController
                   label={"Require Special Care"}
                   name={`familyMembers${index}_requireSpecialHelp`}
-                  checkBoxesOptions={SPECIAL_HELP_REQUIREMENT}
+                  checkBoxesOptions={requiredSpecialCare}
                   control={control}
                 />
               </Box>
@@ -300,7 +298,7 @@ const HelperRegistrationStep3 = ({
               <SelectWithController
                 control={control}
                 name={"currency"}
-                options={CURRENCY_LIST}
+                options={currency}
                 label={"Currency"}
               />
             </Grid>
@@ -335,7 +333,7 @@ const HelperRegistrationStep3 = ({
           />
           <RadioGroupWithController
             name={"refrence_letter"}
-            radioOptions={["Upload Letter", "Provide It Later"]}
+            radioOptions={REFRENCE_LETTER}
             control={control}
           />
           {watch("refrence_letter") === "Upload Letter" && (
@@ -352,35 +350,16 @@ const HelperRegistrationStep3 = ({
           <RadioGroupWithController
             label={"Reference Check Availability"}
             name={"referenceAvailability"}
-            radioOptions={["Yes", "No"]}
+            radioOptions={YES_NO}
             control={control}
           />
           <FormControl fullWidth>
-            <FormLabel id="duties" className="formLabel">
-              Duties / other task
-            </FormLabel>
-            <FormGroup>
-              <FormControl component="fieldset">
-                <RadioGroup className="radioCheckBtn">
-                  <FormControlLabel
-                    control={
-                      <Controller
-                        name={`duties`}
-                        control={control}
-                        defaultValue={[]}
-                        // rules={{ required: "Select at least one skill" }}
-                        render={({ field }) => (
-                          <CheckBoxField
-                            field={field}
-                            checkBoxesValues={DUTIES_OTHER_TASK}
-                          />
-                        )}
-                      />
-                    }
-                  />
-                </RadioGroup>
-              </FormControl>
-            </FormGroup>
+            <CheckBoxFieldWithController
+              label={"Duties / other task"}
+              name={`duties`}
+              checkBoxesOptions={dutiesTasksList}
+              control={control}
+            />
           </FormControl>
           <SelectWithController
             control={control}
@@ -405,7 +384,7 @@ const HelperRegistrationStep3 = ({
           <RadioGroupWithController
             label={"Do you have any more working experiences?"}
             name={"moreWorkingExperience"}
-            radioOptions={["Yes", "No"]}
+            radioOptions={YES_NO}
             control={control}
           />
         </>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Grid,
   Button,
-  TextField,
   FormControlLabel,
   FormControl,
   FormLabel,
@@ -12,7 +11,6 @@ import {
 } from "@mui/material";
 import { PhoneInput } from "react-international-phone";
 import LocationAutocomplete from "../Common/LocationAutocomplete";
-import DatePicker from "react-datepicker";
 
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
@@ -23,21 +21,9 @@ import "react-international-phone/style.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
-import RadioGroupField from "../Common/FormFields/RadioGroupField";
-import SingleSelectField from "../Common/FormFields/SingleSelectField";
 import CheckBoxField from "../Common/FormFields/CheckBoxField";
 import ErrorMessage from "../Common/ErrorMessage/ErrorMessage";
-import {
-  EDUCATION_LEVEL,
-  LANGUAGE_LEVEL,
-  MAJOR_STUDY,
-  MARITAL_STATUS,
-  RELIGION,
-  SKILLS,
-  SPOKEN_LANGUAGE,
-  UPLOADE_DOCUMENT,
-} from "./Constant";
-import moment from "moment";
+import { MAJOR_STUDY } from "./Constant";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import FileUploaderField from "../Common/FormFields/FileUploaderField";
@@ -48,7 +34,7 @@ import TextFieldWithController from "../Common/FormFields/TextFieldWithControlle
 import SelectWithController from "../Common/FormFields/SelectWithController";
 import DatePickerWIthController from "../Common/FormFields/DatePickerWIthController";
 import NumberField from "../Common/FormFields/NumberField";
-import { height } from "@mui/system";
+import { useSelector } from "react-redux";
 
 const HelperRegistrationStep2 = ({
   saveStepDetails,
@@ -61,8 +47,6 @@ const HelperRegistrationStep2 = ({
   const {
     handleSubmit,
     control,
-    watch,
-    register,
     setValue,
     formState: { errors },
   } = useForm();
@@ -75,11 +59,21 @@ const HelperRegistrationStep2 = ({
   const [currentLocation, setCurrentLocation] = useState("");
 
   const [uploadFilesDetails, setUploadFilesDetails] = useState({
-    drivingLicense: {
+    driving: {
       haveTheDoc: false,
       docFile: "",
     },
   });
+  const {
+    genders,
+    maritalStatus,
+    religion,
+    skillsList,
+    educationLevel,
+    nativeLanguages,
+    languageLevel,
+    certificates,
+  } = useSelector((state) => state.common);
 
   useEffect(() => {
     if (
@@ -122,14 +116,8 @@ const HelperRegistrationStep2 = ({
         } else if (key === "otherLanguages") {
           if (Object.keys(stepDetails.education[key]).length > 0) {
             setOtherLanguage(true);
-            setValue(
-              "otherLanguage",
-              stepDetails.education[key].language
-            );
-            setValue(
-              "otherLanguageLevel",
-              stepDetails.education[key].level
-            );
+            setValue("otherLanguage", stepDetails.education[key].language);
+            setValue("otherLanguageLevel", stepDetails.education[key].level);
           }
         } else {
           setValue(key, stepDetails.education[key]);
@@ -293,6 +281,14 @@ const HelperRegistrationStep2 = ({
     });
   };
 
+  const getCertificateListing = () => {
+    const tempCertificates = [...certificates];
+    tempCertificates.forEach((item) => {
+      const label = item.name.replace(/\s+/g, ""); // Remove spaces from name
+      item.label = label.charAt(0).toLowerCase() + label.slice(1); // Make first letter lowercase
+    });
+    return tempCertificates;
+  };
   const steps = [
     {
       label: "About You",
@@ -310,7 +306,7 @@ const HelperRegistrationStep2 = ({
             label={t("gender")}
             isRequired={true}
             name={"gender"}
-            radioOptions={["Female", "Male"]}
+            radioOptions={genders}
             control={control}
             errors={errors}
           />
@@ -329,7 +325,7 @@ const HelperRegistrationStep2 = ({
               <SelectWithController
                 control={control}
                 name={"maritalStatus"}
-                options={MARITAL_STATUS}
+                options={maritalStatus}
                 label={"Marital Status"}
                 isRequired={true}
                 errors={errors}
@@ -340,7 +336,7 @@ const HelperRegistrationStep2 = ({
               <SelectWithController
                 control={control}
                 name={"religion"}
-                options={RELIGION}
+                options={religion}
                 label={"Religion"}
                 isRequired={true}
                 errors={errors}
@@ -446,14 +442,14 @@ const HelperRegistrationStep2 = ({
                     rules={{ required: "Select at least one skill" }}
                     render={({ field }) => (
                       <>
-                        {SKILLS.map((skill) => (
+                        {skillsList.map((skill) => (
                           <>
                             <FormLabel className="formLabel" component="legend">
-                              {skill.skill_type}
+                              {skill.name}
                             </FormLabel>
                             <CheckBoxField
                               field={field}
-                              checkBoxesValues={skill.skile_opt}
+                              checkBoxesValues={skill.skills}
                             />
                           </>
                         ))}
@@ -524,7 +520,7 @@ const HelperRegistrationStep2 = ({
           <SelectWithController
             control={control}
             name={"level"}
-            options={EDUCATION_LEVEL}
+            options={educationLevel}
             label={"Education Level"}
             isRequired={true}
             errors={errors}
@@ -540,7 +536,7 @@ const HelperRegistrationStep2 = ({
           <SelectWithController
             control={control}
             name={"languages"}
-            options={SPOKEN_LANGUAGE}
+            options={nativeLanguages}
             label={"Native Language"}
             isRequired={true}
             errors={errors}
@@ -562,7 +558,7 @@ const HelperRegistrationStep2 = ({
               <SelectWithController
                 control={control}
                 name={"otherLanguage"}
-                options={SPOKEN_LANGUAGE}
+                options={nativeLanguages}
                 label={"Other Spoken Language"}
                 isRequired={true}
                 errors={errors}
@@ -570,7 +566,7 @@ const HelperRegistrationStep2 = ({
               <SelectWithController
                 control={control}
                 name={"otherLanguageLevel"}
-                options={LANGUAGE_LEVEL}
+                options={languageLevel}
                 label={"Level"}
                 isRequired={true}
                 errors={errors}
@@ -586,7 +582,7 @@ const HelperRegistrationStep2 = ({
             </>
           )}
 
-          {UPLOADE_DOCUMENT.map((doc) => (
+          {getCertificateListing().map((doc) => (
             <Grid container className="queRow certificate UploadFileCustom">
               <Grid className="certificateCheck">
                 <div className="FileUploadtion">
@@ -594,24 +590,24 @@ const HelperRegistrationStep2 = ({
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={uploadFilesDetails[doc.name]?.haveTheDoc}
-                          onChange={(e) => handleCheckboxChange(doc.name, e)}
+                          checked={uploadFilesDetails[doc.label]?.haveTheDoc}
+                          onChange={(e) => handleCheckboxChange(doc.label, e)}
                         />
                       }
-                      label={doc.label}
+                      label={doc.name}
                     />
                   </FormGroup>
                   <div className="inputFile">
                     <FileUploaderField
-                      name={doc.name}
+                      name={doc.label}
                       control={control}
                       setFile={handleFileUpload}
-                      disable={!uploadFilesDetails[doc.name]?.haveTheDoc}
+                      disable={!uploadFilesDetails[doc.label]?.haveTheDoc}
                     />
                   </div>
                 </div>
-                {uploadFilesDetails[doc.name]?.docFile && (
-                  <p>{uploadFilesDetails[doc.name]?.docFile?.name}</p>
+                {uploadFilesDetails[doc.label]?.docFile && (
+                  <p>{uploadFilesDetails[doc.label]?.docFile?.name}</p>
                 )}
               </Grid>
             </Grid>

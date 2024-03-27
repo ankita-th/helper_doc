@@ -9,21 +9,24 @@ const persistConfig = {
   storage,
 };
 
-const combinedReducers = {
+// const combinedReducers = {
+//   common: commonSlice,
+// };
+const reducers = combineReducers({
   common: commonSlice,
-};
-export default configureStore({
-  reducer: combinedReducers,
 });
-
-// const persistedReducer = persistReducer(persistConfig, reducers);
-// export const store = configureStore({
-//   reducer: persistedReducer,
-//   devTools: true,
-//   middleware: (getDefaultMiddleware) =>
-//     getDefaultMiddleware({
-//       serializableCheck: false,
-//     }),
+// export default configureStore({
+//   reducer: combinedReducers,
 // });
 
-// export const reduxStore = persistStore(store);
+const persistedReducer = persistReducer(persistConfig, reducers);
+export const store = configureStore({
+  reducer: persistedReducer,
+  devTools: true,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
+
+export const reduxStore = persistStore(store);

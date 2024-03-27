@@ -2,7 +2,9 @@ import { lazy } from "react";
 import ThanksForRegister from "../pages/HelperSteps/ThanksForRegister";
 import ProfilePreview from "../pages/HelperSteps/ProfilePreview";
 import Setting from "../Components/Common/Setting/Settings";
-const  ForgotPassword = lazy(()=>import( "../pages/ForgotPassword/ForgotPassword"));
+const ForgotPassword = lazy(() =>
+  import("../pages/ForgotPassword/ForgotPassword")
+);
 const Chat = lazy(() => import("../pages/HelperDashboard/Chat"));
 const LandingPage = lazy(() => import("../pages/LandingPage/LandingPage"));
 const Login = lazy(() => import("../pages/Login/Login"));
@@ -31,6 +33,11 @@ const MyProfile = lazy(() => import("../pages/HelperDashboard/MyProfile"));
 const MyNotification = lazy(() =>
   import("../pages/HelperDashboard/Notification")
 );
+
+const EmployerDashboard = lazy(() =>
+  import("../pages/EmployerDashboard/EmployerDashboard")
+);
+const JobPost = lazy(() => import("../pages/EmployerDashboard/Jobs/JobPost"));
 
 export const route = [
   {
@@ -139,5 +146,18 @@ export const route = [
     element: <Setting />,
     private: true,
     helper: true,
+  },
+  // Employer dashboard
+  {
+    path: "/employer/dashboard",
+    element: <EmployerDashboard />,
+    private: true,
+    employer: true,
+  },
+  {
+    path: "/employer/job-post",
+    element: <JobPost />,
+    private: true,
+    employer: true,
   },
 ];

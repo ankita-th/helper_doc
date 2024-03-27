@@ -41,30 +41,30 @@ export default function HelperDashboardSubHeader({
         {progessBar && (
           <ProfileCompletionProgressBar profilePercentage={percentage} />
         )}
-    </div>
-       {
-        isChat && (  <FormControl
-          variant="outlined"
-          sx={{ minWidth: 300 }}
-          className="queRow"
-        >
-          <InputLabel id="filter-messages-label">
-            All Messages
-          </InputLabel>
-          <Select
-            className="formInputFiled"
-            labelId="filter-messages-label"
-            id="filter-messages"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            label="Filter Messages"
+        {
+          isChat && (  <FormControl
+            variant="outlined"
+            sx={{ minWidth: 300 }}
+            className="queRow"
           >
-            <MenuItem value="">All Messages</MenuItem>
-            <MenuItem value="John Doe">John Doe</MenuItem>
-            <MenuItem value="Jane Smith">Jane Smith</MenuItem>
-          </Select>
-        </FormControl>)
-      }
+            <InputLabel id="filter-messages-label">
+              All Messages
+            </InputLabel>
+            <Select
+              className="formInputFiled"
+              labelId="filter-messages-label"
+              id="filter-messages"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              label="Filter Messages"
+            >
+              <MenuItem value="">All Messages</MenuItem>
+              <MenuItem value="John Doe">John Doe</MenuItem>
+              <MenuItem value="Jane Smith">Jane Smith</MenuItem>
+            </Select>
+          </FormControl>)
+        }
+    </div>
     </>
   );
 }
